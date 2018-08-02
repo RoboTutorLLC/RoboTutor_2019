@@ -54,10 +54,10 @@ public class BP_CONST {
     public static final String SHOW_BUBBLES      = "SHOW_BUBBLES";
     public static final String CLEAR_CONTENT     = "CLEAR_CONTENT";
     public static final String SPAWN_BUBBLE      = "SPAWN_BUBBLE";
+    public static final String NEXT_BUBBLE       = "NEXT_BUBBLE";
     public static final String WIGGLE_BUBBLE     = "WIGGLE_BUBBLE";
     public static final String POP_BUBBLE        = "POP_BUBBLE";
-    public static final String INFLATE           = "INFLATE_BUBBLE";
-    public static final long   INFLATE_DELAY     = 200;
+    public static final int SPAWN_DELAY          = 200;
     public static final String SHOW_STIMULUS     = "SHOW_STIMULUS";
     public static final String REMOVE_BUBBLE     = "REMOVE_BUBBLE";
     public static final String REPLACE_BUBBLE    = "REPLACE_BUBBLE";
@@ -102,29 +102,22 @@ public class BP_CONST {
     public static final String RESUME_ANIMATION   = "RESUME_ANIMATION";
     public static final int    MAX_ATTEMPT        = 3;
 
+    public static final String SPAWN_DELAY_VAR    = ".spawnDelay";
     public static final String SOUND_TRACK        = ".sound_track";
     public static final String QUEST_VAR          = ".questValue";
 
-    public static final String ANSWER_VAR         = ".ansValue";
-
-    public static final String QUEST_VAR_TWO      = ".questValueTwo";
-    public static final String ANSWER_VAR_TWO     = ".ansValueTwo";
-
-    public static final String QUEST_VAR_THREE    = ".questValueThree";
-    public static final String ANSWER_VAR_THREE   = ".ansValueThree";
-
-    public static final String ANS_VAR         = ".ansValue";
+    public static final String ANS_VAR            = ".ansValue";
 
     public static final String QUEST_VAR_HUNDREDS = ".questValueHundreds";
     public static final String QUEST_VAR_TENS     = ".questValueTens";
-    public static final String QUEST_VAR_ONES      = ".questValueOnes";
-    public static final String ANS_VAR_HUNDREDS= ".ansValueHundreds";
-    public static final String ANS_VAR_TENS    = ".ansValueTens";
-    public static final String ANS_VAR_ONES    = ".ansValueOnes";
+    public static final String QUEST_VAR_ONES     = ".questValueOnes";
+    public static final String ANS_VAR_HUNDREDS   = ".ansValueHundreds";
+    public static final String ANS_VAR_TENS       = ".ansValueTens";
+    public static final String ANS_VAR_ONES       = ".ansValueOnes";
 
     public static final String QUEST_VAR_STIM_ONE_HUNDREDS = ".questValueStimOneHundreds";
     public static final String QUEST_VAR_STIM_ONE_TENS = ".questValueStimOneTens";
-    public static final String QUEST_VAR_OPERAND  = ".questValueOperand";
+    public static final String QUEST_VAR_OPERAND = ".questValueOperand";
     public static final String QUEST_VAR_STIM_TWO_HUNDREDS = ".questValueStimTwoHundreds";
     public static final String QUEST_VAR_STIM_TWO_TENS = ".questValueStimTwoTens";
 

@@ -38,7 +38,6 @@ import cmu.xprize.bp_component.BP_CONST;
 import cmu.xprize.bp_component.CBP_Component;
 import cmu.xprize.bp_component.CBp_Data;
 import cmu.xprize.bp_component.CBubble;
-import android.graphics.Rect;
 import android.graphics.RectF;
 import cmu.xprize.bp_component.CBubbleStimulus;
 import cmu.xprize.comp_logging.ITutorLogger;
@@ -91,7 +90,6 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
 
     private String mProblemType = "";
 
-
     public TBpComponent(Context context) {
         super(context);
     }
@@ -104,45 +102,37 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
         super(context, attrs, defStyleAttr);
     }
 
-    //Helper function that converts 3 digit number to list of digits
+
+    // Helper function that converts 3 digit number to list of digits
     private int[] getListDigits(int num) {
         int hundredsDigit = 0;  int tensDigit = 0;
-        if(num >= 100) {
-            hundredsDigit = (num / 100) * 100;
-        }
+        if (num >= 100) hundredsDigit = (num / 100) * 100;
         num = num % 100;
         return (new int[]{hundredsDigit, num});
     }
 
-    //Helper function that splits expression into operand1, key, and operand2
+    // Helper function that splits expression into operand1, key, and operand2
     private String[] splitExpression(String exp, String key) {
         int op_index = exp.indexOf(key);
         String operand1 = exp.substring(0, op_index);
 
-        if(key.equals("\n")) {
-            op_index += 1;
-        }
+        if (key.equals("\n")) op_index += 1;
 
         String operation = exp.substring(op_index, op_index+1);
         String operand2 = exp.substring(op_index+1);
 
-        if (operation.equals("+") || operation.equals("plus")) {
-            key = "plus";
-        }
-        else {
-            key = "minus";
-        }
+        if (operation.equals("+") || operation.equals("plus")) key = "plus";
+        else key = "minus";
 
         return (new String[]{operand1, key, operand2});
     }
 
+
     //***********************************************************
     // Event Listener/Dispatcher - Start
 
-
     @Override
     public void addEventListener(String linkedView) {
-
         mListeners.add((IEventListener) mTutor.getViewByName(linkedView));
     }
 
@@ -150,41 +140,43 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
     //***********************************************************
 
 
-
     //**********************************************************
     //**********************************************************
     //*****************  Tutor Interface
 
-
     @Override
     public void setVisibility(String visible) {
-
         mSceneObject.setVisibility(visible);
     }
 
-
     private void reset() {
-
         resetValid();
         resetState();
     }
 
-
     private void resetValid() {
-
         retractFeature(TCONST.GENERIC_RIGHT);
         retractFeature(TCONST.GENERIC_WRONG);
         retractFeature(TCONST.LAST_ATTEMPT);
-
     }
-
 
     private void resetState() {
-
         retractFeature(TCONST.SAY_STIMULUS);
         retractFeature(TCONST.SHOW_STIMULUS);
+        retractFeature(TCONST.SAY_TARGET);
+        retractFeature(TCONST.SHOW_TARGET);
     }
 
+    @Override
+    public void setFeature(String feature, boolean fadd) {
+        if (fadd) publishFeature(feature);
+        else retractFeature(feature);
+    }
+
+    @Override
+    public boolean testFeature(String feature) {
+        return mTutor.testFeature(feature);
+    }
 
     /**
      * Preprocess the data set
@@ -193,22 +185,23 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
      */
     @Override
     protected void updateDataSet(CBp_Data data) {
+        resetState();
 
-        // Let the compoenent process the new data set
-        //
+        if (data.question_say) publishFeature(TCONST.SAY_STIMULUS);
+        if (data.question_show) publishFeature(TCONST.SHOW_STIMULUS);
+        if (data.target_say) publishFeature(TCONST.SAY_TARGET);
+        if (data.target_show) publishFeature(TCONST.SHOW_TARGET);
+
         super.updateDataSet(data);
         mProblemType = problem_type;
         publishQuestionState(data);
     }
 
-
     /**
      * @param dataNameDescriptor
      */
     public void setDataSource(String dataNameDescriptor) {
-
-        // Ensure flags are reset so we don't trigger reset of the ALLCORRECCT flag
-        // on the first pass.
+        // Ensure flags are reset so we don't trigger reset of the ALLCORRECCT flag on the first pass.
         //
         reset();
 
@@ -222,7 +215,7 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
 
                 String dataFile = dataNameDescriptor.substring(TCONST.LOCAL_FILE.length());
 
-                // Generate a langauage specific path to the data source -
+                // Generate a language specific path to the data source -
                 // i.e. tutors/word_copy/assets/data/<iana2_language_id>/
                 // e.g. tutors/word_copy/assets/data/sw/
                 //
@@ -241,9 +234,7 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
 
                 // these two code statements below are the same as in the "startsWith SOURCEFILE" condition
                 // set the total number of questions
-                if(question_count == 0) {
-                    mTutor.setTotalQuestions(gen_stimulusSet.length);
-                }
+                if (question_count == 0) mTutor.setTotalQuestions(gen_stimulusSet.length);
 
                 // preprocess the datasource e.g. populate instance arrays with general types
                 //
@@ -253,7 +244,7 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
 
                 String dataFile = dataNameDescriptor.substring(TCONST.SOURCEFILE.length());
 
-                // Generate a langauage specific path to the data source -
+                // Generate a language specific path to the data source -
                 // i.e. tutors/word_copy/assets/data/<iana2_language_id>/
                 // e.g. tutors/word_copy/assets/data/sw/
                 //
@@ -267,9 +258,7 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
 
                 //
                 // set the total number of questions
-                if(question_count == 0) {
-                    mTutor.setTotalQuestions(gen_stimulusSet.length);
-                }
+                if (question_count == 0) mTutor.setTotalQuestions(gen_stimulusSet.length);
 
                 // preprocess the datasource e.g. populate instance arrays with general types
                 //
@@ -277,12 +266,12 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
 
             } else if (dataNameDescriptor.startsWith("db|")) {
 
-
             } else if (dataNameDescriptor.startsWith("{")) {
 
                 loadJSON(new JSONObject(dataNameDescriptor), null);
 
             } else {
+
                 throw (new Exception("BadDataSource"));
             }
         } catch (Exception e) {
@@ -290,12 +279,10 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
         }
     }
 
-
     /**
      * Chooses one track randomly out of a list kept in string.xml
      */
     public void setSoundTrack() {
-
         Resources res = getResources();
         String[] sound_tracks = res.getStringArray(cmu.xprize.bp_component.R.array.sound_tracks);
         Random rand = new Random();
@@ -306,18 +293,12 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
         publishValue(BP_CONST.SOUND_TRACK, sound_track);
     }
 
-
     public void next() {
-
         // If wrong reset ALLCORRECT
         //
-        if (mTutor.testFeatureSet(TCONST.GENERIC_WRONG)) {
-
-            retractFeature(TCONST.ALL_CORRECT);
-        }
+        if (mTutor.testFeatureSet(TCONST.GENERIC_WRONG)) retractFeature(TCONST.ALL_CORRECT);
 
         reset();
-
         super.next();
 
         if (dataExhausted()) {
@@ -326,31 +307,25 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
         }
     }
 
-
     public void enable(Boolean enable) {
     }
-
 
     public void setButtonBehavior(String command) {
         mSceneObject.setButtonBehavior(command);
     }
-
 
     /**
      * Broadcast bubble exclusion and mask the screen during feedback
      *
      */
     public void maskBubble() {
-
         int[]   screenCoord = new int[2];
         PointF  centerPoint = _touchedBubble.getCenterPosition();
 
         getLocationOnScreen(screenCoord);
 
         PointF centerPt = new PointF(screenCoord[0] + centerPoint.x, screenCoord[1] + centerPoint.y);
-
         PointF center = Scontent.localToGlobal(centerPt);
-
 
         // Add an exclusion around the bubble the (incorrect) user tapped
         //
@@ -363,14 +338,12 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
 
         bManager.sendBroadcast(msg);
 
-
         // Set the mask transparency
         //
         msg = new Intent(MASK_SETALPHA);
         msg.putExtra(MASK_ALPHA, mask_alpha);
 
         bManager.sendBroadcast(msg);
-
 
         // Show the mask while the feedback is in progress
         //
@@ -400,16 +373,13 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
         msg.putExtra(MASK_ALPHA, mask_alpha);
         bManager.sendBroadcast(msg);
 
-
         // Show the mask while the feedback is in progress
         //
         msg = new Intent(MASK_SHOWHIDE);
         msg.putExtra(MASK_SHOWHIDE, VISIBLE);
 
         bManager.sendBroadcast(msg);
-
     }
-
 
     /**
      * Clear the feedback mask
@@ -427,37 +397,34 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
         bManager.sendBroadcast(msg);
     }
 
+
     //**********************************************************
     //**********************************************************
     //*****************  Scripting Interface
 
-
     public void postEvent(String event) {
+        postEvent(event, 0);
+    }
 
+    public void postEvent(String event, Integer delay) {
         switch (event) {
-
             case BP_CONST.PAUSE_ANIMATION:
-
                 post(BP_CONST.PAUSE_ANIMATION);
                 break;
 
             case BP_CONST.RESUME_ANIMATION:
-
                 post(BP_CONST.RESUME_ANIMATION);
                 break;
 
             case BP_CONST.SHOW_BUBBLE_MASK:
-
                 maskBubble();
                 break;
 
             case BP_CONST.HIDE_MASK:
-
                 clearMask();
                 break;
 
             case BP_CONST.SHOW_STIMULUS_MASK:
-
                 maskStimulus();
                 break;
 
@@ -477,6 +444,14 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
                 post(BP_CONST.SHOW_BUBBLES);
                 break;
 
+            case BP_CONST.SPAWN_BUBBLE:
+                post(BP_CONST.SPAWN_BUBBLE, (long)delay);
+                break;
+
+            case BP_CONST.NEXT_BUBBLE:
+                post(BP_CONST.NEXT_BUBBLE, (long)delay);
+                break;
+
             case BP_CONST.POP_BUBBLE:
                 post(BP_CONST.POP_BUBBLE, _touchedBubble);
                 break;
@@ -490,7 +465,6 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
                 break;
         }
     }
-
 
     public void enableTouchEvents() {
         super.enableTouchEvents();
@@ -506,35 +480,24 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
     // IBehaviorManager Interface START
 
     public void setVolatileBehavior(String event, String behavior) {
-
         if (behavior.toUpperCase().equals(TCONST.NULL)) {
-
-            if (volatileMap.containsKey(event)) {
-                volatileMap.remove(event);
-            }
+            if (volatileMap.containsKey(event)) volatileMap.remove(event);
         } else {
             volatileMap.put(event, behavior);
         }
     }
 
-
     public void setStickyBehavior(String event, String behavior) {
-
         if (behavior.toUpperCase().equals(TCONST.NULL)) {
-
-            if (stickyMap.containsKey(event)) {
-                stickyMap.remove(event);
-            }
+            if (stickyMap.containsKey(event)) stickyMap.remove(event);
         } else {
             stickyMap.put(event, behavior);
         }
     }
 
-
-    // Execute scirpt target if behavior is defined for this event
+    // Execute script target if behavior is defined for this event
     //
     public boolean applyBehavior(String event) {
-
         boolean result = false;
         if (volatileMap.containsKey(event)) {
             RoboTutor.logManager.postEvent_D(QGRAPH_MSG, "target:" + TAG + ",action:applybehavior,type:volatile,behavior:" + event);
@@ -543,17 +506,14 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
             volatileMap.remove(event);
 
             result = true;
-
         } else if (stickyMap.containsKey(event)) {
             RoboTutor.logManager.postEvent_D(QGRAPH_MSG, "target:" + TAG + ",action:applybehavior,type:sticky,behavior:" + event);
             applyBehaviorNode(stickyMap.get(event));
 
             result = true;
         }
-
         return result;
     }
-
 
     /**
      * Apply Events in the Tutor Domain.
@@ -564,7 +524,6 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
     public void applyBehaviorNode(String nodeName) {
         IScriptable2 obj = null;
         if (nodeName != null && !nodeName.equals("") && !nodeName.toUpperCase().equals("NULL")) {
-
             try {
                 obj = mTutor.getScope().mapSymbol(nodeName);
 
@@ -574,12 +533,10 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
                     switch(obj.getType()) {
 
                         case TCONST.SUBGRAPH:
-
                             mTutor.getSceneGraph().post(this, TCONST.SUBGRAPH_CALL, nodeName);
                             break;
 
                         case TCONST.MODULE:
-
                             // Disallow module "calls"
                             RoboTutor.logManager.postEvent_E(QGRAPH_MSG, "target:" + TAG + ",action:applybehaviornode,type:modulecall,behavior:" + nodeName +  ",ERROR:MODULE Behaviors are not supported");
                             break;
@@ -588,22 +545,17 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
                         // which is done internally.
                         //
                         case TCONST.QUEUE:
-
-                            if(obj.testFeatures()) {
-                                obj.applyNode();
-                            }
+                            if (obj.testFeatures()) obj.applyNode();
                             break;
 
                         default:
-
-                            if(obj.testFeatures()) {
+                            if (obj.testFeatures()) {
                                 obj.preEnter();
                                 obj.applyNode();
                             }
                             break;
                     }
                 }
-
             } catch (Exception e) {
                 // TODO: Manage invalid Behavior
                 e.printStackTrace();
@@ -611,17 +563,14 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
         }
     }
 
-
     // IBehaviorManager Interface END
     //************************************************************************
     //************************************************************************
 
 
-
     //************************************************************************
     //************************************************************************
     // IEventSource Interface START
-
 
     @Override
     public String getEventSourceName() {
@@ -633,66 +582,40 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
         return "BubblePop_Component";
     }
 
-
     // IEventSource Interface END
     //************************************************************************
     //************************************************************************
-
 
 
     //***********************************************************
     // ITutorLogger - Start
 
     private void extractHashContents(StringBuilder builder, HashMap map) {
-
-        Iterator<?> tObjects = map.entrySet().iterator();
-
-        while(tObjects.hasNext() ) {
-
-            builder.append(',');
-
-            Map.Entry entry = (Map.Entry) tObjects.next();
-
-            String key   = entry.getKey().toString();
-            String value = "#" + entry.getValue().toString();
-
-            builder.append(key);
-            builder.append(value);
+        for (Object entry : map.entrySet()) {
+            builder.append("," + ((Map.Entry)entry).getKey().toString());
+            builder.append("#" + ((Map.Entry)entry).getValue().toString());
         }
     }
 
     private void extractFeatureContents(StringBuilder builder, HashMap map) {
-
-        StringBuilder featureset = new StringBuilder();
-
-        Iterator<?> tObjects = map.entrySet().iterator();
-
         // Scan to build a list of active features
         //
-        while(tObjects.hasNext() ) {
+        StringBuilder featureSet = new StringBuilder();
 
-            Map.Entry entry = (Map.Entry) tObjects.next();
-
-            Boolean value = (Boolean) entry.getValue();
-
-            if(value) {
-                featureset.append(entry.getKey().toString() + ";");
-            }
+        for (Object entry : map.entrySet()) {
+            if ((Boolean)((Map.Entry)entry).getValue()) featureSet.append(((Map.Entry)entry).getKey().toString() + ";");
         }
 
-        // If there are active features then trim the last ',' and add the
-        // comma delimited list as the "$features" object.
+        // If there are active features then trim the last ',' and add the comma delimited list as the "$features" object.
         //
-        if(featureset.length() != 0) {
-            featureset.deleteCharAt(featureset.length()-1);
-
-            builder.append(",$features#" + featureset.toString());
+        if (featureSet.length() != 0) {
+            featureSet.deleteCharAt(featureSet.length() - 1);
+            builder.append(",$features#" + featureSet.toString());
         }
     }
 
     @Override
     public void logState(String logData) {
-
         StringBuilder builder = new StringBuilder();
 
         extractHashContents(builder, _StringVar);
@@ -706,126 +629,117 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
     //***********************************************************
 
 
-
     //************************************************************************
     //************************************************************************
     // IPublish component state data - START
+
+    @Override
+    protected void prepareState(CBubble bubble, CBubbleStimulus bubbleStimulus) {
+        _touchedBubble = bubble;
+        _bubbleStimulus = bubbleStimulus;
+        publishState(bubble);
+        checkBubble(bubble);
+        trackAndLogPerformance(bubble);
+    }
 
     /**
      * Publish the Stimulus value as Scope variables for script access
      */
     @Override
-    protected void publishState(CBubble bubble, CBubbleStimulus bubbleStimulus) {
-
-        _touchedBubble = bubble;
-        _bubbleStimulus = bubbleStimulus;
-
-        TScope scope  = mTutor.getScope();
+    protected void publishState(CBubble bubble) {
         String answer = bubble.getStimulus();
 
         // Ensure letters are lowercase for mp3 matching
         //
-        if(answer.length() == 1) {
-            answer = answer.toLowerCase();
-        }
+        if (answer.length() == 1) answer = answer.toLowerCase();
 
-        if(mProblemType.equals("EXPRESSION_N2E")) {
+        if (mProblemType.equals("EXPRESSION_N2E")) {
             publishFeature(BP_CONST.FTR_N2E);
 
             String[] expTerms = splitExpression(answer, "\n");
-            int operand1 = Integer.parseInt(expTerms[0]); int operand2 = Integer.parseInt(expTerms[2]);
+            int operand1 = Integer.parseInt(expTerms[0]);
+            int operand2 = Integer.parseInt(expTerms[2]);
             String operation = expTerms[1];
-            int[] operand1Digits = getListDigits(operand1); int[] operand2Digits = getListDigits(operand2);
+            int[] operand1Digits = getListDigits(operand1);
+            int[] operand2Digits = getListDigits(operand2);
 
-            //Publish features and values for each digit of first operand so that audios for each digit can be played separately
-            if(operand1Digits[0] >= 100) {
+            // Publish features and values for each digit of first operand so that audios for each digit can be played separately
+            if (operand1Digits[0] >= 100) {
                 publishFeature(BP_CONST.FTR_ANS_STIM_ONE_HUNDREDS);
                 publishValue(BP_CONST.ANS_VAR_STIM_ONE_HUNDREDS, operand1Digits[0]);
-            }
-            else {
+            } else {
                 removeFeature(BP_CONST.FTR_ANS_STIM_ONE_HUNDREDS);
             }
-            if(operand1Digits[1] >= 1 || operand1Digits[0] == 0) {
+            if (operand1Digits[1] >= 1 || operand1Digits[0] == 0) {
                 publishFeature(BP_CONST.FTR_ANS_STIM_ONE_TENS);
                 publishValue(BP_CONST.ANS_VAR_STIM_ONE_TENS, operand1Digits[1]);
-            }
-            else {
+            } else {
                 removeFeature(BP_CONST.FTR_ANS_STIM_ONE_TENS);
             }
 
             publishValue(BP_CONST.ANS_VAR_OPERAND, operation);
 
-            //Publish features and values for each digit of second operand so that audios for each digit can be played separately
-            if(operand2Digits[0] >= 100) {
+            // Publish features and values for each digit of second operand so that audios for each digit can be played separately
+            if (operand2Digits[0] >= 100) {
                 publishFeature(BP_CONST.FTR_ANS_STIM_TWO_HUNDREDS);
                 publishValue(BP_CONST.ANS_VAR_STIM_TWO_HUNDREDS, operand2Digits[0]);
-            }
-            else {
+            } else {
                 removeFeature(BP_CONST.FTR_ANS_STIM_TWO_HUNDREDS);
             }
-            if(operand2Digits[1] >= 1 || operand2Digits[0] == 0 ) {
+            if (operand2Digits[1] >= 1 || operand2Digits[0] == 0) {
                 publishFeature(BP_CONST.FTR_ANS_STIM_TWO_TENS);
                 publishValue(BP_CONST.ANS_VAR_STIM_TWO_TENS, operand2Digits[1]);
-            }
-            else {
+            } else {
                 removeFeature(BP_CONST.FTR_ANS_STIM_TWO_TENS);
             }
-        }
-        else  {
-            if(mProblemType.startsWith("EXPRESSION_E2N")) {
-                publishFeature(BP_CONST.FTR_E2N);
-            }
+        } else {
+            if (mProblemType.startsWith("EXPRESSION_E2N")) publishFeature(BP_CONST.FTR_E2N);
 
-            if(answer != null && answer.matches("[-+]?\\d*\\.?\\d+")) {
+            if (answer != null && answer.matches("[-+]?\\d*\\.?\\d+")) {
                 int ans = Integer.parseInt(answer);
                 int[] ansDigits = getListDigits(ans);
-
-                if(ansDigits[0] >= 100) {
+                if (ansDigits[0] >= 100) {
                     publishFeature(BP_CONST.FTR_ANS_HUNDREDS);
                     publishValue(BP_CONST.ANS_VAR_HUNDREDS, ansDigits[0]);
-                }
-                else {
+                } else {
                     removeFeature(BP_CONST.FTR_ANS_HUNDREDS);
                 }
-                if(ansDigits[1] >= 1 || ansDigits[0] == 0) {
+                if (ansDigits[1] >= 1 || ansDigits[0] == 0) {
                     publishFeature(BP_CONST.FTR_ANS_TENS);
                     publishValue(BP_CONST.ANS_VAR_TENS, ansDigits[1]);
-                }
-                else {
+                } else {
                     removeFeature(BP_CONST.FTR_ANS_TENS);
                 }
-            }
-            else {
+            } else {
                 publishValue(BP_CONST.ANS_VAR, answer);
-
             }
         }
+    }
 
+    private void checkBubble(CBubble bubble) {
         resetValid();
 
         if (bubble.isCorrect()) {
             publishFeature(TCONST.GENERIC_RIGHT);
-            Log.d("BPOP", "Correct" );
+            Log.d(TAG, "Correct");
 
             correct_Count++;
-
         } else {
             publishFeature(TCONST.GENERIC_WRONG);
-            Log.d("BPOP", "Wrong" );
+            Log.d(TAG, "Wrong");
             attempt_count--;
 
-            if(attempt_count <= 0) {
+            if (attempt_count <= 0) {
                 publishFeature(TCONST.LAST_ATTEMPT);
 
-                Log.d("BPOP", "Publish Last Attempt" );
+                Log.d(TAG, "Publish Last Attempt");
             }
         }
 
-        Log.d("BPOP", "Publish correct Count: " + correct_Count);
-        Log.d("BPOP", "Publish attempt Count: " + attempt_count);
+        Log.d(TAG, "Publish correct Count: " + correct_Count);
+        Log.d(TAG, "Publish attempt Count: " + attempt_count);
 
         trackAndLogPerformance(bubble);
-
     }
 
     /**
@@ -833,21 +747,14 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
      * tracking performance for Activity Selection and for Logging.
      */
     private void trackAndLogPerformance(CBubble bubble) {
-        // XXX_LL Begin changes
-
-        if (bubble.isCorrect()) {
-            mTutor.countCorrect();
-        } else {
-            mTutor.countIncorrect();
-        }
+        if (bubble.isCorrect()) mTutor.countCorrect();
+        else mTutor.countIncorrect();
 
         PerformanceLogItem event = new PerformanceLogItem();
 
         String problemName = "BPOP_" + _currData.answer + "_";
-        for(int i = 0; i < _currData.response_set.length-1; i++) {
-            problemName += _currData.response_set[i] + "-";
-        }
-        problemName += _currData.response_set[_currData.response_set.length-1] + "";
+        for (int i = 0; i < _currData.response_set.length - 1; i++) problemName += _currData.response_set[i] + "-";
+        problemName += _currData.response_set[_currData.response_set.length - 1] + "";
 
         String promptType = "";
         if (_currData.question_say) promptType += "say";
@@ -870,9 +777,8 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
         event.setExpectedAnswer(_currData.answer);
 
         StringBuilder distractors = new StringBuilder();
-        for(int i = 0; i < _currData.response_set.length; i++) {
-            if(!_currData.response_set[i].equals(_currData.answer))
-                distractors.append(_currData.response_set[i]+"+");
+        for (int i = 0; i < _currData.response_set.length; i++) {
+            if (!_currData.response_set[i].equals(_currData.answer)) distractors.append(_currData.response_set[i] + "+");
         }
         event.setDistractors(distractors.toString().substring(0, distractors.toString().length() - 1));
 
@@ -888,10 +794,8 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
     }
 
     protected void publishQuestionState(CBp_Data data) {
-
         TScope scope = mTutor.getScope();
 
-        resetState();
         String correctVal = data.stimulus;
 
         // Ensure letters are lowercase for mp3 matching
@@ -899,17 +803,12 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
         correctVal = correctVal.toLowerCase();
 
         //Cases over the problem type to publish diffferent features and values
-        if(mProblemType.startsWith("EXPRESSION_E2N")) {
-
+        if (mProblemType.startsWith("EXPRESSION_E2N")) {
             publishFeature("FTR_E2N");
 
             String key = "\n";
-            if(mProblemType.equals("EXPRESSION_E2N_ADD")) {
-                key = "+";
-            }
-            else if(mProblemType.equals("EXPRESSION_E2N_SUB")) {
-                key = "-";
-            }
+            if (mProblemType.equals("EXPRESSION_E2N_ADD")) key = "+";
+            else if (mProblemType.equals("EXPRESSION_E2N_SUB")) key = "-";
 
             String[] expTerms = splitExpression(correctVal, key);
             int operand1 = Integer.parseInt(expTerms[0]); int operand2 = Integer.parseInt(expTerms[2]);
@@ -918,146 +817,112 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
             int[] operand1Digits = getListDigits(operand1); int[] operand2Digits = getListDigits(operand2);
 
             //Publish features and values for each digit of first operand so that audios can be played separately
-            if(operand1Digits[0] >= 100) {
+            if (operand1Digits[0] >= 100) {
                 publishFeature(BP_CONST.FTR_QUEST_STIM_ONE_HUNDREDS);
                 publishValue(BP_CONST.QUEST_VAR_STIM_ONE_HUNDREDS, operand1Digits[0]);
-            }
-            else {
+            } else {
                 removeFeature(BP_CONST.FTR_QUEST_STIM_ONE_HUNDREDS);
             }
-            if(operand1Digits[1] >= 1 || operand1Digits[0] == 0) {
+            if (operand1Digits[1] >= 1 || operand1Digits[0] == 0) {
                 publishFeature(BP_CONST.FTR_QUEST_STIM_ONE_TENS);
                 publishValue(BP_CONST.QUEST_VAR_STIM_ONE_TENS, operand1Digits[1]);
-            }
-            else {
+            } else {
                 removeFeature(BP_CONST.FTR_QUEST_STIM_ONE_TENS);
             }
 
             publishValue(BP_CONST.QUEST_VAR_OPERAND, operation);
 
             //Publish features and values for each digit of second operand so that audios can be played separately
-            if(operand2Digits[0] >= 100) {
+            if (operand2Digits[0] >= 100) {
                 publishFeature(BP_CONST.FTR_QUEST_STIM_TWO_HUNDREDS);
                 publishValue(BP_CONST.QUEST_VAR_STIM_TWO_HUNDREDS, operand2Digits[0]);
-            }
-            else {
+            } else {
                 removeFeature(BP_CONST.FTR_QUEST_STIM_TWO_HUNDREDS);
             }
-            if(operand2Digits[1] >= 1 || operand2Digits[0] == 0) {
+            if (operand2Digits[1] >= 1 || operand2Digits[0] == 0) {
                 publishFeature(BP_CONST.FTR_QUEST_STIM_TWO_TENS);
                 publishValue(BP_CONST.QUEST_VAR_STIM_TWO_TENS, operand2Digits[1]);
-            }
-            else {
+            } else {
                 removeFeature(BP_CONST.FTR_QUEST_STIM_TWO_TENS);
             }
-        }
-        else if(mProblemType.equals("EXPRESSION_N2E")) {
+        } else if (mProblemType.equals("EXPRESSION_N2E")) {
             publishFeature(BP_CONST.FTR_N2E);
 
             int ans = Integer.parseInt(correctVal);
             int[] ansDigits = getListDigits(ans);
 
-            if(ansDigits[0] >= 100) {
+            if (ansDigits[0] >= 100) {
                 publishFeature(BP_CONST.FTR_QUEST_HUNDREDS);
                 publishValue(BP_CONST.QUEST_VAR_HUNDREDS, ansDigits[0]);
-            }
-            else {
+            } else {
                 removeFeature(BP_CONST.FTR_QUEST_HUNDREDS);
             }
-            if(ansDigits[1] >= 1 || ansDigits[0] == 0) {
+            if (ansDigits[1] >= 1 || ansDigits[0] == 0) {
                 publishFeature(BP_CONST.FTR_QUEST_TENS);
                 publishValue(BP_CONST.QUEST_VAR_TENS, ansDigits[1]);
-            }
-            else {
+            } else {
                 removeFeature(BP_CONST.FTR_QUEST_TENS);
             }
-        }
-        else {
-            if(mProblemType.equals("MIS_NUM")) {
-                correctVal = "What number belongs here";
-            }
-            if(mProblemType.equals("GL_GT")) {
-                correctVal = "Touch the largest number";
-            }
-            if(mProblemType.equals("GL_LT")) {
-                correctVal = "Touch the smallest number";
-            }
-            if(correctVal != null && correctVal.matches("[-+]?\\d*\\.?\\d+")) {
+        } else {
+            if (mProblemType.equals("MIS_NUM")) correctVal = "What number belongs here";
+            if (mProblemType.equals("GL_GT")) correctVal = "Touch the largest number";
+            if (mProblemType.equals("GL_LT")) correctVal = "Touch the smallest number";
+
+            if (correctVal != null && correctVal.matches("[-+]?\\d*\\.?\\d+")) {
                 int ans = Integer.parseInt(correctVal);
                 int[] ansDigits = getListDigits(ans);
 
-                if(ansDigits[0] >= 100) {
+                if (ansDigits[0] >= 100) {
                     publishFeature(BP_CONST.FTR_QUEST_HUNDREDS);
                     publishValue(BP_CONST.QUEST_VAR_HUNDREDS, ansDigits[0]);
-                }
-                else {
+                } else {
                     removeFeature(BP_CONST.FTR_QUEST_HUNDREDS);
                 }
-                if(ansDigits[1] >= 1 || ansDigits[0] == 0) {
+                if (ansDigits[1] >= 1 || ansDigits[0] == 0) {
                     publishFeature(BP_CONST.FTR_QUEST_TENS);
                     publishValue(BP_CONST.QUEST_VAR_TENS, ansDigits[1]);
-                }
-                else {
+                } else {
                     removeFeature(BP_CONST.FTR_QUEST_TENS);
                 }
-            }
-            else {
-                if(mProblemType.equals("WORD_STARTS_WITH")) {
+            } else {
+                if (mProblemType.equals("WORD_STARTS_WITH")) {
                     publishFeature(BP_CONST.FTR_WRD_STARTS_WITH);
                     publishValue(BP_CONST.QUEST_VAR, correctVal);
                 }
-                if(mProblemType.equals("WORD_ENDS_WITH")) {
+                if (mProblemType.equals("WORD_ENDS_WITH")) {
                     publishFeature(BP_CONST.FTR_WRD_ENDS_WITH);
                     publishValue(BP_CONST.QUEST_VAR, correctVal);
-                }
-                else {
+                } else {
                     publishValue(BP_CONST.QUEST_VAR, correctVal);
                 }
             }
 
         }
-
-        if (data.question_say) {
-            publishFeature(TCONST.SAY_STIMULUS);
-        }
-
-        if (data.question_show) {
-            publishFeature(TCONST.SHOW_STIMULUS);
-        }
     }
-    
+
     @Override
     public void publishState() {
     }
 
     @Override
     public void publishValue(String varName, String value) {
-
         _StringVar.put(varName,value);
 
         // update the response variable  "<ComponentName>.<varName>"
         mTutor.getScope().addUpdateVar(name() + varName, new TString(value));
-
     }
 
     @Override
     public void publishValue(String varName, int value) {
-
         _IntegerVar.put(varName,value);
 
         // update the response variable  "<ComponentName>.<varName>"
         mTutor.getScope().addUpdateVar(name() + varName, new TInteger(value));
-
     }
 
     @Override
     public void publishFeatureSet(String featureSet) {
-
-        // Add new features - no duplicates
-        List<String> featArray = Arrays.asList(featureSet.split(","));
-
-        for(String feature : featArray) {
-
+        for (String feature : Arrays.asList(featureSet.split(","))) {
             _FeatureMap.put(feature, true);
             publishFeature(feature);
         }
@@ -1065,12 +930,7 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
 
     @Override
     public void retractFeatureSet(String featureSet) {
-
-        // Add new features - no duplicates
-        List<String> featArray = Arrays.asList(featureSet.split(","));
-
-        for(String feature : featArray) {
-
+        for (String feature : Arrays.asList(featureSet.split(","))) {
             _FeatureMap.put(feature, false);
             retractFeature(feature);
         }
@@ -1078,7 +938,6 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
 
     @Override
     public void publishFeature(String feature) {
-
         _FeatureMap.put(feature, true);
         mTutor.addFeature(feature);
     }
@@ -1097,7 +956,6 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
      */
     @Override
     public void retractFeature(String feature) {
-
         _FeatureMap.put(feature, false);
         mTutor.delFeature(feature);
     }
@@ -1108,20 +966,8 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
      */
     @Override
     public void publishFeatureMap(HashMap featureMap) {
-
-        Iterator<?> tObjects = featureMap.entrySet().iterator();
-
-        while(tObjects.hasNext() ) {
-
-            Map.Entry entry = (Map.Entry) tObjects.next();
-
-            Boolean active = (Boolean)entry.getValue();
-
-            if(active) {
-                String feature = (String)entry.getKey();
-
-                mTutor.addFeature(feature);
-            }
+        for (Object entry : featureMap.entrySet()) {
+            if ((Boolean)((Map.Entry)entry).getValue()) mTutor.addFeature((String)((Map.Entry)entry).getKey());
         }
     }
 
@@ -1131,52 +977,34 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
      */
     @Override
     public void retractFeatureMap(HashMap featureMap) {
-
-        Iterator<?> tObjects = featureMap.entrySet().iterator();
-
-        while(tObjects.hasNext() ) {
-
-            Map.Entry entry = (Map.Entry) tObjects.next();
-
-            Boolean active = (Boolean)entry.getValue();
-
-            if(active) {
-                String feature = (String)entry.getKey();
-
-                mTutor.delFeature(feature);
-            }
+        for (Object entry : featureMap.entrySet()) {
+            if ((Boolean)((Map.Entry)entry).getValue()) mTutor.delFeature((String)((Map.Entry)entry).getKey());
         }
     }
 
     // IPublish component state data - EBD
     //************************************************************************
     //************************************************************************
-    
-    
-    
+
+
     //**********************************************************
     //**********************************************************
     //*****************  ITutorObjectImpl Implementation
 
     @Override
     public void init(Context context, AttributeSet attrs) {
-
         super.init(context, attrs);
 
         mSceneObject = new CObjectDelegate(this);
         mSceneObject.init(context, attrs);
     }
 
-
     @Override
     public void onCreate() {
-
         // Do deferred listeners configuration - this cannot be done until after the tutor is instantiated
         //
-        if(!mListenerConfigured) {
-            for (String linkedView : mLinkedViews) {
-                addEventListener(linkedView);
-            }
+        if (!mListenerConfigured) {
+            for (String linkedView : mLinkedViews) addEventListener(linkedView);
             mListenerConfigured = true;
         }
     }
@@ -1185,7 +1013,6 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
     public void onDestroy() {
         super.onDestroy();
     }
-
 
     @Override
     public void setName(String name) {
@@ -1223,7 +1050,6 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
         mSceneObject.setLogManager(logManager);
     }
 
-
     @Override
     public CObjectDelegate getimpl() {
         return mSceneObject;
@@ -1231,26 +1057,20 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
 
     @Override
     public void zoomInOut(Float scale, Long duration) {
-
     }
 
     @Override
     public void wiggle(String direction, Float magnitude, Long duration, Integer repetition) {
-
     }
 
     @Override
     public void setAlpha(Float alpha) {
-
     }
-
 
     // *** Serialization
 
-
     @Override
     public void loadJSON(JSONObject jsonObj, IScope scope) {
-
         // Log.d(TAG, "Loader iteration");
         super.loadJSON(jsonObj, (IScope2) scope);
 

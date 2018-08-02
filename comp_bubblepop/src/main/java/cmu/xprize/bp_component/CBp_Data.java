@@ -28,27 +28,30 @@ import cmu.xprize.util.JSON_Helper;
 public class CBp_Data implements ILoadableObject {
 
     // json loadable
-    public String        question_type    = "MC";           // MC (MultipleChoice) or RISEing bubbles
+    public String        question_type    = "MC";           // MC (MultipleChoice) or RISE (Rising) bubbles
     public boolean       question_say     = false;          // Narrate stimulus (question) value
     public boolean       question_show    = false;          // show stimulus (question)
+
+    public boolean       target_say       = false;          // Narrate target (answer) value
+    public boolean       target_show      = false;          // show target (answer)
 
     public boolean       gen_question     = true;           // Are questions generated or pre-defined
     public int           answer_index     = -1;             // Where answer is placed in response_set (neg -> random)
 
     public String[]      response_set     = null;           // Values for this iteration
     public String[]      responsetype_set = null;           // types for mixed response sets
-    public String[][]    response_script  = null;           // List of uttereances describing the individual responses
+    public String[][]    response_script  = null;           // List of utterances describing the individual responses
 
     public int           respCountExact   = 0;              // Number of bubbles to present 0 == gen # in CountRange
-    public int[]         respCountRange   = {5,5};          // Number of bubbles to present in response set
+    public int[]         respCountRange   = {5, 5};         // Number of bubbles to present in response set
 
     public String        stimulus         = null;           // question value
     public String        stimulus_type    = null;           // question type - reference / text_data
-    public String []     stimulus_script  = null;           // List of uttereances describing the question
+    public String []     stimulus_script  = null;           // List of utterances describing the question
 
     public String        answer;                            // must match unique value in response set
     public String        answer_type      = null;           // answer type - reference / text_data
-    public String []     answer_script    = null;           // List of uttereances describing the answer
+    public String []     answer_script    = null;           // List of utterances describing the answer
 
     public String        comp_start_end   = null;
     public String        comp_with_like   = null;
@@ -57,7 +60,6 @@ public class CBp_Data implements ILoadableObject {
 
     @Override
     public void loadJSON(JSONObject jsonObj, IScope scope) {
-
         JSON_Helper.parseSelf(jsonObj, this, CClassMap.classMap, scope);
     }
 }

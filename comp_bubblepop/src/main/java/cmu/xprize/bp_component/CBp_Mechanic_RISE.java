@@ -53,43 +53,35 @@ public class CBp_Mechanic_RISE extends CBp_Mechanic_Base implements IBubbleMecha
         mProblemType = problem_type;
     }
 
+
     @Override
     protected void init(Context context, CBP_Component parent) {
         super.init(context, parent);
     }
 
-
     @Override
     public void onDraw(Canvas canvas) {
-
     }
-
 
     @Override
     public boolean isInitialized() {
         return mInitialized;
     }
 
-
     @Override
     public void onDestroy() {
         super.onDestroy();
     }
 
-
-    public void execCommand(String command, Object target ) {
-
+    public void execCommand(String command, Object target) {
         CBubble bubble;
         long    delay = 0;
 
         super.execCommand(command, target);
 
-        switch(command) {
-
+        switch (command) {
             case BP_CONST.SHOW_BUBBLES:
-
-                if (!_isRunning && mInitialized) {
-
+                if (mInitialized) {
                     _isRunning = true;
 
                     mComponent.post(BP_CONST.SPAWN_BUBBLE);
@@ -97,22 +89,16 @@ public class CBp_Mechanic_RISE extends CBp_Mechanic_Base implements IBubbleMecha
                 break;
 
             case BP_CONST.PAUSE_ANIMATION:
-
                 if (_isRunning) {
-                    for(Animator animation : translators.keySet()) {
-                        animation.pause();
-                    }
+                    for (Animator animation : translators.keySet()) animation.pause();
 
                     _isRunning = false;
                 }
                 break;
 
             case BP_CONST.RESUME_ANIMATION:
-
                 if (!_isRunning) {
-                    for(Animator animation : translators.keySet()) {
-                        animation.resume();
-                    }
+                    for (Animator animation : translators.keySet()) animation.resume();
 
                     _isRunning = true;
                     mComponent.post(BP_CONST.SPAWN_BUBBLE);
@@ -120,10 +106,8 @@ public class CBp_Mechanic_RISE extends CBp_Mechanic_Base implements IBubbleMecha
                 break;
 
             case BP_CONST.SPAWN_BUBBLE:
-
-                if(_isRunning) {
+                if (_isRunning) {
                     if (launchBubble()) {
-
                         int[] launchRange = {_travelTime / _currData.respCountRange[BP_CONST.MAX], _travelTime / _currData.respCountRange[BP_CONST.MIN]};
 
                         delay = getRandInRange(launchRange);
@@ -136,7 +120,6 @@ public class CBp_Mechanic_RISE extends CBp_Mechanic_Base implements IBubbleMecha
                 break;
 
             case BP_CONST.POP_BUBBLE:
-
                 bubble = (CBubble)target;
                 delay  = bubble.pop();
 
@@ -147,14 +130,11 @@ public class CBp_Mechanic_RISE extends CBp_Mechanic_Base implements IBubbleMecha
 
                 mComponent.post(BP_CONST.REPLACE_BUBBLE, bubble, delay);
                 break;
-
         }
     }
 
-
     @Override
     public void populateView(CBp_Data data) {
-
         CBubble newBubble;
 
         // Check if the response_set needs to be generated
@@ -167,8 +147,7 @@ public class CBp_Mechanic_RISE extends CBp_Mechanic_Base implements IBubbleMecha
         SBubbles = new CBubble[_currData.respCountRange[BP_CONST.MAX]];
 
         for (int i1 = 0; i1 < _currData.respCountRange[BP_CONST.MAX]; i1++) {
-
-            newBubble = (CBubble) View.inflate(mContext, R.layout.bubble_view, null);
+            newBubble = (CBubble)View.inflate(mContext, R.layout.bubble_view, null);
             newBubble.setAlpha(0);
 
             SBubbles[i1] = newBubble;
@@ -176,22 +155,18 @@ public class CBp_Mechanic_RISE extends CBp_Mechanic_Base implements IBubbleMecha
             mParent.addView(newBubble, layoutParams);
         }
         mInitialized = true;
-
     }
 
-
     @Override
-    public void doLayout(int width, int height, CBp_Data data) {}
-
+    public void doLayout(int width, int height, CBp_Data data) {
+    }
 
     private boolean launchBubble() {
-
         CBubble nextBubble = null;
         boolean launched   = false;
         int     colorNdx;
 
         if (SBubbles != null) {
-
             // Find a bubble that is not currently on screen.
             //
             for (CBubble bubble : SBubbles) {
@@ -205,13 +180,11 @@ public class CBp_Mechanic_RISE extends CBp_Mechanic_Base implements IBubbleMecha
             // If there is a free bubble then set it up and launch it
             //
             if (nextBubble != null) {
-
                 launched = true;
 
                 try {
-
                     do {
-                        colorNdx = (int) (Math.random() * BP_CONST.bubbleColors.length);
+                        colorNdx = (int)(Math.random() * BP_CONST.bubbleColors.length);
                     } while (colorNdx == _prevColorNdx);
 
                     _prevColorNdx = colorNdx;
@@ -233,9 +206,7 @@ public class CBp_Mechanic_RISE extends CBp_Mechanic_Base implements IBubbleMecha
                     long timeOfFlight = 0;
 
                     switch (responseTyp) {
-
                         case BP_CONST.REFERENCE:
-
                             //Moved set color and scale here after text has been set
                             nextBubble.setColor(BP_CONST.bubbleColors[colorNdx]);
                             nextBubble.setScale(getRandInRange(_scaleRange));
@@ -245,11 +216,10 @@ public class CBp_Mechanic_RISE extends CBp_Mechanic_Base implements IBubbleMecha
                             nextBubble.configData(responseVal, correctVal, mProblemType);
                             nextBubble.setContents(shapeSet[(int) (Math.random() * shapeSet.length)], null);
                             xRange = new float[]{0, mParent.getWidth() - (BP_CONST.BUBBLE_DESIGN_RADIUS * nextBubble.getAssignedScale())};
-                            timeOfFlight = (long) (_travelTime / nextBubble.getAssignedScale());
+                            timeOfFlight = (long)(_travelTime / nextBubble.getAssignedScale());
                             break;
 
                         case BP_CONST.TEXTDATA:
-
                             nextBubble.configData(responseVal, correctVal, mProblemType);
                             nextBubble.setContents(0, responseVal);
 
@@ -257,12 +227,11 @@ public class CBp_Mechanic_RISE extends CBp_Mechanic_Base implements IBubbleMecha
                             //Should subtract nextBubble.getMeasuredWidth() * nextBubble.getAssignedScale() but
                             //width doesn't load quick enough first bubbles, so use 600 instead as upper bound
                             xRange = new float[]{0, mParent.getWidth() - MAX_BUBBLE_WIDTH};
-                            timeOfFlight = (long) (_travelTime);
+                            timeOfFlight = (long)(_travelTime);
 
                             //Moved set color and scale here after text has been set
                             nextBubble.setColor(BP_CONST.bubbleColors[colorNdx]);
                             nextBubble.setScale(getRandInRange(_scaleRange));
-
                             break;
                     }
 
@@ -271,7 +240,7 @@ public class CBp_Mechanic_RISE extends CBp_Mechanic_Base implements IBubbleMecha
                     } while (Math.abs(xPos - _prevXpos) < nextBubble.getWidth());
                     _prevXpos = xPos;
 
-                    nextBubble.setPosition((int) xPos, mParent.getHeight());
+                    nextBubble.setPosition((int)xPos, mParent.getHeight());
                     nextBubble.setAlpha(1.0f);
 
                     PointF wayPoints[] = new PointF[1];
@@ -289,18 +258,15 @@ public class CBp_Mechanic_RISE extends CBp_Mechanic_Base implements IBubbleMecha
 
                     translator.addListener(new Animator.AnimatorListener() {
                         @Override
-                        public void onAnimationCancel(Animator arg0) {
-                            //Functionality here
+                        public void onAnimationCancel(Animator animation) {
                         }
 
                         @Override
-                        public void onAnimationStart(Animator arg0) {
-                            //Functionality here
+                        public void onAnimationStart(Animator animation) {
                         }
 
                         @Override
                         public void onAnimationEnd(Animator animation) {
-
                             CBubble bubble = translators.get(animation);
                             translators.remove(animation);
 
@@ -308,8 +274,7 @@ public class CBp_Mechanic_RISE extends CBp_Mechanic_Base implements IBubbleMecha
                         }
 
                         @Override
-                        public void onAnimationRepeat(Animator arg0) {
-                            //Functionality here
+                        public void onAnimationRepeat(Animator animation) {
                         }
                     });
 
@@ -318,9 +283,7 @@ public class CBp_Mechanic_RISE extends CBp_Mechanic_Base implements IBubbleMecha
 
                     translators.put(translator, nextBubble);
                     translator.start();
-                }
-                catch(Exception ex) {
-
+                } catch (Exception ex) {
                     Log.e(TAG, "Error : " + ex);
                 }
             }
@@ -329,16 +292,11 @@ public class CBp_Mechanic_RISE extends CBp_Mechanic_Base implements IBubbleMecha
         return launched;
     }
 
-
     protected void setupWiggle(View target, long delay) {
+        float[] wayPoints = new float[]{target.getScaleY() * BP_CONST.STRETCH_MIN, target.getScaleY() * BP_CONST.STRETCH_MAX, target.getScaleY() * BP_CONST.STRETCH_MIN};
 
-        float[] wayPoints   = new float[]{target.getScaleY() * BP_CONST.STRETCH_MIN,
-                target.getScaleY() * BP_CONST.STRETCH_MAX,
-                target.getScaleY() * BP_CONST.STRETCH_MIN};
-
-        AnimatorSet stretch = CAnimatorUtil.configStretch(target, "vertical", 2100, ValueAnimator.INFINITE, delay, wayPoints );
+        AnimatorSet stretch = CAnimatorUtil.configStretch(target, "vertical", 2100, ValueAnimator.INFINITE, delay, wayPoints);
 
         stretch.start();
     }
-
 }

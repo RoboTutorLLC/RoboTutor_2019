@@ -62,17 +62,19 @@ public class CBp_Mechanic_MC extends CBp_Mechanic_Base implements IBubbleMechani
     static final String TAG = "CBp_Mechanic_MC";
 
     private String          mProblemType;
+    private int             mIndex;
+
 
     public CBp_Mechanic_MC(Context context, CBP_Component parent, String problem_type) {
         super.init(context, parent);
         mProblemType = problem_type;
     }
 
+
     @Override
     protected void init(Context context, CBP_Component parent) {
         super.init(context, parent);
     }
-
 
     @Override
     public boolean isInitialized() {
@@ -86,8 +88,7 @@ public class CBp_Mechanic_MC extends CBp_Mechanic_Base implements IBubbleMechani
 
     @Override
     public void onDraw(Canvas canvas) {
-
-        // Create a paint object to deine the line parameters
+        // Create a paint object to define the line parameters
         mPaint      = new Paint();
         mViewRegion = new Rect();
 
@@ -109,8 +110,7 @@ public class CBp_Mechanic_MC extends CBp_Mechanic_Base implements IBubbleMechani
 
         int _bubbleIntrinsicRadius = (mParent.getResources().getDrawable(BP_CONST.BUBBLE_SAMPLE, null).getIntrinsicWidth()) / 2;
 
-        for(int i1 = 0; i1 < SBubbles.length ; i1++) {
-
+        for (int i1 = 0; i1 < SBubbles.length; i1++) {
             float[] range = SBubbles[i1].getRange();
             float   angle = SBubbles[i1].getAngle();
 
@@ -122,116 +122,132 @@ public class CBp_Mechanic_MC extends CBp_Mechanic_Base implements IBubbleMechani
             float srad = brad * BP_CONST.STRETCH_MAGNITUDE;
 
             mPaint.setColor(Color.parseColor("#00FFFF"));
-            canvas.drawCircle(pos2.x, pos2.y , irad, mPaint);
+            canvas.drawCircle(pos2.x, pos2.y, irad, mPaint);
 
             mPaint.setColor(Color.parseColor("#000000"));
-            canvas.drawCircle(pos2.x, pos2.y , 10, mPaint);
+            canvas.drawCircle(pos2.x, pos2.y, 10, mPaint);
 
             mPaint.setColor(Color.parseColor("#000000"));
             mPaint.setStyle(Paint.Style.STROKE);
-            canvas.drawCircle(pos2.x, pos2.y , brad, mPaint);
+            canvas.drawCircle(pos2.x, pos2.y, brad, mPaint);
 
             mPaint.setColor(Color.parseColor("#00FF00"));
             mPaint.setStyle(Paint.Style.STROKE);
-            canvas.drawCircle(pos2.x, pos2.y , srad, mPaint);
+            canvas.drawCircle(pos2.x, pos2.y, srad, mPaint);
 
             mPaint.setColor(Color.parseColor("#FF0000"));
             mPaint.setStyle(Paint.Style.FILL);
-            canvas.drawCircle(pos1.x, pos1.y , 13f, mPaint);
+            canvas.drawCircle(pos1.x, pos1.y, 13f, mPaint);
 
             mPaint.setColor(Color.parseColor("#0000FF"));
             mPaint.setStyle(Paint.Style.FILL);
             PointF pos3 = SBubbles[i1].getCenterPosition();
             mPaint.setAlpha(100);
-            canvas.drawCircle(pos3.x, pos3.y , irad, mPaint);
+            canvas.drawCircle(pos3.x, pos3.y, irad, mPaint);
             mPaint.setAlpha(255);
-            canvas.drawCircle(pos3.x, pos3.y , 13f, mPaint);
-
+            canvas.drawCircle(pos3.x, pos3.y, 13f, mPaint);
 
             mPaint.setColor(Color.parseColor("#000000"));
-            canvas.drawLine(_viewCenter.x, _viewCenter.y ,pos2.x, pos2.y , mPaint);
+            canvas.drawLine(_viewCenter.x, _viewCenter.y, pos2.x, pos2.y, mPaint);
         }
     }
 
-
     protected void setupWiggle(View target, long delay) {
+        AnimatorSet animation = CAnimatorUtil.configWiggle(target, "vertical", 3000, ValueAnimator.INFINITE, delay, BP_CONST.BOUNCE_MAGNITUDE);
 
-        AnimatorSet animation = CAnimatorUtil.configWiggle(target, "vertical", 3000, ValueAnimator.INFINITE, delay, BP_CONST.BOUNCE_MAGNITUDE );
+        float[] wayPoints = new float[]{target.getScaleY(), target.getScaleY() * BP_CONST.STRETCH_MAGNITUDE, target.getScaleY()};
 
-        float[] wayPoints = new float[]{target.getScaleY(),
-                                        target.getScaleY() * BP_CONST.STRETCH_MAGNITUDE,
-                                        target.getScaleY()};
-
-        AnimatorSet stretch   = CAnimatorUtil.configStretch(target, "vertical", 2100, ValueAnimator.INFINITE, delay, wayPoints );
+        AnimatorSet stretch = CAnimatorUtil.configStretch(target, "vertical", 2100, ValueAnimator.INFINITE, delay, wayPoints);
 
         animation.start();
         stretch.start();
     }
 
-
-    public void execCommand(String command, Object target ) {
-
+    public void execCommand(String command, Object target) {
         CBubble bubble;
         long    delay = 0;
 
         super.execCommand(command, target);
 
-        switch(command) {
-
+        switch (command) {
             case BP_CONST.SHOW_BUBBLES:
-                delay = BP_CONST.INFLATE_DELAY;
-
                 if (mInitialized) {
+                    _isRunning = true;
 
-                    for(CBubble ibubble : SBubbles) {
-                        mComponent.post(BP_CONST.INFLATE, ibubble, delay);
-                        delay += BP_CONST.INFLATE_DELAY;
-                    }
-
+                    mComponent.publishValue(BP_CONST.SPAWN_DELAY_VAR, BP_CONST.SPAWN_DELAY);
+                    mIndex = 0;
+                    mComponent.publishState(SBubbles[mIndex]);
+                    mComponent.applyBehavior(BP_CONST.SPAWN_BUBBLE);
                 }
                 break;
 
-            case BP_CONST.INFLATE:
-                bubble = (CBubble)target;
+            case BP_CONST.PAUSE_ANIMATION:
+                if (_isRunning) {
+                    for (Animator animation : translators.keySet()) animation.pause();
 
-                // Persona - look at the stimulus
-                broadcastLocation(TCONST.GLANCEAT, mParent.localToGlobal(new PointF(bubble.getX() + bubble.getWidth()/2, bubble.getY()+ bubble.getHeight()/2)));
+                    _isRunning = false;
+                }
+                break;
 
-                Animator inflator = CAnimatorUtil.configZoomIn(bubble, 600, 0, new BounceInterpolator(), 0f, bubble.getAssignedScale());
+            case BP_CONST.RESUME_ANIMATION:
+                if (!_isRunning) {
+                    _isRunning = true;
 
-                inflator.addListener(new Animator.AnimatorListener() {
-                    @Override
-                    public void onAnimationCancel(Animator arg0) {
-                        //Functionality here
+                    for (Animator animation : translators.keySet()) animation.resume();
+                    mIndex = 0;
+                    mComponent.publishState(SBubbles[mIndex]);
+                    mComponent.applyBehavior(BP_CONST.SPAWN_BUBBLE);
+                }
+                break;
+
+            case BP_CONST.SPAWN_BUBBLE:
+                if (_isRunning) {
+                    bubble = SBubbles[mIndex];
+
+                    // Persona - look at the stimulus
+                    broadcastLocation(TCONST.GLANCEAT, mParent.localToGlobal(new PointF(bubble.getX() + bubble.getWidth() / 2, bubble.getY() + bubble.getHeight() / 2)));
+
+                    Animator inflator = CAnimatorUtil.configZoomIn(bubble, 600, 0, new BounceInterpolator(), 0f, bubble.getAssignedScale());
+
+                    inflator.addListener(new Animator.AnimatorListener() {
+                        @Override
+                        public void onAnimationCancel(Animator animation) {
+                        }
+
+                        @Override
+                        public void onAnimationStart(Animator animation) {
+                        }
+
+                        @Override
+                        public void onAnimationEnd(Animator animation) {
+
+                            CBubble bubble = inflators.get(animation);
+                            inflators.remove(animation);
+
+                            setupWiggle(bubble, 0);
+                            bubble.setOnClickListener(CBp_Mechanic_MC.this);
+                        }
+
+                        @Override
+                        public void onAnimationRepeat(Animator animation) {
+                        }
+                    });
+
+                    inflators.put(inflator, bubble);
+                    inflator.start();
+                }
+                break;
+
+            case BP_CONST.NEXT_BUBBLE:
+                if (_isRunning) {
+                    if (mIndex < SBubbles.length - 1) {
+                        mComponent.publishState(SBubbles[++mIndex]);
+                        mComponent.applyBehavior(BP_CONST.SPAWN_BUBBLE);
                     }
-
-                    @Override
-                    public void onAnimationStart(Animator arg0) {
-                        //Functionality here
-                    }
-
-                    @Override
-                    public void onAnimationEnd(Animator animation) {
-
-                        CBubble bubble = inflators.get(animation);
-                        inflators.remove(animation);
-
-                        setupWiggle(bubble, 0);
-                        bubble.setOnClickListener(CBp_Mechanic_MC.this);
-                    }
-
-                    @Override
-                    public void onAnimationRepeat(Animator arg0) {
-                        //Functionality here
-                    }
-                });
-
-                inflators.put(inflator, bubble);
-                inflator.start();
+                }
                 break;
 
             case BP_CONST.POP_BUBBLE:
-
                 bubble = (CBubble)target;
                 delay  = bubble.pop();
 
@@ -242,10 +258,8 @@ public class CBp_Mechanic_MC extends CBp_Mechanic_Base implements IBubbleMechani
 
                 mComponent.post(BP_CONST.REMOVE_BUBBLE, bubble, delay);
                 break;
-
         }
     }
-
 
     /**
      *   We are looking for the furthest we can push the bubble out along its vector before it
@@ -262,8 +276,7 @@ public class CBp_Mechanic_MC extends CBp_Mechanic_Base implements IBubbleMechani
      * @param angle
      * @param radius
      */
-    private float[] calcVectorRange(float angle, float radius ) {
-
+    private float[] calcVectorRange(float angle, float radius) {
         // Account for the bubble bounce and stretch so that it doesn't go outside the margin bounds.
         // Note: BOUNCE_MAGNITUDE is a relative value while STRETCH_MAGNITUDE is an absolute multiple
         //
@@ -272,62 +285,28 @@ public class CBp_Mechanic_MC extends CBp_Mechanic_Base implements IBubbleMechani
 
         float distIntercept = 0;
         Point coordCenter   = new Point(_viewCenter.x - _margins.right, _viewCenter.y - _margins.top);
-        float criticalAngle = (float) Math.atan((coordCenter.y - radius) / (coordCenter.x - radius));
+        float criticalAngle = (float)Math.atan((coordCenter.y - radius) / (coordCenter.x - radius));
         float quadrant      = (float)(Math.PI / 2f);
 
-
-        if(angle <= quadrant) {
-
-            if(angle < criticalAngle) {
-
-                distIntercept = (float) ((coordCenter.x - radius) / Math.cos(angle));
-            }
-            else {
-
-                distIntercept = (float) ((coordCenter.y - radius) / Math.sin(angle));
-            }
-        }
-        else if(angle <= (quadrant * 2)) {
-
-            if(angle > (Math.PI - criticalAngle)) {
-
-                distIntercept = (float) ((radius - coordCenter.x) / Math.cos(angle));
-            }
-            else {
-
-                distIntercept = (float) ((coordCenter.y - radius) / Math.sin(angle));
-            }
-        }
-        else if(angle <= (quadrant * 3)) {
-
-            if(angle < (Math.PI + criticalAngle)) {
-
-                distIntercept = (float) ((radius - coordCenter.x) / Math.cos(angle));
-            }
-            else {
-
-                distIntercept = (float) ((radius - coordCenter.y) / Math.sin(angle));
-            }
-        }
-        else {
-
-            if(angle > ((2*Math.PI) - criticalAngle)) {
-
-                distIntercept = (float) ((coordCenter.x - radius) / Math.cos(angle));
-            }
-            else {
-
-                distIntercept = (float) ((radius - coordCenter.y) / Math.sin(angle));
-            }
+        if (angle <= quadrant) {
+            if (angle < criticalAngle) distIntercept = (float)((coordCenter.x - radius) / Math.cos(angle));
+            else distIntercept = (float)((coordCenter.y - radius) / Math.sin(angle));
+        } else if (angle <= (quadrant * 2)) {
+            if (angle > (Math.PI - criticalAngle)) distIntercept = (float)((radius - coordCenter.x) / Math.cos(angle));
+            else distIntercept = (float)((coordCenter.y - radius) / Math.sin(angle));
+        } else if (angle <= (quadrant * 3)) {
+            if (angle < (Math.PI + criticalAngle)) distIntercept = (float)((radius - coordCenter.x) / Math.cos(angle));
+            else distIntercept = (float)((radius - coordCenter.y) / Math.sin(angle));
+        } else {
+            if (angle > ((2 * Math.PI) - criticalAngle)) distIntercept = (float)((coordCenter.x - radius) / Math.cos(angle));
+            else distIntercept = (float)((radius - coordCenter.y) / Math.sin(angle));
         }
 
-        //return new float[]{radius * 1.5f, distIntercept};
+//        return new float[]{radius * 1.5f, distIntercept};
         return new float[]{distIntercept * BP_CONST.MIN_VRANGE, distIntercept};
     }
 
-
     public void populateView(CBp_Data data) {
-
         CBubble newBubble;
 
         // Check if the response_set needs to be generated
@@ -343,20 +322,17 @@ public class CBp_Mechanic_MC extends CBp_Mechanic_Base implements IBubbleMechani
         SBubbles = new CBubble[data.response_set.length];
 
         for (int i1 = 0; i1 < SBubbles.length; i1++) {
-
-            newBubble = (CBubble) View.inflate(mContext, R.layout.bubble_view, null);
+            newBubble = (CBubble)View.inflate(mContext, R.layout.bubble_view, null);
 
             String bubbleColor = BP_CONST.bubbleColors[colorNdx];
 
             // Set Color: pass in String e.g. "RED" - Cycle through the colors repetitively
             //
-//            if(data.stimulus_type.equals(TCONST.AUDIO_REF)) {
+//            if (data.stimulus_type.equals(TCONST.AUDIO_REF)) {
 //                newBubble.setFeedbackColor(bubbleColor);
 //            }
 
-
             colorNdx = (colorNdx + 1) % BP_CONST.bubbleColors.length;
-
 
             newBubble.setScale(0);
             newBubble.setAlpha(_alpha);
@@ -368,52 +344,50 @@ public class CBp_Mechanic_MC extends CBp_Mechanic_Base implements IBubbleMechani
             String responseVal = data.response_set[i1];
             String responseTyp = data.responsetype_set[i1];
 
-            switch (responseTyp) {
+            if (!mComponent.testFeature(TCONST.SHOW_TARGET)) {
+                newBubble.configData(responseVal, correctVal, mProblemType);
+                newBubble.setContents(0, "");
 
-                case BP_CONST.REFERENCE:
+                // Moved set color to here too so that text would be known when setting the color (generating  bubble)
+                newBubble.setColor(bubbleColor);
+            } else {
+                switch (responseTyp) {
+                    case BP_CONST.REFERENCE:
+                        try {
+                            int[] shapeSet = BP_CONST.drawableMap.get(responseVal);
 
-                    try {
-                        int[] shapeSet = BP_CONST.drawableMap.get(responseVal);
+                            newBubble.configData(responseVal, correctVal, mProblemType);
+                            newBubble.setContents(shapeSet[(int) (Math.random() * shapeSet.length)], null);
 
+                            // Moved set color to here to so that text would be known when setting the color (generating  bubble)
+                            newBubble.setColor(bubbleColor);
+                        } catch (Exception e) {
+                            Log.e(TAG, "Invalid Dataset: " + responseVal);
+                        }
+                        break;
+
+                    case BP_CONST.TEXTDATA:
                         newBubble.configData(responseVal, correctVal, mProblemType);
-                        newBubble.setContents(shapeSet[(int) (Math.random() * shapeSet.length)], null);
+                        newBubble.setContents(0, responseVal);
 
-                        //Moved set color to here to so that text would be known when setting the color(generating  bubble)
+                        // Moved set color to here too so that text would be known when setting the color (generating  bubble)
                         newBubble.setColor(bubbleColor);
-
-                    }
-                    catch(Exception e) {
-                        Log.e(TAG, "Invalid Datatset: " + responseVal);
-                    }
-                    break;
-
-                case BP_CONST.TEXTDATA:
-
-                    newBubble.configData(responseVal, correctVal, mProblemType);
-                    newBubble.setContents(0, responseVal);
-
-                    //Moved set color to here too so that text would be known when setting the color(generating  bubble)
-                    newBubble.setColor(bubbleColor);
-                    break;
+                        break;
+                }
             }
         }
     }
 
-
     public void doLayout(int width, int height, CBp_Data data) {
-
-        // Now we have the bubbles we position them on rays(vectors) eminating from the center of the
-        // view.
+        // Now we have the bubbles we position them on rays(vectors) emanating from the center of the view.
         //
         _viewCenter.set((width + _margins.left - _margins.right) / 2, (height + _margins.top - _margins.bottom) / 2);
 
-        if(_angleRange != null)
-            _angle = getRandInRange(_angleRange);
+        if (_angleRange != null) _angle = getRandInRange(_angleRange);
 
-        _angleInc   = (float)((2 * Math.PI) / data.response_set.length);
+        _angleInc = (float)((2 * Math.PI) / data.response_set.length);
 
-        for(int i1 = 0; i1 < SBubbles.length ; i1++) {
-
+        for (int i1 = 0; i1 < SBubbles.length; i1++) {
             // This is the scale the bubble will expand too.
             //
             SBubbles[i1].setAssignedScale(getRandInRange(_scaleRange));
@@ -423,13 +397,13 @@ public class CBp_Mechanic_MC extends CBp_Mechanic_Base implements IBubbleMechani
             String text = SBubbles[i1].getTextView().getText().toString();
             String singleLine = text;
 
-            //Calculate approximations of height and width of bubble instantenously so that calculations for
-            //arranging the bubble can be done
+            // Calculate approximations of height and width of bubble instantaneously so that calculations for
+            // arranging the bubble can be done
             int bubbleHeight = BP_CONST.BUBBLE_DESIGN_RADIUS;
             int bubbleWidth = BP_CONST.BUBBLE_DESIGN_RADIUS;
 
-            //If multiple lines, change what one line is
-            if(text.matches(".*\n.*")) {
+            // If multiple lines, change what one line is
+            if (text.matches(".*\n.*")) {
                 int index = text.indexOf("\n");
                 singleLine = text.substring(0, index);
             }
@@ -439,7 +413,7 @@ public class CBp_Mechanic_MC extends CBp_Mechanic_Base implements IBubbleMechani
             bubbleWidth = 190;
 
             float[] _widthRange = calcVectorRange(_angle, bubbleWidth * SBubbles[i1].getAssignedScale());
-            float[] _heightRange = calcVectorRange(_angle,  bubbleHeight * SBubbles[i1].getAssignedScale());
+            float[] _heightRange = calcVectorRange(_angle, bubbleHeight * SBubbles[i1].getAssignedScale());
 
             SBubbles[i1].setVectorPosition(_viewCenter, getRandInRange(_widthRange), getRandInRange(_heightRange), _angle);
             _angle += _angleInc;
@@ -447,6 +421,4 @@ public class CBp_Mechanic_MC extends CBp_Mechanic_Base implements IBubbleMechani
 
         mInitialized = true;
     }
-
-
 }

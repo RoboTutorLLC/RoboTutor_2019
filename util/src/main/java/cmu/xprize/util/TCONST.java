@@ -114,9 +114,10 @@ public class TCONST {
     public static final String SET_LANG_FTR     = "SET_LANGUAGE_FEATURE";
     public static final String VALUE            = "VALUE";
     public static final String NULL             = "NULL";
-    public static final String SAY_STIMULUS     = "FTR_SAY";
-    public static final String SHOW_STIMULUS    = "FTR_SHOW";
-
+    public static final String SAY_STIMULUS     = "FTR_SAY_STIMULUS";
+    public static final String SHOW_STIMULUS    = "FTR_SHOW_STIMULUS";
+    public static final String SAY_TARGET       = "FTR_SAY_TARGET";
+    public static final String SHOW_TARGET      = "FTR_SHOW_TARGET";
 
     public static final String ASM_DIGIT_OR_OVERHEAD_CORRECT   = "ASM_DIGIT_OR_OVERHEAD_CORRECT";
     public static final String ASM_DIGIT_OR_OVERHEAD_WRONG     = "ASM_DIGIT_OR_OVERHEAD_WRONG";
@@ -618,7 +619,7 @@ public class TCONST {
     public static final String HOT_LOG_FOLDER = "/RoboTutor_HOT/";
     public static final String READY_LOG_FOLDER = "/RoboTutor/";
 
-    public static final String  HOT_LOG_FOLDER_PERF = "/RoboTutor_HOT/"; // use same as normal logs
+    public static final String HOT_LOG_FOLDER_PERF = "/RoboTutor_HOT/"; // use same as normal logs
     public static final String READY_LOG_FOLDER_PERF = "/RoboTutor/";    // use same as normal logs
 
     public static final String ROBOTUTOR_ASSET_FOLDER   = "/robotutor_assets/";
