@@ -192,7 +192,8 @@ public class CBp_Mechanic_RISE extends CBp_Mechanic_Base implements IBubbleMecha
                     String correctVal = _currData.answer;
 
                     nextBubble.setColor(BP_CONST.bubbleColors[colorNdx]);
-                    nextBubble.setScale(getRandInRange(_scaleRange));
+                    //nextBubble.setScale(getRandInRange(_scaleRange));
+                    nextBubble.setScale(1.0f);
 
                     // Cycle on the indexes to display
                     //
@@ -209,7 +210,8 @@ public class CBp_Mechanic_RISE extends CBp_Mechanic_Base implements IBubbleMecha
                         case BP_CONST.REFERENCE:
                             //Moved set color and scale here after text has been set
                             nextBubble.setColor(BP_CONST.bubbleColors[colorNdx]);
-                            nextBubble.setScale(getRandInRange(_scaleRange));
+                            //nextBubble.setScale(getRandInRange(_scaleRange));
+                            nextBubble.setScale(1.0f);
 
                             int[] shapeSet = BP_CONST.drawableMap.get(responseVal);
 
@@ -231,7 +233,8 @@ public class CBp_Mechanic_RISE extends CBp_Mechanic_Base implements IBubbleMecha
 
                             //Moved set color and scale here after text has been set
                             nextBubble.setColor(BP_CONST.bubbleColors[colorNdx]);
-                            nextBubble.setScale(getRandInRange(_scaleRange));
+                            //nextBubble.setScale(getRandInRange(_scaleRange));
+                            nextBubble.setScale(1.0f);
                             break;
                     }
 
