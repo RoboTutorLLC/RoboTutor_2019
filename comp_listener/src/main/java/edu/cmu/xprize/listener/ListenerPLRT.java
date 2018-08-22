@@ -19,11 +19,6 @@
 
 package edu.cmu.xprize.listener;
 
-import android.annotation.SuppressLint;
-import android.annotation.TargetApi;
-import android.content.Context;
-import android.os.AsyncTask;
-import android.os.Build;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -35,16 +30,12 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 
-import cmu.xprize.util.IReadyListener;
-import cmu.xprize.util.TimerUtils;
 import edu.cmu.pocketsphinx.FsgModel;
 import edu.cmu.pocketsphinx.Hypothesis;
-import edu.cmu.pocketsphinx.LogMath;
 import edu.cmu.pocketsphinx.Segment;
 
 
@@ -59,15 +50,16 @@ public class ListenerPLRT extends ListenerBase {
 
     // state for the current ListenFor operation
 
-    private String      sentenceWords[];             // array of sentence words to hear
-    private int         iExpected = 0;               // index of expected next word in sentence
-    private int         iNextWord = 0;               // Next word expected.
-    private HeardWord[] heardWords = null;           // latest total aligned hypothesis
-    private long        sentenceStartTime;           // time in ms since epoch
-    private long        sentenceStartSamples;        // sample counter at sentence start, for adjusting frame numbers
-    private final int   SAMPLES_PER_FRAME = 160;     // number of samples in a centisecond frame at 16000 samples/sec
-    private boolean     useTruncations = true;       // Flag whether or not to use truncations.
-    private boolean     speaking = false;            // speaking state. [currently unused]
+    private String[] sentenceWords;              // array of sentence words to hear
+    private int iExpected = 0;                   // index of expected next word in sentence
+    private int iNextWord = 0;                   // Next word expected.
+    private HeardWord[] heardWords = null;       // latest total aligned hypothesis
+    private long sentenceStartTime;              // time in ms since epoch
+    private long sentenceStartSamples;           // sample counter at sentence start, for adjusting frame numbers
+    private final int SAMPLES_PER_FRAME = 160;   // number of samples in a centisecond frame at 16000 samples/sec
+    private boolean useTruncations = true;       // Flag whether or not to use truncations.
+    private boolean speaking = false;            // speaking state. [currently unused]
+
 
     /**
      * Attach event listener to receive notification callbacks
@@ -84,7 +76,6 @@ public class ListenerPLRT extends ListenerBase {
      * @param startWord   -- 0-based index of word to expect next
      */
     public void listenFor(String[] wordsToHear, int startWord) {
-
         Log.d("STABLE", "ListenFor: " + TextUtils.join(" ", wordsToHear));
 
         // try to build the language model. Note this updates dictionary attached to decoder
@@ -98,11 +89,10 @@ public class ListenerPLRT extends ListenerBase {
         // Remember the current sentence words and start position -
         // The start position is used by MultiMatch to align the hypothesis with the sentence.
         sentenceWords = wordsToHear;
-        iExpected     = startWord;
+        iExpected = startWord;
 
         // start listening
         if (recognizer != null) {
-
             // register our language model in the decoder
             // Note that this replaces any model of the same name -
             // i.e. SENTENCE_SEARCH - see: pocketsphinx.c:set_search_internal
@@ -114,8 +104,7 @@ public class ListenerPLRT extends ListenerBase {
             // reset prePause cache
             prePauseResult = null;
 
-            // save stream offset of start of utterance, for converting stream-based frame times
-            // to utterance-based times.
+            // save stream offset of start of utterance, for converting stream-based frame times to utterance-based times
             sentenceStartSamples = recognizer.nSamples;
             // record start time now
             sentenceStartTime = System.currentTimeMillis();
@@ -126,25 +115,20 @@ public class ListenerPLRT extends ListenerBase {
             recognizer.startListening(SENTENCE_SEARCH, captureLabel);
 
             // start per-capture log file for tracing sequence of partial hypotheses for this target
-            if(IS_LOGGING)
-                beginHypLog();
-
+            if (IS_LOGGING) beginHypLog();
         }
     }
-
 
 	/**
      * Construct and initialize the speech recognizer
 	 */
     @Override
     protected void setupRecognizer(File assetsDir, File configFile, String langDictionary) {
-
         super.setupRecognizer(assetsDir, configFile, langDictionary);
 
         // use a private implementation to receive events from pocketsphinx
         recognizer.addListener(new IPocketSphinxListener());
     }
-
 
     // private inner class to hide our event listener implementation.
     // We receive these events from the SpeechRecognizer object for our own use, and send similar events from the
@@ -154,8 +138,8 @@ public class ListenerPLRT extends ListenerBase {
         @Override
         public void onStableResult(String[] hypothesis) {
             // NOTE: that hypothesis may be null during shutdown
-            if(hypothesis != null) {
-                Log.i("ASR", "Part Hyp: " + TextUtils.join(" ", hypothesis));
+            if (hypothesis != null) {
+                Log.i("ASR", "Stable Hyp: " + TextUtils.join(" ", hypothesis));
                 processHypothesis(hypothesis, false);
             }
         }
@@ -163,8 +147,8 @@ public class ListenerPLRT extends ListenerBase {
         @Override
         public void onPartialResult(Hypothesis hypothesis) {
             // NOTE: that hypothesis may be null during shutdown
-            if(hypothesis != null) {
-                Log.i("ASR", "Part Hyp: " + hypothesis.getHypstr());
+            if (hypothesis != null) {
+                Log.i("ASR", "Partial Hyp: " + hypothesis.getHypstr());
                 processHypothesis(hypothesis, false);
             }
         }
@@ -172,7 +156,7 @@ public class ListenerPLRT extends ListenerBase {
         @Override
         public void onResult(Hypothesis hypothesis) {
             // NOTE: that hypothesis may be null during shutdown
-            if(hypothesis != null) {
+            if (hypothesis != null) {
                 Log.i("ASR", "Final Hyp: " + hypothesis.getHypstr());
                 processHypothesis(hypothesis, true);
             }
@@ -180,12 +164,10 @@ public class ListenerPLRT extends ListenerBase {
 
         @Override
         public void onError(Exception e) {
-
         }
 
         @Override
         public void onTimeout() {
-
         }
 
         @Override
@@ -193,8 +175,7 @@ public class ListenerPLRT extends ListenerBase {
             speaking = true;
 
             // forward to listener client app
-            if (eventListener != null)
-                eventListener.onBeginningOfSpeech();
+            if (eventListener != null) eventListener.onBeginningOfSpeech();
         }
 
         @Override
@@ -205,8 +186,7 @@ public class ListenerPLRT extends ListenerBase {
             prePauseResult = heardWords;
 
             // forward to listener client app
-            if (eventListener != null)
-                eventListener.onEndOfSpeech();
+            if (eventListener != null) eventListener.onEndOfSpeech();
         }
 
         @Override
@@ -264,34 +244,25 @@ public class ListenerPLRT extends ListenerBase {
      * @return
      */
     private FsgModel generateLM(String[] wordsToHear, int startWord) {
-
         // ensure all sentence words in dictionary
-        //
         HashSet<String> wordSet = new HashSet<>(Arrays.asList(wordsToHear));
 
         for (String word : wordSet) {
-
             if (recognizer.decoder.lookupWord(word) == null) {    // word not in dictionary
-
                 // Synthesize a pronunciation using English rule-based synthesizer
-                //
                 String phonemes = Phoneme.toPhoneme(word).trim();
 
-                if (phonemes.isEmpty())
-                    continue;
+                if (phonemes.isEmpty()) continue;
 
                 Log.i("generateLM", "addWord " + word + " pronunciation " + phonemes);
                 recognizer.decoder.addWord(word, phonemes, 1); // more efficient to pass 1 (true) on last word only?
             }
 
             // ensure START_ words for truncated readings are in dictionary
-            if(useTruncations && recognizer.decoder.lookupWord(startWord(word)) == null) {
-                addTruncations(word);
-            }
+            if (useTruncations && recognizer.decoder.lookupWord(startWord(word)) == null) addTruncations(word);
         }
 
         // have to write to a temporary file to create LM
-        //
         String filename = "lm/fsg.txt";
         File fsgFile = new File(modelsDir, filename);
 
@@ -309,10 +280,9 @@ public class ListenerPLRT extends ListenerBase {
             final double PrJump = 0.03;
 
             // write the fsg file header info
-            int state_count = wordsToHear.length + 1;
-            int final_state = state_count - 1;
+            int final_state = wordsToHear.length;
             bw.write("FSG_BEGIN sentence\n");
-            bw.write("NUM_STATES " + state_count + "\n");
+            bw.write("NUM_STATES " + (final_state + 1) + "\n");
             bw.write("START_STATE " + startWord + "\n");
             bw.write("FINAL_STATE " + final_state + "\n");
 
@@ -321,47 +291,37 @@ public class ListenerPLRT extends ListenerBase {
             if (n < 1) n = 1;
 
             // add state transitions
-            for (int i = 0; i < state_count - 1; i++) {
+            for (int i = 0; i < final_state; i++) {
                 // emit word i for transition from state i to i + 1 with probability PrCorrect
                 AddFSGTransition(i, i + 1, PrCorrect, wordsToHear[i]);
 
-                //if this is not the last word of the sentence emit null word from transition from state i to the final state with probability PrEndEarly
-                if (i != final_state - 1) {
-                    AddFSGTransition(i, final_state, PrEndEarly, "");
-                }
+                // if this is not the last word of the sentence emit null word from transition from state i to the final state with probability PrEndEarly
+                if (i != final_state - 1) AddFSGTransition(i, final_state, PrEndEarly, "");
 
                 // truncations not yet implemented for words not in dictionary
-                if(useTruncations && recognizer.decoder.lookupWord(startWord(wordsToHear[i])) != null) {
-                    //emit word i truncation for transition from state i to state i with probability PrTruncate
+                if (useTruncations && recognizer.decoder.lookupWord(startWord(wordsToHear[i])) != null) {
+                    // emit word i truncation for transition from state i to state i with probability PrTruncate
                     AddFSGTransition(i, i, PrTruncate, startWord(wordsToHear[i]));
 
-                    //emit word i truncation for transition from state i to i + 1 with probability PrResume
+                    // emit word i truncation for transition from state i to i + 1 with probability PrResume
                     AddFSGTransition(i, i + 1, PrResume, startWord(wordsToHear[i]));
                 }
 
-                //if i <> 0 emit null word for jump from state i back to state 0 with probability PrRestart
-                if (i != 0) {
-                    AddFSGTransition(i, 0, PrRestart / n, "");
-                }
+                // if i <> 0 emit null word for jump from state i back to state 0 with probability PrRestart / n
+                if (i != 0) AddFSGTransition(i, 0, PrRestart / n, "");
 
-                //emit word i for transition from state i to state i with probability PrRepeat
+                // emit word i for transition from state i to state i with probability PrRepeat / n
                 AddFSGTransition(i, i, PrRepeat / n, wordsToHear[i]);
 
                 // emit null word for jump from state i to state j with probability PrJump for all states j except state 0
-                for (int j = 1; j < state_count - 1; j++) {
-                    if (i != j) {
-                        AddFSGTransition(i, j, PrJump / n, "");
-                    }
-                }
+                for (int j = 1; j < final_state; j++) if (i != j) AddFSGTransition(i, j, PrJump / n, "");
             }
 
-            // add jump from final state back to start with probability PrRestart
+            // add jump from final state back to start with probability PrRestart / n
             AddFSGTransition(final_state, 0, PrRestart / n, "");
 
-            // add jump from final state back to each earlier state
-            for (int st = 1; st < state_count - 1; st++) {
-                AddFSGTransition(final_state, st, PrJump / n, "");
-            }
+            // add jump from final state back to each earlier state with probability PrJump / n
+            for (int j = 1; j < final_state; j++) AddFSGTransition(final_state, j, PrJump / n, "");
 
             // done writing the file
             bw.write("FSG_END\n");
@@ -378,7 +338,6 @@ public class ListenerPLRT extends ListenerBase {
     private void AddFSGTransition(int from, int to, double prob, String word) throws IOException {
         bw.write("TRANSITION " + from + " " + to + " " + prob + " " + word + "\n");
     }
-
 
     // add entries for all truncations of given ASR word to dictionary
     private void addTruncations(String word) {
@@ -405,11 +364,8 @@ public class ListenerPLRT extends ListenerBase {
         }
     }
 
-
     // handle a partial or final hypothesis from pocketsphinx
-    //
     private void processHypothesis(Hypothesis hypothesis, Boolean finalResult) {
-
         if (hypothesis == null) return;
 
         // get array of hypothesis words
@@ -418,11 +374,8 @@ public class ListenerPLRT extends ListenerBase {
         processHypothesis(asrWords, finalResult);
     }
 
-
     // handle a partial or final hypothesis from pocketsphinx
-    //
     private void processHypothesis(String[] asrWords, Boolean finalResult) {
-
         String timestamp = timestampMillis();    // save receipt timestamp for logging
 
         if (sentenceWords == null) {
@@ -430,20 +383,16 @@ public class ListenerPLRT extends ListenerBase {
             return;
         }
 
-        if (asrWords.length < 1)
-            return;
+        if (asrWords.length < 1) return;
 
         // get the list of segments
         ArrayList<Segment> segments = new ArrayList<>();
-        for (Segment s : recognizer.decoder.seg()) {
-            segments.add(s);
-        }
+        for (Segment s : recognizer.decoder.seg()) segments.add(s);
 
-        // optional: strip last hyp word if it is not terminated by silence because it is unreliable
         String[] wordsToUse = asrWords;
 
+        // optional: strip last hyp word if it is not terminated by silence because it is unreliable
         if (LCONST.LAST_WORD_LAG) {
-
             // Find word of last segment in the segmentation detail
             String lastSegmentWord = null;
 
@@ -460,7 +409,6 @@ public class ListenerPLRT extends ListenerBase {
         }
 
         if (wordsToUse.length >= 1) {
-
             long multimatchTimer = System.currentTimeMillis();
 
             // align hyp words with sentence words
@@ -472,14 +420,10 @@ public class ListenerPLRT extends ListenerBase {
             getWordTimes(heardWords, sentenceWords, segments);
 
             // post update to client component
-            //
-            if (eventListener != null) {
-                eventListener.onUpdate(heardWords, finalResult);
-            }
+            if (eventListener != null) eventListener.onUpdate(heardWords, finalResult);
 
             // log the partial hypothesis
-            if(IS_LOGGING)
-                logHyp(timestamp, TextUtils.join(" ", asrWords), segments, heardWords);
+            if (IS_LOGGING) logHyp(timestamp, TextUtils.join(" ", asrWords), segments, heardWords);
         }
     }
 
@@ -488,9 +432,11 @@ public class ListenerPLRT extends ListenerBase {
     // ------------------------------------------------
 
     static private class MultiMatchScore {    // record kept for one possible word alignment
+
         int cost;            // penalty for this alignment
         int nMatches;        // number of word matches for this alignment
-        int iPrev;            //  sentence index of previous hyp word's alignment
+        int iPrev;           // sentence index of previous hyp word's alignment
+
 
         MultiMatchScore(int inCost, int inMatches, int inPrev) {
             cost = inCost;
@@ -498,23 +444,20 @@ public class ListenerPLRT extends ListenerBase {
             iPrev = inPrev;
         }
 
-        MultiMatchScore() {            // init to very high score before searching for minimum
+        MultiMatchScore() {
+            // init to very high score before searching for minimum
             cost = 1000000;
             nMatches = 0;
             iPrev = -1;
         }
     }
 
-
     // Multimatch costs: scaled by 100 from RT version to use integer arithmetic
 
     // cost for mismatch hypWord with sentenceWord
     private int mismatchCost(String hypWord, String sentenceWord) {
-        if (asrWordMatches(hypWord, sentenceWord))
-            return 0;
-
-        if(useTruncations && asrWordIsTruncationOf(hypWord, sentenceWord))
-            return 0;
+        if (asrWordMatches(hypWord, sentenceWord)) return 0;
+        if (useTruncations && asrWordIsTruncationOf(hypWord, sentenceWord)) return 0;
 
         // else mismatch
         return 100;
@@ -523,31 +466,24 @@ public class ListenerPLRT extends ListenerBase {
     // cost of jump from position i to j
     private int jumpCost(int from, int to) {
         // different cost when LeftToRight alignment is configured
-        if (LCONST.ALIGN_L2R)
-            return jumpCostL2R(from, to);
+        if (LCONST.ALIGN_L2R) return jumpCostL2R(from, to);
 
         // else normal "chase the reader" alignment
-        if (to == from + 1)    // no cost for sequential reading
-            return 0;
-        if (to == from)        // small cost so advancing over HO HO beats repeating HO
-            return 1;
-        return 100;            // cost of a jump, any direction or size
+        if (to == from + 1) return 0;    // no cost for sequential reading
+        if (to == from) return 1;        // small cost so advancing over HO HO beats repeating HO
+        return 100;                      // cost of a jump, any direction or size
     }
 
     // cost of jump when L2R alignment is being used
     private int jumpCostL2R(int from, int to) {
-        if (to == from + 1)    // no cost for sequential reading
-            return 0;
-        if (to == from)        // small cost so advancing over HO HO beats repeating HO
-            return 1;
-        if (to == from + 2)    // skip one word: normal jump cost
-            return 100;
+        if (to == from + 1) return 0;     // no cost for sequential reading
+        if (to == from) return 1;         // small cost so advancing over HO HO beats repeating HO
+        if (to == from + 2) return 100;   // skip one word: normal jump cost
 
-        return 999999;        // very high cost for any other jump
+        return 999999;                    // very high cost for any other jump
     }
 
     // find least-cost alignment of hypWords to sentenceWords
-    @SuppressLint("NewApi")
     private HeardWord[] doMultiMatch(String[] hypWords, String[] sentenceWords) {
         // build array or HeardWord's to hold multimatch result
         ArrayList<HeardWord> heardWords = new ArrayList<>();
@@ -556,57 +492,52 @@ public class ListenerPLRT extends ListenerBase {
         int costCalcWords = 0;
         // store scores in matrix, one row per hypWord with one column for each sentence position it could be aligned with
         for (int h = 0; h < hypWords.length; h++) {
-            MultiMatchScore multiMatchScore[] = new MultiMatchScore[sentenceWords.length];
+            MultiMatchScore[] multiMatchScore = new MultiMatchScore[sentenceWords.length];
 
             for (int s = 0; s < sentenceWords.length; s++) {
-
                 //@@ TODO: remove this dependency
-//                if (!ReadingTutorActivity.isWordCredited(s))
-//                    break;
-                // This is an experiment - should eliminate matches past expected word.
+//                if (!ReadingTutorActivity.isWordCredited(s)) break;
+
+                // This is an experiment - should eliminate matches past expected word
                 // TODO: TEST -> probably needs to be updated dynamically
-                if(s > iNextWord+1)
-                    break;
+                if (s > iNextWord + 1) break;
 
                 int mismatchCostHere = mismatchCost(hypWords[h], sentenceWords[s]);    // match cost this position
                 int matchesHere = asrWordMatches(hypWords[h], sentenceWords[s]) ? 1 : 0;
 
-                if (h == 0) {    // first row, no predecessor => compute jump cost from just before expected start word
+                if (h == 0) {
+                    // first row, no predecessor => compute jump cost from just before expected start word
                     int cost = mismatchCostHere + jumpCost(iExpected - 1, s);
                     multiMatchScore[s] = new MultiMatchScore(cost, matchesHere, -1);
                     costCalcWords++;
                 } else {
                     // find lowest cost we can achieve here from each possible previous hypword alignment
-                    MultiMatchScore prevWord[] = multiMatchScores.get(h - 1);
+                    MultiMatchScore[] prevWordScore = multiMatchScores.get(h - 1);
+
                     MultiMatchScore best = new MultiMatchScore();    // best found so far
                     for (int j = 0; j < costCalcWords; j++) {
-                        int cost = prevWord[j].cost + mismatchCostHere + jumpCost(j, s);
-                        int matches = prevWord[j].nMatches + matchesHere;
-                        if (cost < best.cost ||
-                                (cost == best.cost && matches > best.nMatches) ||
-                                (cost == best.cost && matches == best.nMatches && jumpCost(j, s) == 0)) {
+                        int cost = prevWordScore[j].cost + mismatchCostHere + jumpCost(j, s);
+                        int matches = prevWordScore[j].nMatches + matchesHere;
+                        if (cost < best.cost || (cost == best.cost && matches > best.nMatches) || (cost == best.cost && matches == best.nMatches && jumpCost(j, s) == 0))
                             best = new MultiMatchScore(cost, matches, j);
-                        }
                     }
 
                     // record best value possible for this hypword alignment
                     multiMatchScore[s] = best;
                 }
             }
+
             multiMatchScores.add(h, multiMatchScore);
             heardWords.add(h, new HeardWord(hypWords[h]));
         }
 
         // search last row to find best possible alignment of last hypWord
-        int hLast = heardWords.size() - 1;
-        int best_alignment = -1;
+        MultiMatchScore[] multiMatchScore = multiMatchScores.get(heardWords.size() - 1);
 
         MultiMatchScore best = new MultiMatchScore();
-        MultiMatchScore multiMatchScore[] = multiMatchScores.get(hLast);
-
+        int best_alignment = -1;
         for (int i = 0; i < costCalcWords; i++) {
-            if (multiMatchScore[i].cost < best.cost ||
-                    (multiMatchScore[i].cost == best.cost && multiMatchScore[i].nMatches > best.nMatches)) {
+            if (multiMatchScore[i].cost < best.cost || (multiMatchScore[i].cost == best.cost && multiMatchScore[i].nMatches > best.nMatches)) {
                 best = multiMatchScore[i];
                 best_alignment = i;
             }
@@ -620,12 +551,9 @@ public class ListenerPLRT extends ListenerBase {
             heardWord.iSentenceWord = best_alignment;
 
             // record match type
-            if (asrWordMatches(hypWords[h], sentenceWords[best_alignment]))
-                heardWord.matchLevel = HeardWord.MATCH_EXACT;
-            else if(useTruncations && asrWordIsTruncationOf(hypWords[h], sentenceWords[best_alignment]))
-                heardWord.matchLevel = HeardWord.MATCH_TRUNCATION;
-            else if (!hypWords[h].isEmpty())    // sanity check
-                heardWord.matchLevel = HeardWord.MATCH_MISCUE;
+            if (asrWordMatches(hypWords[h], sentenceWords[best_alignment])) heardWord.matchLevel = HeardWord.MATCH_EXACT;
+            else if (useTruncations && asrWordIsTruncationOf(hypWords[h], sentenceWords[best_alignment])) heardWord.matchLevel = HeardWord.MATCH_TRUNCATION;
+            else if (!hypWords[h].isEmpty()) heardWord.matchLevel = HeardWord.MATCH_MISCUE;   // sanity check
 
             // would also record lots of other context about hypWord here
 
@@ -635,7 +563,7 @@ public class ListenerPLRT extends ListenerBase {
         }
 
         // return the aligned word array
-        HeardWord words[] = new HeardWord[heardWords.size()];
+        HeardWord[] words = new HeardWord[heardWords.size()];
         words = heardWords.toArray(words);
         return words;
     }
@@ -649,8 +577,8 @@ public class ListenerPLRT extends ListenerBase {
         // can be segments like <sil> after the last matching hypword, so quit after last hyp word
         int h = 0;            // index of next hypword to match
         for (Segment s : segments) {
-            if (h < heardWords.length &&
-                    HeardWord.asrWordText(s.getWord()).equals(HeardWord.asrWordText(heardWords[h].hypWord))) {    // segment matches next hyp word
+            if (h < heardWords.length && HeardWord.asrWordText(s.getWord()).equals(HeardWord.asrWordText(heardWords[h].hypWord))) {
+                // segment matches next hyp word
 
                 // fill in utterance boilerplate
                 heardWords[h].utteranceStartTime = sentenceStartTime;
@@ -665,16 +593,13 @@ public class ListenerPLRT extends ListenerBase {
                 heardWords[h].startTime = sentenceStartTime + heardWords[h].startFrame * 10;
                 heardWords[h].endTime = sentenceStartTime + heardWords[h].endFrame * 10;
 
-                if (++h >= heardWords.length)    // have matched all heardWords
-                    break;
+                if (++h >= heardWords.length)break;    // have matched all heardWords
             }
         }
 
         // work around pocketsphinx bug:
         // patch in previously-computed timings for hyp words before most recent pause
-        if (prePauseResult != null && prePauseResult.length <= heardWords.length) {
-            System.arraycopy(prePauseResult, 0, heardWords, 0, prePauseResult.length);
-        }
+        if (prePauseResult != null && prePauseResult.length <= heardWords.length) System.arraycopy(prePauseResult, 0, heardWords, 0, prePauseResult.length);
 
         // Now that we have correct times, fill in derived measures latency and silence
         addLatency(heardWords);
@@ -688,28 +613,26 @@ public class ListenerPLRT extends ListenerBase {
             if (h == 0) { // special case for first word
                 // silence is time from start of utterance
                 hw.silence = (int) (hw.startTime - hw.utteranceStartTime);
-                continue;    // latency undefined for first word, remains -1 as initialized
-            }
-            // else on non-first word
+                // latency undefined for first word, remains -1 as initialized
+            } else {
+                // silence is time from end of previous word.
+                hw.silence = (int)(hw.startTime - heardWords[h - 1].endTime);
 
-            // silence is time from end of previous word.
-            hw.silence = (int) (hw.startTime - heardWords[h - 1].endTime);
+                // Following gets "best case" [most charitable] latency as computed by the Reading Tutor: if current word is aligned
+                // with sentence word s, get time from the end of most recent hyp word aligned with sentence word s-1.
+                if (hw.iSentenceWord > 0) {
+                    for (int hPrev = h - 1; hPrev >= 0; hPrev--) {    // search backwards through prior hyp words
+                        HeardWord priorHypWord = heardWords[hPrev];
 
-            // Following gets "best case" [most charitable] latency as computed by the Reading Tutor: if current word is aligned
-            // with sentence word s, get time from the end of most recent hyp word aligned with sentence word s-1.
-            if (hw.iSentenceWord > 0) {
-                for (int hPrev = h - 1; hPrev >= 0; hPrev--) {    // search backwards through prior hyp words
-                    HeardWord priorHypWord = heardWords[hPrev];
-
-                    if (priorHypWord.iSentenceWord == hw.iSentenceWord - 1) {
-                        hw.latency = (int) (hw.startTime - priorHypWord.endTime);
-                        break;
+                        if (priorHypWord.iSentenceWord == hw.iSentenceWord - 1) {
+                            hw.latency = (int)(hw.startTime - priorHypWord.endTime);
+                            break;
+                        }
                     }
                 }
             }
         }
     }
-
 
     // create and write header of hypothesis log file.
     @Override
@@ -717,11 +640,11 @@ public class ListenerPLRT extends ListenerBase {
         Log.i("beginHypLog", "starting hypothesis log");
         try {
             File hypLog = getHypLogFile(captureLabel);
+            Log.d("beginHypLog", "hypothesis log file: " + hypLog);
             BufferedWriter bw = new BufferedWriter(new FileWriter(hypLog.getPath(), false));
 
             String configPath = "<none>";
-            if (this.configFile != null)
-                configPath = this.configFile.getPath();
+            if (this.configFile != null) configPath = this.configFile.getPath();
 
             // write header information. Not exactly the same format as ReadingTutor .hea file
             bw.write("UTTERANCE ID: " + captureLabel + "\n");
@@ -736,9 +659,7 @@ public class ListenerPLRT extends ListenerBase {
 
             bw.close();
         } catch (IOException e) {
-            Log.e("beginHypothesisLog", "Error writing hypothesis log file " + e);
+            Log.e("beginHypLog", "Error writing hypothesis log file " + e);
         }
     }
-
-
 } // end Listener class

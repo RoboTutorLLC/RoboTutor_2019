@@ -92,9 +92,9 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
     private int                     mHeardWord;                          // The expected location of mCurrWord in heardWords - see PLRT version of onUpdate below
 
     private String                  speakButtonEnable = "DISABLE";
-    private String                  speakButtonShow   = "HIDE";
-    private String                  pageButtonEnable  = "DISABLE";
-    private String                  pageButtonShow    = "HIDE";
+    private String                  speakButtonShow = "HIDE";
+    private String                  pageButtonEnable = "DISABLE";
+    private String                  pageButtonShow = "HIDE";
 
     private int                     mPageCount;
     private int                     mParaCount;
@@ -128,12 +128,12 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
     private int                     segmentCurr;
 
     private String                  completedSentencesFmtd = "";
-    private String                  completedSentences     = "";
-    private String                  futureSentencesFmtd    = "";
-    private String                  futureSentences        = "";
+    private String                  completedSentences = "";
+    private String                  futureSentencesFmtd = "";
+    private String                  futureSentences = "";
     private boolean                 showWords;
     private boolean                 showFutureWords;
-    private boolean                 listenFutureContent    = false;
+    private boolean                 listenFutureContent = false;
     private String                  assetLocation;
 
     private ArrayList<String>       wordsSpoken;
@@ -391,9 +391,7 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
     }
 
     private String[] splitRawSentence(String rawSentence) {
-        String  sentenceWords[];
-
-        sentenceWords = rawSentence.trim().split("\\s+");
+        String[] sentenceWords = rawSentence.trim().split("\\s+");
 
         sentenceWords = stripLeadingTrailing(sentenceWords, "'");
         sentenceWords = splitWordOnChar(sentenceWords, "-");
@@ -413,10 +411,8 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
      * @return
      */
     private String processRawSentence(String rawSentence) {
-        String[]      sentenceWords;
+        String[] sentenceWords = splitRawSentence(rawSentence);
         StringBuilder sentence = new StringBuilder();
-
-        sentenceWords = splitRawSentence(rawSentence);
 
         for (int i1 = 0; i1 < sentenceWords.length; i1++) {
             if (sentenceWords[i1].endsWith("'") || sentenceWords[i1].endsWith("-")) sentence.append(sentenceWords[i1]);
@@ -463,11 +459,11 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
         Log.d(TAG, "seekToStoryPosition: showWords = " + showWords + ", showFutureWords = " + showFutureWords);
 
         completedSentencesFmtd = "";
-        completedSentences     = "";
-        futureSentencesFmtd    = "";
-        futureSentences        = "";
-        wordsSpoken            = new ArrayList<>();
-        futureSpoken           = new ArrayList<>();
+        completedSentences = "";
+        futureSentencesFmtd = "";
+        futureSentences = "";
+        wordsSpoken = new ArrayList<>();
+        futureSpoken = new ArrayList<>();
 
         // Optimization - Skip If seeking to the very first line
         //
@@ -787,7 +783,7 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
 
         mParent.setFeature(TCONST.FTR_PROMPT, mParent.testFeature(TCONST.FTR_USER_PROMPT) ? TCONST.ADD_FEATURE : TCONST.DEL_FEATURE);
         mParent.setFeature(TCONST.FTR_PLAY_PROMPT, mParent.testFeature(TCONST.FTR_USER_PROMPT) || mPrevEffectiveVariant.equals("story.prompt") || mCurrPrompt.equals(mPrevPrompt) ? TCONST.DEL_FEATURE : TCONST.ADD_FEATURE);
-        
+
         // Set the scriptable flag indicating the current state.
         //
         if (mCurrWord >= mWordCount) {
@@ -1213,9 +1209,9 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
      * @return
      */
     private PointF broadcastActiveTextPos(TextView text, String[] words){
-        PointF  point   = new PointF(0,0);
-        int     charPos = 0;
-        int     maxPos;
+        PointF point = new PointF(0,0);
+        int charPos = 0;
+        int maxPos;
 
         try {
             Layout layout = text.getLayout();
@@ -1233,7 +1229,7 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
                 // Note that sending a value greater than maxPos will corrupt the textView - so
                 // guarantee this will never happen.
                 //
-                maxPos  = text.getText().length();
+                maxPos = text.getText().length();
                 charPos = (charPos > maxPos) ? maxPos : charPos;
 
                 point.x = layout.getPrimaryHorizontal(charPos);
@@ -1256,8 +1252,8 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
      */
     @Override
     public void onUpdate(String[] heardWords) {
-        boolean result    = true;
-        String  logString = "";
+        boolean result = true;
+        String logString = "";
 
         for (int i = 0; i < heardWords.length; i++) logString += heardWords[i].toLowerCase() + " | ";
 
@@ -1298,12 +1294,12 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
      * to using 2 simultaneous decoders one for the correct sentence and one for any other "distractor"
      * words. i.e. other words in the sentence in this case.
      *
-     *  TODO: check if it is possible for the hypothesis to chamge between last update and final hyp
+     *  TODO: check if it is possible for the hypothesis to change between last update and final hyp
      */
     @Override
     public void onUpdate(ListenerBase.HeardWord[] heardWords, boolean finalResult) {
-        boolean result    = true;
-        String  logString = "";
+        boolean result = true;
+        String logString = "";
 
         try {
             for (int i = 0; i < heardWords.length; i++) {
@@ -1315,7 +1311,6 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
                 if (wordsToSpeak[mCurrWord].equals(heardWords[mHeardWord].hypWord)) {
                     nextWord();
                     mHeardWord++;
-
                     mListener.updateNextWordIndex(mHeardWord);
 
                     Log.i("ASR", "RIGHT");

@@ -52,19 +52,18 @@ public class ListenerBase {
      */
     protected SpeechRecognizer recognizer;
 
-    static protected ListenerAssets  assets;     // created in init phase -
+    static protected ListenerAssets assets;      // created in init phase -
 
-    protected String  captureLabel = "";          // label for capture, logging files
-    protected boolean IS_LOGGING   = false;
+    protected String captureLabel = "";          // label for capture, logging files
+    protected boolean IS_LOGGING = false;
 
-    protected File    configFile;                // config file to use, null => default
-    protected File    modelsDir;                 // saved model directory
+    protected File configFile;                   // config file to use, null => default
+    protected File modelsDir;                    // saved model directory
     protected LogMath logMath;                   // needed for creating Fsgs
 
     private String acousticModel = LCONST.KIDS;  // LCONST.KIDS | LCONST.ADULT
 
-    protected String   userID;                   // User ID
-
+    protected String userID;                     // User ID
 
     // to work around pocketsphinx timing bug: when recognizing continuously across silent pauses,
     // after a pause hyp words from a speech segments before the pause have their reported frame times
@@ -76,7 +75,7 @@ public class ListenerBase {
     protected IAsrEventListener eventListener;    // where to send client notification callbacks
 
     protected static final String SENTENCE_SEARCH = "sentence";       // label for our search in decoder
-    protected static final String JSGF_SEARCH     = "jsgf_search";    // label for our search in decoder
+    protected static final String JSGF_SEARCH = "jsgf_search";        // label for our search in decoder
 
     // This is used to map language "Features" to the associated dictionary filenames
     // Dictionary files are located in the assets/sync/models/lm
@@ -89,12 +88,11 @@ public class ListenerBase {
         dictMap.put("LANG_SW", "SWAHILI.DIC");
     }
 
-    static private boolean       isReady = false;
-    static private String  TAG = "ListenerBase";
+    static private boolean isReady = false;
+    static private String TAG = "ListenerBase";
 
 
     public ListenerBase() {
-
     }
 
     /**
@@ -105,10 +103,8 @@ public class ListenerBase {
     public ListenerBase(String userID) {
         this.userID = userID;
         configFile = null;
-
         // decoder setup deferred until init() call.
     }
-
 
     /**
      * construct Listener to setup decoder from a pocketsphinx config file. For path arguments config file must contain
@@ -120,10 +116,8 @@ public class ListenerBase {
     public ListenerBase(String userID, File config) {
         this.userID = userID;
         configFile = config;
-
         // decoder setup deferred until init() call.
     }
-
 
     /**
      * Initialize the listener
@@ -131,17 +125,13 @@ public class ListenerBase {
      * @param langFTR -- application context for locating resources and external storage
      */
     public void setLanguage(String langFTR) {
-
         // Configure the phonetic rules that will be used by the decoder
         // TODO: Need to make phoneme lang rules dynamic so we may have multiple recognizers
-        //
         Phoneme.setTargetLanguage(langFTR);
 
         // initialize recognizer for our task
-        //
         setupRecognizer(assets.getExternalDir(), configFile, dictMap.get(langFTR));
     }
-
 
     /**
      * Utility method to initialize the listener assets folder
@@ -149,18 +139,15 @@ public class ListenerBase {
      * @param callback
      */
     public void configListener(IReadyListener callback) {
-
         tutorRoot = callback;
 
         new listenerConfigTask().execute((Context) callback);
     }
 
-
     /**
      * Construct and initialize the speech recognizer
      */
     protected void setupRecognizer(File assetsDir, File configFile, String langDictionary) {
-
         try {
             // save path to modelsDir for use when finding fsgs
             modelsDir = new File(assetsDir, "models");
@@ -169,14 +156,11 @@ public class ListenerBase {
             // In this config file must specify *all* non-default pocketsphinx parameters
             if (configFile != null) {
                 recognizer = SpeechRecognizerSetup.setupFromFile(configFile).getRecognizer();
-
-            } else {    // init using default config parameters
-
-                switch(acousticModel) {
+            } else {
+                // init using default config parameters
+                switch (acousticModel) {
                     case LCONST.KIDS:
-
                         // create pocketsphinx SpeechRecognizer using the SpeechRecognizerSetup factory method
-
                         recognizer = SpeechRecognizerSetup.defaultSetup()
                                 // our pronunciation dictionary
                                 .setDictionary(new File(modelsDir, "lm/" + langDictionary))
@@ -189,30 +173,20 @@ public class ListenerBase {
                                 .setBoolean("-verbose", true)            // maximum log output
 
                                 .setFloat("-samprate", 16000f)
-
                                 .setInteger("-nfft", 512)
-
                                 .setInteger("-frate", 100)
-
                                 .setFloat("-lowerf", 50f)
-
                                 .setFloat("-upperf", 6800f)
-
                                 .setBoolean("-dither", true)
-
                                 .setInteger("-nfilt", 40)
-
                                 .setInteger("-ncep", 13)
-
                                 .setString("-agc", "none")
                                 .setFloat("-ascale", 1f)                // 20 in default
                                 .setBoolean("-backtrace", true)         // no in default
-
                                 .setDouble("-beam", 1e-80)		        // 1e-48 in default
-
                                 .setBoolean("-bestpath", false)		    // yes in default
 
-//                                .setString("-cmn", "current")
+                                //.setString("-cmn", "current")
                                 .setString("-cmn", "prior")
                                 .setBoolean("-compallsen", false)
                                 .setBoolean("-dictcase", false)
@@ -220,35 +194,28 @@ public class ListenerBase {
                                 .setBoolean("-fwdflat", false)          // yes in default
                                 .setInteger("-latsize", 5000)
                                 .setFloat("-lpbeam", 1e-5f)	            // 1e-40 in default
-
                                 .setDouble("-lponlybeam", 7e-29)        //
-
                                 .setFloat("-lw", 10f)   	            // 6.5 in default
                                 .setInteger("-maxhmmpf", 1500)          // 10000 in default
                                 //.setInteger("-maxnewoov", 5000)         // 20 in default
 
                                 .setDouble("-pbeam", 1e-80)             // 1e-48 in default
-
                                 .setFloat("-pip", 1f)
 
-                                .setBoolean("-remove_noise", true)     // yes in default
-                                .setBoolean("-remove_silence", true)   // yes in default
+                                .setBoolean("-remove_noise", true)      // yes in default
+                                .setBoolean("-remove_silence", true)    // yes in default
 
                                 .setFloat("-silprob", 1f)               // 0.005 in default
                                 .setInteger("-topn",  4)
 
                                 .setDouble("-wbeam", 1e-60)             // 7e-29 in default
-
                                 .setFloat("-wip",  1f)                  // 0.65 in default
 
                                 .getRecognizer();
-
                         break;
 
                     case LCONST.ADULT:
-
                         // create pocketsphinx SpeechRecognizer using the SpeechRecognizerSetup factory method
-
                         recognizer = SpeechRecognizerSetup.defaultSetup()
                                 // our pronunciation dictionary
                                 //.setDictionary(new File(modelsDir, "lm/CMU07A-CAPS.DIC"))
@@ -260,19 +227,16 @@ public class ListenerBase {
                                 // this automatically logs raw audio to the specified directory:
                                 .setRawLogDir(assetsDir)
 
-		              /* can't get sphinx logfile on Android, log messages go to LogCat facility instead
-                        .setString("-logfn", new File(assetsDir, logName).getPath())
-		               */
+		                        // can't get sphinx logfile on Android, log messages go to LogCat facility instead
+                                //.setString("-logfn", new File(assetsDir, logName).getPath())
                                 .setBoolean("-verbose", true)            // maximum log output
 
                                 // a few other settings we might want to experiment with:
-
                                 // threshold for voice activity detection:
                                 .setFloat("-vad_threshold", LCONST.VAD_THRESHOLD)       // default 2.0
                                 // other vad parameters:
                                 // .setInteger("vad_postspeech", 50)		    // default 50 (centiseconds)
                                 // .setInteger("vad_prespeech", 10)				// default 10 (centiseconds)
-
                                 // .setFloat("-silprob", 0.005f)				// default 0.005
                                 .setFloat("-fillprob", LCONST.FILLPROB)                 // default 1e-8f
                                 // .setFloat("-wip", 0.65f)						// default 0.65
@@ -284,18 +248,14 @@ public class ListenerBase {
 
             // save a log math object to use when constructing FsgModels.
             logMath = new LogMath();
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             CErrorManager.logEvent(TAG, "Recognizer configuration error: ", e, false);
         }
     }
 
-
-
     /**
-         * Moves new assets to an external folder so the Sphinx code can access it.
-         *
-         */
+     * Moves new assets to an external folder so the Sphinx code can access it.
+     */
     class listenerConfigTask extends AsyncTask<Context, Void, Boolean> {
 
         @Override
@@ -304,7 +264,6 @@ public class ListenerBase {
 
         @Override
         protected Boolean doInBackground(Context... params) {
-
             boolean result = false;
             try {
                 // sync assets from resources to filesystem via ListenerAssets class
@@ -313,7 +272,6 @@ public class ListenerBase {
                 assets = new ListenerAssets(params[0]);
                 assets.syncAssets();
                 result = true;
-
             } catch (IOException e) {
                 // TODO: Manage exceptions
                 Log.d("ASR", "init Failed: " + e);
@@ -330,14 +288,13 @@ public class ListenerBase {
         }
     }
 
+    public void listenFor(String[] wordsToHear, int startWord) {
+    }
 
-    public void listenFor(String[] wordsToHear, int startWord){}
+    public void listenForSentence(String[] wordsToHear, int startWord) {
+    }
 
-
-    public void listenForSentence(String[] wordsToHear, int startWord){}
-
-
-    public void updateNextWordIndex(int next){
+    public void updateNextWordIndex(int next) {
     }
 
     /**
@@ -352,18 +309,15 @@ public class ListenerBase {
      * Stop the listener. Will send final hypothesis event
      */
     public void stop() {
-        if (recognizer != null)
-            recognizer.stop();
+        if (recognizer != null) recognizer.stop();
     }
 
     /**
      * Cancel the listener. Does not send final hypothesis event
      */
     public void cancel() {
-        if (recognizer != null)
-            recognizer.cancel();
+        if (recognizer != null) recognizer.cancel();
     }
-
 
     /**
      * Attach event listener to receive notification callbacks
@@ -373,8 +327,7 @@ public class ListenerBase {
     }
 
     public void setPauseListener(boolean pauseListener) {
-        if (recognizer != null)
-            recognizer.setPauseRecognizer(pauseListener);
+        if (recognizer != null) recognizer.setPauseRecognizer(pauseListener);
     }
 
     /**
@@ -382,7 +335,6 @@ public class ListenerBase {
      * @return
      */
     public boolean isListening() {
-
        return (recognizer != null)? recognizer.isListening(): false;
     }
 
@@ -406,9 +358,6 @@ public class ListenerBase {
         recognizer.resetStaticEvent(eventType);
     }
 
-
-
-
     /**
      * get the path to the capture file for given utterance label
      */
@@ -416,17 +365,11 @@ public class ListenerBase {
         return new File(recognizer.rawLogDir, utteranceLabel + ".wav");
     }
 
-
     public void deleteLogFiles() {
-        if (recognizer == null)
-            return;
+        if (recognizer == null) return;
         new File(recognizer.rawLogDir, captureLabel + "-log.txt").delete();
         new File(recognizer.rawLogDir, captureLabel + ".raw").delete();
     }
-
-
-
-
 
     /**
      * class used to hold info about heard words in recognition results.
@@ -448,7 +391,6 @@ public class ListenerBase {
          */
         public int matchLevel;
 
-
         /**
          * default value: no information
          */
@@ -465,7 +407,6 @@ public class ListenerBase {
          * heard exact match
          */
         public static final int MATCH_EXACT = 3;
-
 
         /**
          * start time of word, milliseconds since epoch
@@ -560,13 +501,10 @@ public class ListenerBase {
     }
 
 
-
     /***** Logging */
 
-
-
     /**
-     * get the  path to the hypothesis log file for given utterance label
+     * get the path to the hypothesis log file for given utterance label
      */
     protected File getHypLogFile(String utteranceLabel) {
         // store it alongside the captured audio file
@@ -597,13 +535,9 @@ public class ListenerBase {
             bw.write("    TIME: " + timestamp + "\n");
             bw.write("  DECODER OUTPUT: " + hyp + "\n");
             bw.write("  RAW SEGMENTS:\n");
-            for (Segment s : segments) {
-                bw.write(s.getWord() + " " + s.getStartFrame() + " " + s.getEndFrame() + "\n");
-            }
+            for (Segment s : segments) bw.write(s.getWord() + " " + s.getStartFrame() + " " + s.getEndFrame() + "\n");
             bw.write("  SEGMENTATION:\n");
-            for (HeardWord hw : heardWords) {
-                bw.write(hw.hypWord + " " + hw.startFrame + " " + hw.endFrame + "\n");
-            }
+            for (HeardWord hw : heardWords) bw.write(hw.hypWord + " " + hw.startFrame + " " + hw.endFrame + "\n");
             bw.write("\n");
 
             bw.close();
@@ -611,6 +545,4 @@ public class ListenerBase {
             Log.e("logHyp", "Error writing hypothesis log file " + e.getMessage());
         }
     }
-
-
 }

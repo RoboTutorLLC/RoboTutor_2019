@@ -98,11 +98,9 @@ public class CRt_Component extends ViewAnimator implements IEventListener, IVMan
     private Animation slide_top_down;
 
     // json loadable
-    //
     public CData_Index[]      dataSource;
 
     // This is used to map "type" (class names) in the index to real classes
-    //
     static public HashMap<String, Class> viewClassMap = new HashMap<String, Class>();
 
     static {
@@ -129,10 +127,10 @@ public class CRt_Component extends ViewAnimator implements IEventListener, IVMan
 
         mContext = context;
 
-        slide_left_to_right  = AnimationUtils.loadAnimation(mContext, R.anim.slide_left_to_right);
-        slide_right_to_left  = AnimationUtils.loadAnimation(mContext, R.anim.slide_right_to_left);
-        slide_top_down       = AnimationUtils.loadAnimation(mContext, R.anim.slide_top_down);
-        slide_bottom_up      = AnimationUtils.loadAnimation(mContext, R.anim.slide_bottom_up);
+        slide_left_to_right = AnimationUtils.loadAnimation(mContext, R.anim.slide_left_to_right);
+        slide_right_to_left = AnimationUtils.loadAnimation(mContext, R.anim.slide_right_to_left);
+        slide_top_down = AnimationUtils.loadAnimation(mContext, R.anim.slide_top_down);
+        slide_bottom_up = AnimationUtils.loadAnimation(mContext, R.anim.slide_bottom_up);
     }
 
     public void onDestroy() {
@@ -158,7 +156,6 @@ public class CRt_Component extends ViewAnimator implements IEventListener, IVMan
         mListener.setEventListener(this);
 
         // Have connector sub-class in the tutor domain Inject the listener into the MediaManager
-        //
         setListener(mListener);
 
         // attach TTS
@@ -176,9 +173,7 @@ public class CRt_Component extends ViewAnimator implements IEventListener, IVMan
      * @param language Feature string (e.g. LANG_EN)
      */
     public void configListenerLanguage(String language) {
-
         // Configure the mListener for our storyName
-        //
         mListener.setLanguage(language);
     }
 
@@ -218,7 +213,6 @@ public class CRt_Component extends ViewAnimator implements IEventListener, IVMan
     }
 
     public int addPage(View newView) {
-
         int insertNdx = super.getChildCount();
         super.addView((View) newView, insertNdx);
 
@@ -292,7 +286,7 @@ public class CRt_Component extends ViewAnimator implements IEventListener, IVMan
     }
 
     /* Following saves state over possible destroy/recreate cycle,
-      * which occurs most commonly on portrait/landscape change.
+     * which occurs most commonly on portrait/landscape change.
  	 * We save current sentence (though no credit state) in order to restart from there
  	 */
     protected void onSaveInstanceState(Bundle state) {
@@ -393,14 +387,11 @@ public class CRt_Component extends ViewAnimator implements IEventListener, IVMan
     public void speakTargetSentence() {   // to speak the entire Target word sentence
     }
 
-    /**
-     */
     public void speakTargetWord() {
     }
 
     // Must override in TClass
     // TClass domain where TScope lives providing access to tutor scriptables
-    //
     public void onButtonClick(String buttonName) {
     }
 
@@ -415,13 +406,11 @@ public class CRt_Component extends ViewAnimator implements IEventListener, IVMan
 
     // Must override in TClass
     // TClass domain where TScope lives providing access to tutor scriptables
-    //
     public void publishValue(String varName, String value) {
     }
 
     // Must override in TClass
     // TClass domain where TScope lives providing access to tutor scriptables
-    //
     public void publishValue(String varName, int value) {
     }
 
@@ -541,16 +530,11 @@ public class CRt_Component extends ViewAnimator implements IEventListener, IVMan
      */
     public void setStory(String storyName, String assetLocation) {
         for (int i1 = 0; i1 < dataSource.length; i1++) {
-
             if (storyName.equals(dataSource[i1].storyName)) {
-
                 // Generate a cached path to the storyName asset data
-                //
                 String EXTERNPATH = DATASOURCEPATH + dataSource[i1].levelFolder + "/" + dataSource[i1].storyFolder + "/";
 
                 loadStory(EXTERNPATH, dataSource[i1].viewtype, assetLocation);
-
-                // we're done
                 break;
             }
         }
@@ -578,15 +562,12 @@ public class CRt_Component extends ViewAnimator implements IEventListener, IVMan
     public void onEvent(IEvent eventObject) {
         // We expect AUDIO_EVENTS from the narration type_audio nodes to let us know when
         // they are complete with an UTTERANCE_COMPLETE_EVENT
-        //
         if (mViewManager != null) {
             try {
                 switch (eventObject.getType()) {
                     case TYPE_AUDIO:
-
                         // We expect AUDIO_EVENTS from the narration type_audio nodes to let us know when
                         // they are complete with an UTTERANCE_COMPLETE_EVENT
-                        //
                         mViewManager.execCommand((String) eventObject.getString(AUDIO_EVENT), null);
                         break;
 
@@ -640,11 +621,9 @@ public class CRt_Component extends ViewAnimator implements IEventListener, IVMan
     /**
      *  Disable the input queues permenantly in prep for destruction
      *  walks the queue chain to diaable scene queue
-     *
      */
     private void terminateQueue() {
         // disable the input queue permenantly in prep for destruction
-        //
         _qDisabled = true;
         flushQueue();
     }
@@ -655,7 +634,6 @@ public class CRt_Component extends ViewAnimator implements IEventListener, IVMan
      */
     private void flushQueue() {
         for (Object entry : queueMap.entrySet()) {
-
             Log.d(TAG, "Post Cancelled on Flush: " + ((Queue)((Map.Entry)entry).getValue()).getCommand());
 
             mainHandler.removeCallbacks((Queue)((Map.Entry)entry).getValue());

@@ -62,7 +62,7 @@ public class CAudioLogThread extends Thread {
                     readCount = 0;
                 } else {
                     readCount = recorder.read(buffer, 0, BUFFER_SIZE);
-                    Log.i("AudioLog", "Read from recorder: read_count = " + readCount);
+//                    Log.i("AudioLog", "Read from recorder: read_count = " + readCount);
                 }
 
                 if (readCount == AudioRecord.ERROR_INVALID_OPERATION || readCount == AudioRecord.ERROR_BAD_VALUE) {

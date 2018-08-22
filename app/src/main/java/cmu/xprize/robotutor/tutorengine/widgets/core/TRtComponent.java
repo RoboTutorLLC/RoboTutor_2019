@@ -750,10 +750,7 @@ public class TRtComponent extends CRt_Component implements IBehaviorManager, ITu
 
     public TBoolean test() {
         boolean correct = isCorrect();
-
-        if (correct) publishFeature("FTR_RIGHT");
-        else publishFeature("FTR_WRONG");
-
+        publishFeature(correct ? TCONST.GENERIC_RIGHT : TCONST.GENERIC_WRONG);
         return new TBoolean(correct);
     }
 
@@ -794,9 +791,7 @@ public class TRtComponent extends CRt_Component implements IBehaviorManager, ITu
     @Override
     public void UpdateValue(boolean correct) {
         reset();
-
-        if (correct) publishFeature(TCONST.GENERIC_RIGHT);
-        else publishFeature(TCONST.GENERIC_WRONG);
+        publishFeature(correct ? TCONST.GENERIC_RIGHT : TCONST.GENERIC_WRONG);
     }
 
     public void reset() {
