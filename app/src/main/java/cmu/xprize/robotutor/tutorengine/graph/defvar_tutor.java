@@ -74,4 +74,9 @@ public class defvar_tutor implements ILoadableObject2 {
         // Log.d(TAG, "Loader iteration");
         loadJSON(jsonObj, (IScope2) scope);
     }
+
+    @Override
+    public String toString() {
+        return String.format("{name : \"%s\", features : \"%s\"}", tutorName, features);
+    }
 }

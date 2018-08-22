@@ -22,15 +22,9 @@ import android.util.Log;
 
 import org.json.JSONObject;
 
-import java.util.HashMap;
-
 import cmu.xprize.robotutor.tutorengine.ILoadableObject2;
 import cmu.xprize.robotutor.tutorengine.graph.vars.IScope2;
 import cmu.xprize.robotutor.tutorengine.util.CClassMap2;
-import cmu.xprize.util.ILoadableObject;
-import cmu.xprize.robotutor.tutorengine.ITutorObject;
-import cmu.xprize.robotutor.tutorengine.ITutorSceneImpl;
-import cmu.xprize.robotutor.tutorengine.graph.vars.TScope;
 import cmu.xprize.util.IScope;
 import cmu.xprize.util.JSON_Helper;
 
@@ -74,6 +68,11 @@ public class databinding implements ILoadableObject2 {
     public void loadJSON(JSONObject jsonObj, IScope scope) {
         // Log.d(TAG, "Loader iteration");
         loadJSON(jsonObj, (IScope2) scope);
+    }
+
+    @Override
+    public String toString() {
+        return String.format("{name: \"%s\", datasource: \"%s\"}", name, datasource);
     }
 
 }

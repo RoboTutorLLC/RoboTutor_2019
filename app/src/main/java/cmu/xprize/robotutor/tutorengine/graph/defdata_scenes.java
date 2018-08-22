@@ -61,4 +61,18 @@ public class defdata_scenes implements ILoadableObject2 {
         loadJSON(jsonObj, (IScope2) scope);
     }
 
+    @Override
+    public String toString() {
+
+        StringBuilder builder = new StringBuilder("[");
+        for (databinding binding : databindings) {
+            builder.append(binding);
+            builder.append(",");
+        }
+
+        builder.deleteCharAt(builder.length() - 1); // delete last comma
+        builder.append("]");
+        return builder.toString();
+    }
+
 }

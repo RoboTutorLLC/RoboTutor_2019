@@ -36,7 +36,6 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Random;
 
-import cmu.xprize.comp_logging.PerformanceLogItem;
 import cmu.xprize.robotutor.BuildConfig;
 import cmu.xprize.robotutor.R;
 import cmu.xprize.robotutor.tutorengine.graph.databinding;
@@ -62,7 +61,7 @@ import cmu.xprize.robotutor.RoboTutor;
  * CTutorEngine is a singleton
  *
  */
-public class CTutorEngine implements ILoadableObject2 {
+public class CTutorEngine {
 
     private static TScope                   mRootScope;
 
@@ -84,6 +83,9 @@ public class CTutorEngine implements ILoadableObject2 {
     // must match incoming json data
     //
     private String                          EXPECTED_VERSION = "1.0";
+
+    static public CTutorEngineDescriptor _descriptor;
+
 
     // json loadable
     static public String                         descr_version;                 //
@@ -624,12 +626,10 @@ public class CTutorEngine implements ILoadableObject2 {
      *
      * @param jsonData
      */
-    @Override
     public void loadJSON(JSONObject jsonData, IScope2 scope) {
 
       JSON_Helper.parseSelf(jsonData, this, CClassMap2.classMap, scope);
     }
-    @Override
     public void loadJSON(JSONObject jsonObj, IScope scope) {
         // Log.d(TAG, "Loader iteration");
         loadJSON(jsonObj, (IScope2) scope);

@@ -1,0 +1,327 @@
+{
+  //************************************************
+  // ****    NOTE NOTE NOTE    ***************
+  //
+  // Engine descriptor version
+  // If you change this json structurally you must update this field.
+  // It is meant to ensure the utility name proceessor is in sync
+  //
+  "desc_version":"1.0",
+
+  "defTutor":"activity_selector",
+
+  // Set the default language for the tutors
+  //
+  "language":"LANG_SW",
+
+
+  // This maps a "variant" i.e. arbitrary name to the tutor/featureset that define a
+  // path through the given tutors anumation_graph.
+  //
+  "tutorVariants": {
+
+    "numberscale": {
+      "type": "TUTORVAR_MAP",
+      "tutorName": "numberscale",
+      "features": ""
+    },
+    "countingx": {
+      "type": "TUTORVAR_MAP",
+      "tutorName": "countingx",
+      "features": ""
+    },
+    "counting": {
+      "type": "TUTORVAR_MAP",
+      "tutorName": "counting",
+      "features": ""
+    },
+    "math": {
+      "type": "TUTORVAR_MAP",
+      "tutorName": "add_subtract",
+      "features": ""
+    },
+    "akira": {
+      "type": "TUTORVAR_MAP",
+      "tutorName": "akira",
+      "features": ""
+    },
+    "bpop.ltr.mix": {
+      "type": "TUTORVAR_MAP",
+      "tutorName": "bubble_pop",
+      "features": "FTR_LETTERS:FTR_MIXEDCASE"
+    },
+    "bpop.ltr.lc": {
+      "type": "TUTORVAR_MAP",
+      "tutorName": "bubble_pop",
+      "features": "FTR_LETTERS:FTR_LOWERCASE"
+    },
+    "bpop.ltr.uc": {
+      "type": "TUTORVAR_MAP",
+      "tutorName": "bubble_pop",
+      "features": "FTR_LETTERS:FTR_UPPERCASE"
+    },
+    "bpop.wrd": {
+      "type": "TUTORVAR_MAP",
+      "tutorName": "bubble_pop",
+      "features": "FTR_WORDS"
+    },
+    "bpop.num": {
+      "type": "TUTORVAR_MAP",
+      "tutorName": "bubble_pop",
+      "features": "FTR_NUMBERS"
+    },
+    "bpop.shp": {
+      "type": "TUTORVAR_MAP",
+      "tutorName": "bubble_pop",
+      "features": "FTR_SHAPES"
+    },
+    "bpop.addsub": {
+      "type": "TUTORVAR_MAP",
+      "tutorName": "bubble_pop",
+      "features": "FTR_E2N"
+    },
+    "bpop.gl": {
+      "type": "TUTORVAR_MAP",
+      "tutorName": "bubble_pop",
+      "features": "FTR_GT_LT"
+    },
+    "bpop.mn": {
+      "type": "TUTORVAR_MAP",
+      "tutorName": "bubble_pop",
+      "features": "FTR_MIS_NUM"
+    },
+    "write.ltr.uc": {
+      "type": "TUTORVAR_MAP",
+      "tutorName": "word_copy",
+      "features": "FTR_LETTERS:FTR_UPPERCASE"
+    },
+    "write.ltr.uc.dic": {
+      "type": "TUTORVAR_MAP",
+      "tutorName": "word_copy",
+      "features": "FTR_LETTERS:FTR_UPPERCASE:FTR_DICTATION"
+    },
+    "write.ltr.uc.trc": {
+      "type": "TUTORVAR_MAP",
+      "tutorName": "word_copy",
+      "features": "FTR_LETTERS:FTR_UPPERCASE:FTR_TRACE"
+    },
+    "write.ltr.lc": {
+      "type": "TUTORVAR_MAP",
+      "tutorName": "word_copy",
+      "features": "FTR_LETTERS:FTR_LOWERCASE"
+    },
+    "write.ltr.lc.dic": {
+      "type": "TUTORVAR_MAP",
+      "tutorName": "word_copy",
+      "features": "FTR_LETTERS:FTR_LOWERCASE:FTR_DICTATION"
+    },
+    "write.ltr.lc.trc": {
+      "type": "TUTORVAR_MAP",
+      "tutorName": "word_copy",
+      "features": "FTR_LETTERS:FTR_LOWERCASE:FTR_TRACE"
+    },
+    "write.num": {
+      "type": "TUTORVAR_MAP",
+      "tutorName": "word_copy",
+      "features": "FTR_NUMBERS"
+    },
+    "write.num.dic": {
+      "type": "TUTORVAR_MAP",
+      "tutorName": "word_copy",
+      "features": "FTR_NUMBERS:FTR_DICTATION"
+    },
+    "write.num.trc": {
+      "type": "TUTORVAR_MAP",
+      "tutorName": "word_copy",
+      "features": "FTR_NUMBERS:FTR_TRACE"
+    },
+    "write.wrd": {
+      "type": "TUTORVAR_MAP",
+      "tutorName": "word_copy",
+      "features": "FTR_WORDS"
+    },
+    "write.wrd.dic": {
+      "type": "TUTORVAR_MAP",
+      "tutorName": "word_copy",
+      "features": "FTR_WORDS:FTR_DICTATION"
+    },
+    "write.wrd.trc": {
+      "type": "TUTORVAR_MAP",
+      "tutorName": "word_copy",
+      "features": "FTR_WORDS:FTR_TRACE"
+    },
+    "write.dotCount": {
+      "type": "TUTORVAR_MAP",
+      "tutorName": "word_copy",
+      "features": "FTR_DOTCOUNT"
+    },
+    "write.arith.add": {
+      "type": "TUTORVAR_MAP",
+      "tutorName": "word_copy",
+      "features": "FTR_ARITH:FTR_ADD"
+    },
+    "write.arith.sub": {
+      "type": "TUTORVAR_MAP",
+      "tutorName": "word_copy",
+      "features": "FTR_ARITH:FTR_SUB"
+    },
+    "write.missingLtr": {
+      "type": "TUTORVAR_MAP",
+      "tutorName": "word_copy",
+      "features": "FTR_MISSING_LTR"
+    },
+    "story.echo": {
+      "type": "TUTORVAR_MAP",
+      "tutorName": "story_reading",
+      "features": "FTR_USER_ECHO"
+    },
+    "story.hear": {
+      "type": "TUTORVAR_MAP",
+      "tutorName": "story_reading",
+      "features": "FTR_USER_HEAR"
+    },
+    "story.read": {
+      "type": "TUTORVAR_MAP",
+      "tutorName": "story_reading",
+      "features": "FTR_USER_READ"
+    },
+    "story.hide": {
+      "type": "TUTORVAR_MAP",
+      "tutorName": "story_reading",
+      "features": "FTR_USER_HIDE"
+    },
+    "story.reveal": {
+      "type": "TUTORVAR_MAP",
+      "tutorName": "story_reading",
+      "features": "FTR_USER_REVEAL"
+    },
+    "story.parrot": {
+      "type": "TUTORVAR_MAP",
+      "tutorName": "story_reading",
+      "features": "FTR_USER_PARROT"
+    }
+  },
+
+  // Tutor binding patterns -
+  // These contain the prototype tutor/component bindings to datasources
+  // If there is a single binding then the datasource is pushed in as a simple string
+  // else it is pushed in with a prefixed component:datasource compound specification.
+  //
+  "bindingPatterns": {
+
+    "numberscale": {
+      "type": "TUTORDATA_MAP",
+      "scene_bindings": {
+        "numberscale": {
+          "type": "SCENEDATA_MAP",
+          "databindings": [
+            {
+              "name": "SNumberScale",
+              "datasource": ""
+            }
+          ]
+        }
+      }
+    },
+    "countingx": {
+      "type": "TUTORDATA_MAP",
+      "scene_bindings": {
+        "countingx": {
+          "type": "SCENEDATA_MAP",
+          "databindings": [
+            {
+              "name": "SCountingX",
+              "datasource": ""
+            }
+          ]
+        }
+      }
+    },
+    "counting": {
+      "type": "TUTORDATA_MAP",
+      "scene_bindings": {
+        "counting": {
+          "type": "SCENEDATA_MAP",
+          "databindings": [
+            {
+              "name": "SCounting",
+              "datasource": ""
+            }
+          ]
+        }
+      }
+    },
+    "story_reading": {
+      "type": "TUTORDATA_MAP",
+      "scene_bindings": {
+        "story_reading": {
+          "type": "SCENEDATA_MAP",
+          "databindings": [
+            {
+              "name": "SstoryReading",
+              "datasource": ""
+            }
+          ]
+        }
+      }
+    },
+    "akira": {
+      "type": "TUTORDATA_MAP",
+      "scene_bindings": {
+        "akira": {
+          "type": "SCENEDATA_MAP",
+          "databindings": [
+            {
+              "name": "SAkira",
+              "datasource": ""
+            }
+          ]
+        }
+      }
+    },
+    "word_copy": {
+      "type": "TUTORDATA_MAP",
+      "scene_bindings": {
+        "word_copy": {
+          "type": "SCENEDATA_MAP",
+          "databindings": [
+            {
+              "name": "SWordCopy",
+              "datasource": ""
+            }
+          ]
+        }
+      }
+    },
+    "bubble_pop": {
+      "type": "TUTORDATA_MAP",
+      "scene_bindings": {
+        "bubble_pop": {
+          "type": "SCENEDATA_MAP",
+          "databindings": [
+            {
+              "name": "SBubblePop",
+              "datasource": ""
+            }
+          ]
+        }
+      }
+    },
+    "add_subtract": {
+      "type": "TUTORDATA_MAP",
+      "scene_bindings": {
+        "add_subtract": {
+          "type": "SCENEDATA_MAP",
+          "databindings": [
+            {
+              "name": "SAddSubtract",
+              "datasource": ""
+            }
+          ]
+        }
+      }
+    }
+  }
+
+}
+

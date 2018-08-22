@@ -68,4 +68,16 @@ public class defdata_tutor implements ILoadableObject2 {
         loadJSON(jsonObj, (IScope2) scope);
     }
 
+    @Override
+    public String toString() {
+
+        StringBuilder bindings = new StringBuilder("{");
+        for (String key : scene_bindings.keySet()) {
+            bindings.append(String.format("%s: %s,", key, scene_bindings.get(key)));
+        }
+        bindings.deleteCharAt(bindings.length() - 1); // delete last comma
+        bindings.append("}");
+        return String.format("{scene_bindings : %s}", bindings.toString());
+    }
+
 }

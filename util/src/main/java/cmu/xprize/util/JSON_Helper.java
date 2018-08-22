@@ -74,6 +74,7 @@ public class JSON_Helper {
     }
 
 
+    // UNIT_TEST call a resource directly
     static public String cacheDataByName(String fileName) {
         return cacheData(fileName, TCONST.DEFINED);
     }
@@ -110,9 +111,12 @@ public class JSON_Helper {
                         in = new FileInputStream(filePath);
                         break;
 
+                        // UNIT_TEST can we do it like this?
                     case TCONST.DEFINED:
                         in = new FileInputStream(fileName);
                         break;
+
+                        // UNIT_TEST or do we need a new case for Test classes?
                 }
 
                 BufferedReader br = new BufferedReader(new InputStreamReader(in));
@@ -132,9 +136,11 @@ public class JSON_Helper {
             }
 
         } catch (FileNotFoundException e) {
+            e.printStackTrace();
             Log.d(TAG, "ERROR: " + e);
 
         } catch (IOException e) {
+            e.printStackTrace();
             Log.d(TAG, "ERROR: " + e);
         }
 
