@@ -287,8 +287,7 @@ public class ListenerPLRT extends ListenerBase {
             bw.write("FINAL_STATE " + final_state + "\n");
 
             // factor to normalize transition probabilities based on sentence length
-            int n = wordsToHear.length - 1;
-            if (n < 1) n = 1;
+            int n = wordsToHear.length;
 
             // add state transitions
             for (int i = 0; i < final_state; i++) {
@@ -307,21 +306,21 @@ public class ListenerPLRT extends ListenerBase {
                     AddFSGTransition(i, i + 1, PrResume, startWord(wordsToHear[i]));
                 }
 
-                // if i <> 0 emit null word for jump from state i back to state 0 with probability PrRestart / n
-                if (i != 0) AddFSGTransition(i, 0, PrRestart / n, "");
+                // if i <> 0 emit null word for jump from state i back to state 0 with probability PrRestart
+                if (i != 0) AddFSGTransition(i, 0, PrRestart, "");
 
                 // emit word i for transition from state i to state i with probability PrRepeat / n
                 AddFSGTransition(i, i, PrRepeat / n, wordsToHear[i]);
 
-                // emit null word for jump from state i to state j with probability PrJump for all states j except state 0
-                for (int j = 1; j < final_state; j++) if (i != j) AddFSGTransition(i, j, PrJump / n, "");
+                // emit null word for jump from state i to state j with probability PrJump / n - 1 for all states j except state 0
+                for (int j = 1; j < final_state; j++) if (i != j) AddFSGTransition(i, j, PrJump / (n - 1), "");
             }
 
-            // add jump from final state back to start with probability PrRestart / n
-            AddFSGTransition(final_state, 0, PrRestart / n, "");
+            // add jump from final state back to start with probability PrRestart
+            AddFSGTransition(final_state, 0, PrRestart, "");
 
-            // add jump from final state back to each earlier state with probability PrJump / n
-            for (int j = 1; j < final_state; j++) AddFSGTransition(final_state, j, PrJump / n, "");
+            // add jump from final state back to each earlier state with probability PrJump / n - 1
+            for (int j = 1; j < final_state; j++) AddFSGTransition(final_state, j, PrJump / (n - 1), "");
 
             // done writing the file
             bw.write("FSG_END\n");
