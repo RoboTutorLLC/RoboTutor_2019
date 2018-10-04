@@ -173,7 +173,7 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
 
     private Thread audioLogThread;
     // TODO move to config file
-    private boolean RECORD_AUDIO = false;
+    private boolean RECORD_AUDIO = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
