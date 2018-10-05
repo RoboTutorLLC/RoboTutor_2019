@@ -625,8 +625,7 @@ public class SpeechRecognizer {
 
         for (int i1 = 0; i1 < maxScan; i1++) {
             // If the word has changed - update its last changed time.
-            if (!asrWords[i1].equals(prevAsrWords[i1])  // && !("START_" + asrWords[i1]).equals(prevAsrWords[i1])
-                    ) {
+            if (!asrWords[i1].equals(prevAsrWords[i1]) && !("START_" + asrWords[i1]).equals(prevAsrWords[i1])) {
                 wordLastChanged.set(i1, currTime);
 
                 Log.d("ASR", "Word Changed: " + asrWords[i1] + " from: " + prevAsrWords[i1]);

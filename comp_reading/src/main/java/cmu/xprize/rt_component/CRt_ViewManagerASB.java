@@ -103,6 +103,7 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
     private int                     attemptNum = 0;
     private boolean                 skippedWord = false;
     private boolean                 storyBooting;
+    private boolean                 restartListener;
 
     private String[]                wordsToDisplay;                      // current sentence words to display - contain punctuation
     private String[]                wordsToSpeak;                        // current sentence words to hear
@@ -697,7 +698,6 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
 
         if (!endOfSentence) {
             // Tell the script to speak the new utterance
-            //
             mParent.applyBehavior(TCONST.SPEAK_UTTERANCE);
             postDelayedTracker();
         } else {
@@ -750,7 +750,6 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
 
         String cumulativeState = TCONST.RTC_CLEAR;
 
-        // ensure echo state has a valid value.
         mParent.publishValue(TCONST.RTC_VAR_ECHOSTATE, TCONST.FALSE);
         mParent.publishValue(TCONST.RTC_VAR_PARROTSTATE, TCONST.FALSE);
 
@@ -1016,6 +1015,7 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
         mParent.setTutorFeatures(mCurrEffectiveVariant);
 
         if (storyBooting) mParent.setFeature(TCONST.FTR_STORY_STARTING, TCONST.ADD_FEATURE);
+        restartListener = true;
 
         pagePrompt = data[currPage].prompt;
         mPrevPrompt = mCurrPrompt;
@@ -1056,10 +1056,12 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
      */
     public void continueListening() {
         if (hearRead.equals(TCONST.FTR_USER_HEAR)) mParent.applyBehavior(TCONST.NARRATE_STORY);
-        if (hearRead.equals(TCONST.FTR_USER_READ)) startListening();
+        if (hearRead.equals(TCONST.FTR_USER_READ) && restartListener) startListening();
     }
 
     private void startListening() {
+        Log.d(TAG, "startListening");
+
         // We allow the user to say any of the onscreen words but set the priority order of how we
         // would like them matched  Note that if the listener is not explicitly listening for a word
         // it will just ignore it if spoken.
@@ -1088,6 +1090,7 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
 
             mListener.listenFor(wordsToListenFor.toArray(new String[wordsToListenFor.size()]), 0);
             mListener.setPauseListener(false);
+            restartListener = false;
         }
     }
 
@@ -1255,8 +1258,7 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
             }
 
             while ((mCurrWord < wordsToSpeak.length) && (mHeardWord < heardWords.length)) {
-                if (wordsToSpeak[mCurrWord].equals(heardWords[mHeardWord].hypWord) // || ("START_" + wordsToSpeak[mCurrWord]).equals(heardWords[mHeardWord].hypWord)
-                        ) {
+                if (wordsToSpeak[mCurrWord].equals(heardWords[mHeardWord].hypWord) || ("START_" + wordsToSpeak[mCurrWord]).equals(heardWords[mHeardWord].hypWord)) {
                     Log.i("ASR", "RIGHT");
 
                     skippedWord = false;
@@ -1266,8 +1268,7 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
                     attemptNum = 0;
                     result = true;
                     mParent.updateContext(rawSentence, mCurrLine, wordsToSpeak, mCurrWord - 1, heardWords[mHeardWord - 1].hypWord, attemptNum, heardWords[mHeardWord - 1].utteranceId == "", true);
-                } else if (skippingWords && !skippedWord && attemptNum == 0 && mCurrWord + 1 < wordsToSpeak.length && (wordsToSpeak[mCurrWord + 1].equals(heardWords[mHeardWord].hypWord) // || ("START_" + wordsToSpeak[mCurrWord]).equals(heardWords[mHeardWord].hypWord)
-                        )) {
+                } else if (skippingWords && !skippedWord && attemptNum == 0 && mCurrWord + 1 < wordsToSpeak.length && (wordsToSpeak[mCurrWord + 1].equals(heardWords[mHeardWord].hypWord) || ("START_" + wordsToSpeak[mCurrWord + 1]).equals(heardWords[mHeardWord].hypWord))) {
                     Log.i("ASR", "SKIPPED");
 
                     skippedWord = true;
@@ -1290,6 +1291,7 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
 
                     skippedWord = false;
                     mListener.setPauseListener(true);
+                    restartListener = true;
                     attemptNum++;
                     result = false;
                     mParent.updateContext(rawSentence, mCurrLine, wordsToSpeak, mCurrWord, heardWords[mHeardWord].hypWord, attemptNum, heardWords[mHeardWord].utteranceId == "", false);
