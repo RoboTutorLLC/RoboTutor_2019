@@ -74,7 +74,7 @@
 
     "tutorVariants" supporting [encfolder] encodings
     ----------------------------------------------------------
-    "story.echo", "story.hear", "story.read"
+    "story.echo", "story.hear", "story.read", "story.parrot", "story.hide", "story.reveal"
 
 
     Tutors with large numbers of datasources use the [encfolder] encoding scheme. With this encoding the tutor descriptor is combined with the datasource descriptor in the following manner.

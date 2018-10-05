@@ -429,8 +429,7 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
             try {
                 // TODO: Don't do this in production
                 // At the moment we always reinstall the tutor spec data - for 
-              
-              
+
                 if(CacheSource.equals(TCONST.EXTERN)) {
                     tutorAssetManager.installAssets(TCONST.TUTORROOT);
                     logManager.postEvent_V(TAG, "INFO:Tutor Assets installed");
@@ -482,7 +481,7 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
             return result;
         }
 
-                @Override
+        @Override
         protected void onPostExecute(Boolean result) {
             isReady = result;
 
@@ -836,8 +835,8 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
         // after logging, transfer logs to READY folder
         logManager.transferHotLogs(hotLogPath, readyLogPath);
         logManager.transferHotLogs(hotLogPathPerf, readyLogPathPerf);
-
     }
+
 
     private int getNextLogSequenceId() {
         SharedPreferences prefs = getPreferences(MODE_PRIVATE);
@@ -896,9 +895,7 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
                 placement = false;
         }
 
-
         return placement ? "PLACEMENT" : "PROMOTION";
-
     }
 }
 

@@ -38,8 +38,6 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -81,7 +79,6 @@ public class CTutor implements ILoadableObject2, IEventSource {
     private HashMap<String, ITutorObject> mObjects = new HashMap<String, ITutorObject>();
 
     private ArrayList<String>            fFeatures = new ArrayList<String>();
-    private ArrayList<String>            fDefaults = new ArrayList<String>();
 
     public Context                       mContext;
     public ILogManager                   mTutorLogManager;
@@ -92,6 +89,7 @@ public class CTutor implements ILoadableObject2, IEventSource {
 
     public String                        mTutorName = "";
     public String                        mTutorId = "";
+    public String                        mTutorVariant = "";
     public AssetManager                  mAssetManager;
     public boolean                       mTutorActive = false;
 
@@ -128,13 +126,12 @@ public class CTutor implements ILoadableObject2, IEventSource {
     static private final boolean DEBUG = false;
 
 
-
-    public CTutor(Context context, String name, String tutorId, ITutorManager tutorContainer, ILogManager logManager, TScope rootScope, String tarLanguage, String featSet) {
-
+    public CTutor(Context context, String name, String tutorId, String tutorVariant, ITutorManager tutorContainer, ILogManager logManager, TScope rootScope, String tarLanguage, String featSet) {
         mTutorScope      = new TScope(this, name, rootScope);
         mContext         = context;
         mTutorName       = name;
         mTutorId         = tutorId;
+        mTutorVariant    = tutorVariant;
         mTutorContainer  = tutorContainer;
         mTutorLogManager = logManager;
 
@@ -145,7 +142,7 @@ public class CTutor implements ILoadableObject2, IEventSource {
 
         uuid = UUID.randomUUID();
 
-        setTutorFeatures(featSet);
+        setTutorFeatures(tutorVariant, featSet);
 
         // Update the unique instance string for the tutor
         //
@@ -168,7 +165,6 @@ public class CTutor implements ILoadableObject2, IEventSource {
      * accessed by other classes
      */
     private void monitorBattery() {
-
         IntentFilter iFilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
         Intent batteryStatus = mContext.registerReceiver(null, iFilter);
 
@@ -190,14 +186,11 @@ public class CTutor implements ILoadableObject2, IEventSource {
 
         //Log.wtf("BATTERY", String.format("status=%d  isCharging=%s  percent=%f", status, isCharging ? "YES": "NO", batteryPct));
         RoboTutor.logManager.postBattery(TCONST.BATTERY_MSG, String.valueOf(batteryPct), chargeType);
-
     }
 
-
     private void inflateTutor() {
-
         // Load the "tutor_descriptor.json" file -
-        // TODO : Ultimately this is meant to hold the scene layout data -
+        // TODO: Ultimately this is meant to hold the scene layout data -
         loadTutorFactory();
 
         // Load the tutor graph (scene sequence script data) for the tutor
@@ -208,16 +201,15 @@ public class CTutor implements ILoadableObject2, IEventSource {
         loadSceneGraph();
     }
 
-
     @Override
     public String getEventSourceName() {
         return mTutorName;
     }
+
     @Override
     public String getEventSourceType() {
         return TCONST.TYPE_CTUTOR;
     }
-
 
     public ITutorManager getTutorContainer() {
         return mTutorContainer;
@@ -227,8 +219,7 @@ public class CTutor implements ILoadableObject2, IEventSource {
      *  Load the tutorGraph - tutor scene sequence script for this tutor
      */
     private void loadTutorGraph() {
-
-        switch(navigatorType) {
+        switch (navigatorType) {
             case TCONST.SIMPLENAV:
                 mTutorGraph = new CTutorGraph(this, mTutorName, mTutorContainer, mTutorScope);
                 break;
@@ -239,19 +230,15 @@ public class CTutor implements ILoadableObject2, IEventSource {
         }
     }
 
-
     /**
      * Load the scenegraph - scene animation scripts for this tutor
      * Push the scenegraph into the tutorgraph for scripting purposes
      *
      */
     private void loadSceneGraph() {
-
         mSceneGraph = new CSceneGraph(this, mTutorScope, mTutorGraph);
-
         mTutorGraph.setSceneGraph(mSceneGraph);
     }
-
 
     /**
      * Update the current scene container view
@@ -262,7 +249,6 @@ public class CTutor implements ILoadableObject2, IEventSource {
         mSceneContainer = container;
     }
 
-
     /**
      * This is where the tutor gets kick started
      * Note we pass the extDataSource if available - otherwise we use the local descriptor
@@ -270,18 +256,15 @@ public class CTutor implements ILoadableObject2, IEventSource {
      * dynamically by the scenegraph.
      */
     public void launchTutor(defdata_tutor extDataSource) {
-
         mTutorActive = true;
-        mTutorGraph.setDefDataSource((extDataSource != null)? extDataSource:dataSource);
+        mTutorGraph.setDefDataSource((extDataSource != null) ? extDataSource : dataSource);
         mTutorGraph.post(this, TCONST.FIRST_SCENE);
     }
-
 
     /**
      *
      */
     public void onDestroy() {
-
         // Release the Tutor resources
         scenedata       = null;
         language        = null;
@@ -291,7 +274,6 @@ public class CTutor implements ILoadableObject2, IEventSource {
         // Release the scene graph first so the scene data is still intact during destruction
         // TODO: don't know if this sequencing is required
         mSceneGraph.onDestroy();
-
         mTutorGraph.onDestroy();
     }
 
@@ -335,7 +317,6 @@ public class CTutor implements ILoadableObject2, IEventSource {
         this.totalQuestions = totalQuestions;
     }
 
-
     public UUID getUuid() {
         return uuid;
     }
@@ -349,7 +330,6 @@ public class CTutor implements ILoadableObject2, IEventSource {
         }
 
         private void cleanUpTutor() {
-
             // GRAY_SCREEN_BUG tutor might be cleaned up here
             Log.d(TCONST.DEBUG_GRAY_SCREEN_TAG, "r1: Cleaning up tutor " + mTutorName);
             CMediaController.destroyMediaManager(mTutorName);
@@ -364,22 +344,18 @@ public class CTutor implements ILoadableObject2, IEventSource {
             mTutorActive = false;
         }
 
-
         @Override
         public void run() {
-
             try {
                 queueMap.remove(this);
 
                 switch (_command) {
-
                     // This is how you kill a running tutor externally -
                     // When the engine wants to kill a tutor and start another.
                     // killDeadTutor just cleans up the now unused tutor.  What happens
                     // after is the responsability of the poster of the event
                     //
                     case TCONST.KILLTUTOR:
-
                         Log.d(TCONST.DEBUG_GRAY_SCREEN_TAG, "r2: In Queue: " + _command);
                         cleanUpTutor();
 
@@ -391,7 +367,6 @@ public class CTutor implements ILoadableObject2, IEventSource {
                     // of some sort of session manager of exit the app completely
                     //
                     case TCONST.ENDTUTOR:
-
                         // don't do end of tutor assessment when we're ending the default tutor (activity selector)
                         if (!mTutorName.equals(CTutorEngine.defTutor)) {
                             // assess student performance after tutor is completed
@@ -406,20 +381,17 @@ public class CTutor implements ILoadableObject2, IEventSource {
                         CTutorEngine.destroyCurrentTutor();
                         break;
 
-
                     // This is how a tutor stops itself -
                     // DestroyCurrentTutor should remove the tutor and manage the launch
                     // of some sort of session manager of exit the app completely
                     //
                     case TCONST.FINISH:
-
                         Log.d(TCONST.DEBUG_GRAY_SCREEN_TAG, "r2: In Queue: " + _command);
                         cleanUpTutor();
 
                         CTutorEngine.destroyCurrentTutor();
                         RoboTutor.ACTIVITY.finish();
                         break;
-
                 }
             }
             catch(Exception e) {
@@ -428,42 +400,30 @@ public class CTutor implements ILoadableObject2, IEventSource {
         }
     }
 
-
     /**
      *  Disable the input queues permenantly in prep for destruction
      *  walks the queue chain to diaable scene queue
      *
      */
     private void terminateQueue() {
-
         // disable the input queue permenantly in prep for destruction
         //
         mDisabled = true;
         flushQueue();
     }
 
-
     /**
      * Remove any pending scenegraph commands.
      *
      */
     private void flushQueue() {
-
         try {
-            Iterator<?> tObjects = queueMap.entrySet().iterator();
-
-            while (tObjects.hasNext()) {
-                Map.Entry entry = (Map.Entry) tObjects.next();
-
-                mainHandler.removeCallbacks((Queue) (entry.getValue()));
-            }
-        }
-        catch(Exception e) {
+            for (Object entry : queueMap.entrySet()) mainHandler.removeCallbacks((Queue)((Map.Entry)entry).getValue());
+        } catch(Exception e) {
             Log.d(TAG, "flushQueue Error: " + e);
         }
 
     }
-
 
     /**
      * Keep a mapping of pending messages so we can flush the queue if we want to terminate
@@ -472,16 +432,13 @@ public class CTutor implements ILoadableObject2, IEventSource {
      * @param qCommand
      */
     private void enQueue(Queue qCommand) {
-
         RoboTutor.logManager.postEvent_V(TAG, "Processing POST to tutorGraph: " + qCommand._command );
 
-        if(!mDisabled) {
+        if (!mDisabled) {
             queueMap.put(qCommand, qCommand);
-
             mainHandler.post(qCommand);
         }
     }
-
 
     /**
      * Post a command to the tutorgraph queue
@@ -489,12 +446,8 @@ public class CTutor implements ILoadableObject2, IEventSource {
      * @param command
      */
     public void post(String command) {
-
         enQueue(new Queue(command));
     }
-
-
-
 
     /**
      * Return the view within the current scene container
@@ -503,45 +456,35 @@ public class CTutor implements ILoadableObject2, IEventSource {
      * @return
      */
     public View getViewByName(String findme) {
-
-        HashMap map = mTutorGraph.getChildMap();
-
-        return (View)map.get(findme);
+        return (View)mTutorGraph.getChildMap().get(findme);
     }
-
-
 
     public ITutorObject getViewById(int findme, ViewGroup container) {
         ITutorObject foundView = null;
 
-        if(container == null)
-            container = (ViewGroup)mSceneContainer;
+        if (container == null) container = (ViewGroup)mSceneContainer;
 
         try {
             for (int i = 0; (foundView == null) && (i < container.getChildCount()); ++i) {
 
-                ITutorObject nextChild = (ITutorObject) container.getChildAt(i);
+                ITutorObject nextChild = (ITutorObject)container.getChildAt(i);
 
-                if (((View) nextChild).getId() == findme) {
+                if (((View)nextChild).getId() == findme) {
                     foundView = nextChild;
                     break;
                 } else {
-                    if (nextChild instanceof ViewGroup)
-                        foundView = getViewById(findme, (ViewGroup) nextChild);
+                    if (nextChild instanceof ViewGroup) foundView = getViewById(findme, (ViewGroup) nextChild);
                 }
             }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             Log.i(TAG, "View walk error: " + e);
         }
         return foundView;
     }
 
-
     public TScope getScope() {
         return mTutorScope;
     }
-
 
     public ITutorGraph getTutorGraph() {
         return mTutorGraph;
@@ -562,16 +505,12 @@ public class CTutor implements ILoadableObject2, IEventSource {
 
         // Remove any active language - Only want one language feature active
         delFeature(mMediaManager.getLanguageFeature(this));
-
         addFeature(langFtr);
     }
 
     public String getLanguageFeature() {
-
         return mMediaManager.getLanguageFeature(this);
     }
-
-
 
     // Language management
     //**************************************************************************
@@ -589,22 +528,17 @@ public class CTutor implements ILoadableObject2, IEventSource {
         return mAssetManager.open(path);
     }
 
-
     // framendx is a simple counter used it uniquely id a scene instance for logging
     //
     public void incFrameNdx() {
         _framendx++;
     }
 
-
     public void add(String Id, ITutorObject obj) {
-
         mObjects.put(Id, obj);
     }
 
-
     public ITutorObject get(String Id) {
-
         return mObjects.get(Id);
     }
 
@@ -616,7 +550,6 @@ public class CTutor implements ILoadableObject2, IEventSource {
      * @return
      */
     public View instantiateScene(scene_descriptor scenedata) {
-
         int i1;
         View tarScene;
         View subScene;
@@ -628,28 +561,25 @@ public class CTutor implements ILoadableObject2, IEventSource {
 
         int id = mContext.getResources().getIdentifier(scenedata.id, "layout", mContext.getPackageName());
 
-        LayoutInflater inflater = (LayoutInflater)mContext.getSystemService
-                (Context.LAYOUT_INFLATER_SERVICE);
+        LayoutInflater inflater = (LayoutInflater)mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         tarScene = inflater.inflate(id, null );
 
-        if(traceMode) Log.d(TAG, "Creating Scene : " + scenedata.id);
+        if (traceMode) Log.d(TAG, "Creating Scene: " + scenedata.id);
 
         tarScene.setVisibility(View.VISIBLE);
 
         // Generate the automation hooks
-        automateScene((ITutorSceneImpl) tarScene, scenedata);
+        automateScene((ITutorSceneImpl)tarScene, scenedata);
 
         // Parse the JSON spec data for onCreate Commands
         onCreate(scenedata);
 
-        return (View) tarScene;
+        return (View)tarScene;
     }
 
-
     private void automateScene(ITutorSceneImpl tutorContainer, scene_descriptor scenedata) {
-
-        // Propogate to children
+        // Propagate to children
         //
         HashMap childMap = new HashMap();
 
@@ -666,40 +596,30 @@ public class CTutor implements ILoadableObject2, IEventSource {
         mapChildren(tutorContainer, childMap);
 
         try {
-            Iterator<?> tObjects = childMap.entrySet().iterator();
-
             // post create / inflate / init / map - here everything is created including the
             // view map to permit findViewByName
             //
-            while (tObjects.hasNext()) {
-                Map.Entry entry = (Map.Entry) tObjects.next();
-
-                ((ITutorObject) (entry.getValue())).onCreate();
-            }
-        }
-        catch(Exception e) {
+            for (Object entry : childMap.entrySet()) ((ITutorObject)((Map.Entry)entry).getValue()).onCreate();
+        } catch(Exception e) {
             Log.d(TAG, "automateScene Error: " + e);
         }
     }
 
-
     private void mapChildren(ITutorSceneImpl tutorContainer, HashMap childMap) {
-
         ITutorObject child;
 
         // Add the container as well so we can find it in a getViewByName search
         //
         childMap.put(tutorContainer.name(), tutorContainer);
 
-        int count = ((ViewGroup) tutorContainer).getChildCount();
+        int count = ((ViewGroup)tutorContainer).getChildCount();
 
         // Iterate through all children
         for (int i = 0; i < count; i++) {
             try {
-                child = (ITutorObject) ((ViewGroup) tutorContainer).getChildAt(i);
+                child = (ITutorObject) ((ViewGroup)tutorContainer).getChildAt(i);
 
-                if(childMap.containsKey(child.name())) {
-
+                if (childMap.containsKey(child.name())) {
                     CErrorManager.logEvent(TAG, "ERROR: Duplicate child view in:" + tutorContainer.name() + " - Duplicate of: " + child.name(),  new Exception("no-exception"), false);
                 }
 
@@ -710,157 +630,107 @@ public class CTutor implements ILoadableObject2, IEventSource {
                 child.setNavigator(mTutorGraph);
                 child.setLogManager(mTutorLogManager);
 
-                if(child instanceof ITutorSceneImpl) {
-                    mapChildren((ITutorSceneImpl)child, childMap);
-                }
-
+                if (child instanceof ITutorSceneImpl) mapChildren((ITutorSceneImpl)child, childMap);
             } catch (ClassCastException e) {
-
                 CErrorManager.logEvent(TAG, "ERROR: Non-ITutor child view in:" + tutorContainer.name(), e, false);
             }
         }
     }
 
-
     private void onCreate(scene_descriptor scenedata) {
-
         // Parse the oncreate command set
 
-        type_action[] createCmds    = _sceneMap.get(scenedata.id).oncreate;
+        type_action[] createCmds = _sceneMap.get(scenedata.id).oncreate;
 
         // Can have an empty JSON array - so filter that out
         //
-        if(createCmds != null) {
-
+        if (createCmds != null) {
             for (type_action cmd : createCmds) {
-
-                if(cmd.testFeatures()) {
-                    cmd.applyNode();
-                }
-
+                if (cmd.testFeatures()) cmd.applyNode();
             }
         }
     }
 
+    /**
+     * get the feature set for this tutor variant from tutorVariants
+     *
+     * @param variant
+     */
+    public String getTutorFeatures(String variant) {
+        return CTutorEngine.tutorVariants.get(variant).features;
+    }
 
     /**
-     * generate the working feature set for this tutor instance
+     * set the working feature set for this tutor instance
      *
-     * @param featSet
+     * @param featureSet
      */
-    public void setTutorFeatures(String featSet) {
-
+    public void setTutorFeatures(String variant, String featureSet) {
         // Ignore "null" feature sets which may come during a tutor launch if there is no
         // features data in the session_manager dataset
         //
-        if(!featSet.toUpperCase().equals("NULL")) {
+        if (variant != null) setFeatures(getTutorFeatures(variant));
+        else if (!featureSet.toUpperCase().equals("NULL")) setFeatures(featureSet);
 
-            List<String> featArray = new ArrayList<String>();
-
-            if (featSet != null && featSet.length() > 0)
-                featArray = Arrays.asList(featSet.split(":"));
-
-            fFeatures = new ArrayList<String>();
-
-            // Add default features
-
-            for (String feature : fDefaults) {
-                fFeatures.add(feature);
-            }
-
-            // Add instance feature
-
-            for (String feature : featArray) {
-                fFeatures.add(feature);
-            }
-        }
+        Log.d(TAG, "setTutorFeatures: features = " + getFeatures());
     }
 
-
     /**
-     *  get : delimited string of features
+     *  get: delimited string of features
      * ## Mod Oct 16 2012 - logging support
      *
      */
     public String getFeatures() {
         StringBuilder builder = new StringBuilder();
 
-        for(String feature: fFeatures) {
-            builder.append(feature).append(':');
-        }
+        for (String feature : fFeatures) builder.append(feature).append(':');
         builder.deleteCharAt(builder.length() - 1);
 
         return builder.toString();
     }
 
-
     /**
-     * set : delimited string of features
+     * set: delimited string of features
      * ## Mod Dec 03 2013 - DB state support
      *
-     * @param ftrSet
+     * @param featureSet
      */
-    public void setFeatures(String ftrSet) {
+    public void setFeatures(String featureSet) {
         // Add new features - no duplicates
-        List<String> featArray = Arrays.asList(ftrSet.split(","));
-
         fFeatures.clear();
-        
-        for (String feature : featArray) {
-            fFeatures.add(feature);
-        }
+        for (String feature : Arrays.asList(featureSet.split(":"))) fFeatures.add(feature);
     }
 
-
-    // udpate the working feature set for this instance
+    // update the working feature set for this instance
     //
-    public void addFeature(String feature)
-    {
+    public void addFeature(String feature) {
         // Add new features - no duplicates
-
-        if(fFeatures.indexOf(feature) == -1)
-        {
-            fFeatures.add(feature);
-        }
+        if (fFeatures.indexOf(feature) == -1) fFeatures.add(feature);
     }
 
-
-    // udpate the working feature set for this instance
+    // update the working feature set for this instance
     //
     public void delFeature(String feature) {
+        // Remove features - no duplicates
         int fIndex;
-
-        // remove features - no duplicates
-
-        if((fIndex = fFeatures.indexOf(feature)) != -1)
-        {
-            fFeatures.remove(fIndex);
-        }
+        if ((fIndex = fFeatures.indexOf(feature)) != -1) fFeatures.remove(fIndex);
     }
 
-
-    //## Mod Jul 01 2012 - Support for NOT operation on features.
+    // Support for NOT operation on features.
     //
-    //	
     public boolean testFeature(String element) {
-        if(element.charAt(0) == '!')
-        {
-            return (fFeatures.indexOf(element.substring(1)) != -1)? false : true;
-        }
-        else {
-            return (fFeatures.indexOf(element) != -1) ? true : false;
-        }
+        if (element.charAt(0) == '!') return (fFeatures.indexOf(element.substring(1)) == -1);
+        else return (fFeatures.indexOf(element) != -1);
     }
 
     public String testFeatureHelper(String element) {
-        if(element.charAt(0) == '!') {
-            if(element.substring(1).equals("true")) return "false";
-            if(element.substring(1).equals("false")) return "true";
+        if (element.charAt(0) == '!') {
+            if (element.substring(1).equals("true")) return "false";
+            if (element.substring(1).equals("false")) return "true";
             return (fFeatures.indexOf(element.substring(1)) != -1)? "false" : "true";
-        }
-        else {
-            if(element.equals("true")) return "true";
-            if(element.equals("false")) return "false";
+        } else {
+            if (element.equals("true")) return "true";
+            if (element.equals("false")) return "false";
             return (fFeatures.indexOf(element) != -1) ? "true" : "false";
         }
     }
@@ -869,8 +739,7 @@ public class CTutor implements ILoadableObject2, IEventSource {
     // TODO: Enhance with fsm
     // Doesn't allow inner paren matching
     public boolean testFeatureSet(String featSet) {
-        String result = testFeatureSetHelper(featSet);
-        return result.equals("true") ? true : false;
+        return testFeatureSetHelper(featSet).equals("true");
     }
 
     public String testFeatureSetHelper(String featSet) {
@@ -879,19 +748,17 @@ public class CTutor implements ILoadableObject2, IEventSource {
 
         StringBuffer featSetBuffer = new StringBuffer(featSet);
 
-        while(featSetBuffer.indexOf("(") != -1) {
-            for(int i = 0; i < featSetBuffer.length(); i++) {
-                String curString = featSetBuffer.substring(i, i+1);
+        while (featSetBuffer.indexOf("(") != -1) {
+            for (int i = 0; i < featSetBuffer.length(); i++) {
+                String curString = featSetBuffer.substring(i, i + 1);
 
-                if(curString.equals("(")) {
+                if (curString.equals("(")) {
                     curParenCount += 1;
-                    if(leftMostOpenParen == -1) {
-                        leftMostOpenParen = i;
-                    }
+                    if (leftMostOpenParen == -1) leftMostOpenParen = i;
                 }
-                if(curString.equals(")")) {
+                if (curString.equals(")")) {
                     curParenCount -= 1;
-                    if(curParenCount == 0) {
+                    if (curParenCount == 0) {
                         String withParen = featSetBuffer.substring(leftMostOpenParen + 1, i);
                         featSetBuffer.replace(leftMostOpenParen, i+1, testFeatureSetHelper(withParen));
                         leftMostOpenParen = -1;
@@ -900,38 +767,27 @@ public class CTutor implements ILoadableObject2, IEventSource {
                 }
             }
         }
+
         return testNonParenFeatureSet(featSetBuffer.toString());
     }
 
     private String testNonParenFeatureSet(String featSet) {
-
-        String      result = "false";
-
-        List<String> disjFeat = Arrays.asList(featSet.split("\\|"));   // | Disjunctive features
-        List<String> conjFeat;                                          // & Conjunctive features
+        String result = "false";
 
         // match a null set - i.e. empty string means the object is not feature constrained
+        if (featSet.equals("")) return "true";
 
-        if(featSet.equals(""))
-            return "true";
-
-        // Check all disjunctive featuresets - one in each element of disjFeat
+        // Check all disjunctive feature sets
         // As long as one is true we pass
-
-        for (String dfeature : disjFeat)
-        {
-            conjFeat   = Arrays.asList(dfeature.split("\\&"));
+        for (String dfeature : Arrays.asList(featSet.split("\\|"))) {
             result = "true";
 
             // Check that all conjunctive features are set in fFeatures
-
-            for (String cfeature : conjFeat) {
-                if(!(testFeatureHelper(cfeature) == "true"))
-                    result = "false";
+            for (String cfeature : Arrays.asList(dfeature.split("\\&"))) {
+                if (!(testFeatureHelper(cfeature) == "true")) result = "false";
             }
 
-            if(result == "true")
-                break;
+            if (result == "true") break;
         }
 
         return result;
@@ -941,10 +797,14 @@ public class CTutor implements ILoadableObject2, IEventSource {
     public String getTutorName() {
         return mTutorName;
     }
+
     public String getTutorId() {
         return mTutorId;
     }
 
+    public String getTutorVariant() {
+        return mTutorVariant;
+    }
 
     public AssetManager getAssetManager() {
         return mAssetManager;
@@ -962,9 +822,7 @@ public class CTutor implements ILoadableObject2, IEventSource {
     }
 
 
-
     //************ Serialization
-
 
     /**
      * Load the Tutor specification from JSON file data
@@ -974,23 +832,18 @@ public class CTutor implements ILoadableObject2, IEventSource {
      * and completely define view layout in TDESC
      */
     private void loadTutorFactory() {
-
         try {
             loadJSON(new JSONObject(JSON_Helper.cacheData(TCONST.TUTORROOT + "/" + mTutorName + "/" + TCONST.TDESC)), (IScope2)mTutorScope);
-
         } catch (JSONException e) {
             Log.d(TAG, "error");
         }
     }
 
-
     public void loadJSON(JSONObject jsonObj, IScope2 scope) {
-
         JSON_Helper.parseSelf(jsonObj, this, CClassMap2.classMap, scope);
 
         // Use updateLanguageFeature to properly override the Engine language feature
-        if(language != null)
-            mMediaManager.setLanguageFeature(this, language);
+        if (language != null) mMediaManager.setLanguageFeature(this, language);
 
         // push the soundMap into the MediaManager -
         //
@@ -998,14 +851,12 @@ public class CTutor implements ILoadableObject2, IEventSource {
 
         // Create a associative cache for the initialization data
         //
-        for(scene_initializer scene : scenedata) {
-            _sceneMap.put(scene.id, scene);
-        }
+        for (scene_initializer scene : scenedata) _sceneMap.put(scene.id, scene);
     }
+
     @Override
     public void loadJSON(JSONObject jsonObj, IScope scope) {
         // Log.d(TAG, "Loader iteration");
         loadJSON(jsonObj, (IScope2) scope);
     }
-
 }

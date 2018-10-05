@@ -259,6 +259,11 @@
       "tutorName": "story_reading",
       "features": "FTR_USER_PARROT"
     },
+    "story.prompt": {
+      "type": "TUTORVAR_MAP",
+      "tutorName": "story_reading",
+      "features": "FTR_USER_PROMPT"
+    },
     "story.gen.hide": {
       "type": "TUTORVAR_MAP",
       "tutorName": "story_questions",

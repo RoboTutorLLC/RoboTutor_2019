@@ -28,7 +28,6 @@ import org.json.JSONObject;
 
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -60,7 +59,6 @@ import cmu.xprize.util.IScope;
 import cmu.xprize.util.JSON_Helper;
 import cmu.xprize.util.TCONST;
 import edu.cmu.xprize.listener.ListenerBase;
-
 import static cmu.xprize.util.TCONST.ASREventMap;
 import static cmu.xprize.util.TCONST.LANG_AUTO;
 import static cmu.xprize.util.TCONST.LOCAL_STORY_AUDIO;
@@ -84,6 +82,7 @@ public class TRtComponent extends CRt_Component implements IBehaviorManager, ITu
 
     static private String TAG = "TRtComponent";
 
+
     public TRtComponent(Context context) {
         super(context);
     }
@@ -106,7 +105,6 @@ public class TRtComponent extends CRt_Component implements IBehaviorManager, ITu
         prepareListener(CMediaController.getTTS());
     }
 
-
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -119,18 +117,13 @@ public class TRtComponent extends CRt_Component implements IBehaviorManager, ITu
     //************************************************************************
     // IBehaviorManager Interface START
 
-
     public void setVolatileBehavior(String event, String behavior) {
-
-        Log.d("SET_BEHAVIOR - Volatile", "Event: " + event + "  - behavior: " + behavior );
+        Log.d("SET_BEHAVIOR - Volatile", "Event: " + event + "  - behavior: " + behavior);
 
         enableOnClickBehavior(event, behavior);
 
         if (behavior.toUpperCase().equals(TCONST.NULL)) {
-
-            if (volatileMap.containsKey(event)) {
-                volatileMap.remove(event);
-            }
+            if (volatileMap.containsKey(event)) volatileMap.remove(event);
         } else {
             volatileMap.put(event, behavior);
         }
@@ -141,21 +134,14 @@ public class TRtComponent extends CRt_Component implements IBehaviorManager, ITu
 
         if (eventType != null)
             switch (eventType) {
-
                 case TCONST.SILENCE_EVENT:
                 case TCONST.SOUND_EVENT:
                 case TCONST.WORD_EVENT:
-
-                    if (behavior.toUpperCase().equals(TCONST.NULL)) {
-
-                        mListener.resetStaticEvent(eventType);
-                    } else {
-                        mListener.configStaticEvent(eventType);
-                    }
+                    if (behavior.toUpperCase().equals(TCONST.NULL)) mListener.resetStaticEvent(eventType);
+                    else mListener.configStaticEvent(eventType);
                     break;
             }
     }
-
 
     /** Special Behavior processing for timed ASR events which must be setup in the listener component
      *
@@ -164,7 +150,6 @@ public class TRtComponent extends CRt_Component implements IBehaviorManager, ITu
      * @param timeout
      */
     public void setVolatileBehavior(String event, String behavior, int timeout) {
-
         // Setup the behavior
         //
         setVolatileBehavior(event, behavior);
@@ -175,34 +160,22 @@ public class TRtComponent extends CRt_Component implements IBehaviorManager, ITu
 
         if (eventType != null)
             switch (eventType) {
-
                 case TCONST.TIMEDSILENCE_EVENT:
                 case TCONST.TIMEDSOUND_EVENT:
                 case TCONST.TIMEDWORD_EVENT:
-
-                    if (behavior.toUpperCase().equals(TCONST.NULL)) {
-
-                        mListener.resetTimedEvent(eventType);
-                    }
-                    else {
-                        mListener.configTimedEvent(eventType, timeout);
-                    }
+                    if (behavior.toUpperCase().equals(TCONST.NULL)) mListener.resetTimedEvent(eventType);
+                    else mListener.configTimedEvent(eventType, timeout);
                     break;
             }
     }
 
-
     public void setStickyBehavior(String event, String behavior) {
-
-        Log.d("SET_BEHAVIOR - Sticky", "Event: " + event + "  - behavior: " + behavior );
+        Log.d("SET_BEHAVIOR - Sticky", "Event: " + event + "  - behavior: " + behavior);
 
         enableOnClickBehavior(event, behavior);
 
         if (behavior.toUpperCase().equals(TCONST.NULL)) {
-
-            if (stickyMap.containsKey(event)) {
-                stickyMap.remove(event);
-            }
+            if (stickyMap.containsKey(event)) stickyMap.remove(event);
         } else {
             stickyMap.put(event, behavior);
         }
@@ -212,23 +185,15 @@ public class TRtComponent extends CRt_Component implements IBehaviorManager, ITu
         Integer eventType = ASREventMap.get(event);
 
         if (eventType != null)
-            switch(eventType) {
-
+            switch (eventType) {
                 case TCONST.SILENCE_EVENT:
                 case TCONST.SOUND_EVENT:
                 case TCONST.WORD_EVENT:
-
-                    if (behavior.toUpperCase().equals(TCONST.NULL)) {
-
-                        mListener.resetStaticEvent(eventType);
-                    }
-                    else {
-                        mListener.configStaticEvent(eventType);
-                    }
+                    if (behavior.toUpperCase().equals(TCONST.NULL)) mListener.resetStaticEvent(eventType);
+                    else mListener.configStaticEvent(eventType);
                     break;
             }
     }
-
 
     /** Special Behavior processing for timed ASR events which must be setup in the listener component
      *
@@ -237,7 +202,6 @@ public class TRtComponent extends CRt_Component implements IBehaviorManager, ITu
      * @param timeout
      */
     public void setStickyBehavior(String event, String behavior, int timeout) {
-
         // Setup the behavior
         //
         setStickyBehavior(event, behavior);
@@ -248,35 +212,24 @@ public class TRtComponent extends CRt_Component implements IBehaviorManager, ITu
 
         if (eventType != null)
             switch(eventType) {
-
                 case TCONST.TIMEDSILENCE_EVENT:
                 case TCONST.TIMEDSOUND_EVENT:
                 case TCONST.TIMEDWORD_EVENT:
-
-                    if (behavior.toUpperCase().equals(TCONST.NULL)) {
-
-                        mListener.resetTimedEvent(eventType);
-                    }
-                    else {
-                        mListener.configTimedEvent(eventType, timeout);
-                    }
+                    if (behavior.toUpperCase().equals(TCONST.NULL)) mListener.resetTimedEvent(eventType);
+                    else mListener.configTimedEvent(eventType, timeout);
                     break;
             }
     }
-
 
     // Execute script target if behavior is defined for this event
     //
     @Override
     public boolean applyBehavior(String event) {
+        boolean result;
 
-        boolean result = false;
-        
-        if(!(result = super.applyBehavior(event))) {
-
+        if (!(result = super.applyBehavior(event))) {
             if (volatileMap.containsKey(event)) {
-
-                RoboTutor.logManager.postEvent_D(QGRAPH_MSG, "target:" + TAG + ",action:applybehavior,type:volatile,behavior:" + event);
+                RoboTutor.logManager.postEvent_D(TCONST.QGRAPH_MSG, "target:" + TAG + ",action:applybehavior,type:volatile,behavior:" + event);
                 applyBehaviorNode(volatileMap.get(event));
 
                 // clear the volatile behavior after use and update the listener if the event is a
@@ -285,10 +238,8 @@ public class TRtComponent extends CRt_Component implements IBehaviorManager, ITu
                 setVolatileBehavior(event, TCONST.NULL, 0);
 
                 result = true;
-
             } else if (stickyMap.containsKey(event)) {
-
-                RoboTutor.logManager.postEvent_D(QGRAPH_MSG, "target:" + TAG + ",action:applybehavior,type:sticky,behavior:" + event);
+                RoboTutor.logManager.postEvent_D(TCONST.QGRAPH_MSG, "target:" + TAG + ",action:applybehavior,type:sticky,behavior:" + event);
                 applyBehaviorNode(stickyMap.get(event));
 
                 result = true;
@@ -309,39 +260,28 @@ public class TRtComponent extends CRt_Component implements IBehaviorManager, ITu
         IScriptable2 obj = null;
 
         if (nodeName != null && !nodeName.equals("") && !nodeName.toUpperCase().equals("NULL")) {
-
             try {
-                obj = mTutor.getScope().mapSymbol(nodeName);
-
-                if (obj != null) {
-
-                    RoboTutor.logManager.postEvent_D(QGRAPH_MSG, "target:" + TAG + ",action:applybehaviornode,type:" + obj.getType() + ",behavior:" + nodeName);
+                if ((obj = mTutor.getScope().mapSymbol(nodeName)) != null) {
+                    RoboTutor.logManager.postEvent_D(TCONST.QGRAPH_MSG, "target:" + TAG + ",action:applybehaviornode,type:" + obj.getType() + ",behavior:" + nodeName);
 
                     switch (obj.getType()) {
-
                         case TCONST.SUBGRAPH:
-
                             mTutor.getSceneGraph().post(this, TCONST.SUBGRAPH_CALL, nodeName);
                             break;
 
                         case TCONST.MODULE:
-
                             // Disallow module "calls"
-                            RoboTutor.logManager.postEvent_E(QGRAPH_MSG, "target:" + TAG + ",action:applybehaviornode,type:modulecall,behavior:" + nodeName +  ",ERROR:MODULE Behaviors are not supported");
+                            RoboTutor.logManager.postEvent_E(TCONST.QGRAPH_MSG, "target:" + TAG + ",action:applybehaviornode,type:modulecall,behavior:" + nodeName +  ",ERROR:MODULE Behaviors are not supported");
                             break;
 
                         // Note that we should not preEnter queues - they may need to be cancelled
                         // which is done internally.
                         //
                         case TCONST.QUEUE:
-
-                            if (obj.testFeatures()) {
-                                obj.applyNode();
-                            }
+                            if (obj.testFeatures()) obj.applyNode();
                             break;
 
                         default:
-
                             if (obj.testFeatures()) {
                                 obj.preEnter();
                                 obj.applyNode();
@@ -349,14 +289,12 @@ public class TRtComponent extends CRt_Component implements IBehaviorManager, ITu
                             break;
                     }
                 }
-
             } catch (Exception e) {
                 // TODO: Manage invalid Behavior
                 e.printStackTrace();
             }
         }
     }
-
 
     /**
      * Do button like behavior defined for component itself - i.e. click anywhere
@@ -365,36 +303,27 @@ public class TRtComponent extends CRt_Component implements IBehaviorManager, ITu
      */
     @Override
     public void onClick(View v) {
-
         if (v == this) {
-            Log.v(QGRAPH_MSG, "event.click: " + " view");
+            Log.v(TCONST.QGRAPH_MSG, "event.click: " + " view");
 
             applyBehavior(TCONST.ON_CLICK);
         }
     }
-
 
     @Override
     public void nextScene() {
         mTutor.mTutorGraph.post(this, TCONST.NEXTSCENE);
     }
 
-
     @Override
     public void nextNode() {
         mTutor.mSceneGraph.post(this, TCONST.NEXT_NODE);
     }
 
-
     private void enableOnClickBehavior(String event, String behavior) {
-
         if (event.toUpperCase().equals(TCONST.ON_CLICK)) {
-
-            if (behavior.toUpperCase().equals(TCONST.NULL)) {
-                setOnClickListener(null);
-            } else {
-                setOnClickListener(this);
-            }
+            if (behavior.toUpperCase().equals(TCONST.NULL)) setOnClickListener(null);
+            else setOnClickListener(this);
         }
     }
 
@@ -403,78 +332,51 @@ public class TRtComponent extends CRt_Component implements IBehaviorManager, ITu
     //************************************************************************
 
 
-
     //***********************************************************
     // ITutorLogger - Start
 
     private void extractHashContents(StringBuilder builder, HashMap map) {
-
-        Iterator<?> tObjects = map.entrySet().iterator();
-
-        while (tObjects.hasNext() ) {
-
-            builder.append(',');
-
-            Map.Entry entry = (Map.Entry) tObjects.next();
-
-            String key   = entry.getKey().toString();
-            String value = "#" + entry.getValue().toString();
-
-            builder.append(key);
-            builder.append(value);
+        for (Object entry : map.entrySet()) {
+            builder.append("," + ((Map.Entry)entry).getKey().toString());
+            builder.append("#" + ((Map.Entry)entry).getValue().toString());
         }
     }
 
     private void extractFeatureContents(StringBuilder builder, HashMap map) {
-
-        StringBuilder featureset = new StringBuilder();
-
-        Iterator<?> tObjects = map.entrySet().iterator();
-
         // Scan to build a list of active features
         //
-        while (tObjects.hasNext() ) {
+        StringBuilder featureSet = new StringBuilder();
 
-            Map.Entry entry = (Map.Entry) tObjects.next();
-
-            Boolean value = (Boolean) entry.getValue();
-
-            if (value) {
-                featureset.append(entry.getKey().toString() + ";");
-            }
+        for (Object entry : map.entrySet()) {
+            if ((Boolean)((Map.Entry)entry).getValue()) featureSet.append(((Map.Entry)entry).getKey().toString() + ";");
         }
 
-        // If there are active features then trim the last ',' and add the
-        // comma delimited list as the "$features" object.
+        // If there are active features then trim the last ',' and add the comma delimited list as the "$features" object.
         //
-        if (featureset.length() != 0) {
-            featureset.deleteCharAt(featureset.length()-1);
-
-            builder.append(",$features#" + featureset.toString());
+        if (featureSet.length() != 0) {
+            featureSet.deleteCharAt(featureSet.length() - 1);
+            builder.append(",$features#" + featureSet.toString());
         }
     }
 
     @Override
     public void logState(String logData) {
-
         StringBuilder builder = new StringBuilder();
 
         extractHashContents(builder, _StringVar);
         extractHashContents(builder, _IntegerVar);
         extractFeatureContents(builder, _FeatureMap);
 
-        RoboTutor.logManager.postTutorState(TUTOR_STATE_MSG, "target#reading_tutor," + logData + builder.toString());
+        RoboTutor.logManager.postTutorState(TCONST.TUTOR_STATE_MSG, "target#reading_tutor," + logData + builder.toString());
     }
 
     // ITutorLogger - End
     //***********************************************************
 
 
-
     //************************************************************************
     //************************************************************************
     // IEventSource Interface START
-
 
     @Override
     public String getEventSourceName() {
@@ -485,7 +387,6 @@ public class TRtComponent extends CRt_Component implements IBehaviorManager, ITu
     public String getEventSourceType() {
         return "Reading_Component";
     }
-
 
     // IEventSource Interface END
     //************************************************************************
@@ -500,21 +401,15 @@ public class TRtComponent extends CRt_Component implements IBehaviorManager, ITu
      */
     @Override
     public void setDataSource(String dataNameDescriptor) {
-
         try {
-
             // Note that here the {folder] load-type semantics is for a direct encoded link to an
             // external storydata.json file location
             //
             // TODO: work toward consistent [file] semantics as externally sourced files
             //
             if (dataNameDescriptor.startsWith(TCONST.LOCAL_FILE)) {
-
                 String storyFolder = dataNameDescriptor.substring(TCONST.LOCAL_FILE.length()).toLowerCase();
-
-                String[] levelval   = storyFolder.split("_");
-
-                String levelFolder = levelval[0];
+                String levelFolder = storyFolder.split("_")[0];
 
                 // ALAN_HILL (5) here is how to load the image...
                 DATASOURCEPATH  = TCONST.DOWNLOAD_RT_TUTOR + "/" +  TCONST.STORY_ASSETS + "/" + mMediaManager.getLanguageIANA_2(mTutor) + "/";
@@ -528,10 +423,9 @@ public class TRtComponent extends CRt_Component implements IBehaviorManager, ITu
                 // NOTE: we override the CMediaPackage srcpath folder to point to the debug LOCAL_STORY_AUDIO - in Download
                 //
                 configListenerLanguage(mMediaManager.getLanguageFeature(mTutor));
-                mMediaManager.addSoundPackage(mTutor, MEDIA_STORY, new CMediaPackage(LANG_AUTO, AUDIOSOURCEPATH, LOCAL_STORY_AUDIO));
+                mMediaManager.addSoundPackage(mTutor, TCONST.MEDIA_STORY, new CMediaPackage(TCONST.LANG_AUTO, AUDIOSOURCEPATH, TCONST.LOCAL_STORY_AUDIO));
 
                 loadStory(STORYSOURCEPATH, "ASB_Data", TCONST.EXTERN);
-
             } else if (dataNameDescriptor.startsWith(TCONST.ENCODED_FOLDER)) {
                 System.out.println("ENCODED FOLDER");
 
@@ -541,16 +435,7 @@ public class TRtComponent extends CRt_Component implements IBehaviorManager, ITu
 
                 // XYZ-1: mimic this behavior
                 String storyFolder = dataNameDescriptor.substring(TCONST.ENCODED_FOLDER.length()).toLowerCase();
-                // "0..10.SD_OFF1_DES.34"
-                // "3_2"
-
-                String[] levelval   = storyFolder.split("_");
-                // "0..10.SD", "OFF1", "DES.34"
-                // "3", "2"
-
-                String levelFolder = levelval[0];
-                // "0..10.SD"
-                // "3"
+                String levelFolder = storyFolder.split("_")[0];
 
 
                 DATASOURCEPATH  = TCONST.ROBOTUTOR_ASSETS + "/" +  TCONST.STORY_ASSETS + "/" + mMediaManager.getLanguageIANA_2(mTutor) + "/";
@@ -565,17 +450,15 @@ public class TRtComponent extends CRt_Component implements IBehaviorManager, ITu
                 // "cmu/xprize/story_reading/<level>/<level_story>" // XYZ folder path should look like this
 
                 configListenerLanguage(mMediaManager.getLanguageFeature(mTutor));
-                mMediaManager.addSoundPackage(mTutor, MEDIA_STORY, new CMediaPackage(LANG_AUTO, AUDIOSOURCEPATH));
+                mMediaManager.addSoundPackage(mTutor, TCONST.MEDIA_STORY, new CMediaPackage(TCONST.LANG_AUTO, AUDIOSOURCEPATH));
 
                 // ZZZ load story!!!
                 // ZZZ STORYSOURCEPATH contains storydata.json and images
                 // ZZZ EXTERN is... TCONST.EXTERN
                 loadStory(STORYSOURCEPATH, "ASB_Data", TCONST.EXTERN);
-
             } else if (dataNameDescriptor.startsWith(TCONST.SHARED_LITERACY)) {
-                 // ZZZ 1: replace code in Transition Table to make it [sharedliteracy] (DONE)
+                // ZZZ 1: replace code in Transition Table to make it [sharedliteracy] (DONE)
                 String storyFolder = dataNameDescriptor.substring(TCONST.SHARED_LITERACY.length()).toLowerCase();
-
                 String levelFolder = "literacy";
 
                 // don't use level folder...
@@ -594,20 +477,13 @@ public class TRtComponent extends CRt_Component implements IBehaviorManager, ITu
                 SHAREDPATH = DATASOURCEPATH + TCONST.SHARED_LITERACY_IMAGE_FOLDER + "/";
                 // "cmu/xprize/story_reading/shared/shared_literacy"
 
-
                 configListenerLanguage(mMediaManager.getLanguageFeature(mTutor));
-                mMediaManager.addSoundPackage(mTutor, MEDIA_STORY, new CMediaPackage(LANG_AUTO, AUDIOSOURCEPATH));
+                mMediaManager.addSoundPackage(mTutor, TCONST.MEDIA_STORY, new CMediaPackage(TCONST.LANG_AUTO, AUDIOSOURCEPATH));
 
                 loadStory(STORYSOURCEPATH, "ASB_Data", TCONST.EXTERN_SHARED, SHAREDPATH);
-
             } else if (dataNameDescriptor.startsWith(TCONST.SHARED_MATH)) {
-
                 String storyFolder = dataNameDescriptor.substring(TCONST.SHARED_MATH.length()).toLowerCase();
-
-                String[] levelval = storyFolder.split("_");
-
-                String levelFolder = levelval[0];
-
+                String levelFolder = storyFolder.split("_")[0];
 
                 DATASOURCEPATH = TCONST.ROBOTUTOR_ASSETS + "/" + TCONST.STORY_ASSETS + "/" + mMediaManager.getLanguageIANA_2(mTutor) + "/";
                 // "robotutor_assets/assets/story/sw"
@@ -622,17 +498,13 @@ public class TRtComponent extends CRt_Component implements IBehaviorManager, ITu
                 SHAREDPATH = DATASOURCEPATH + TCONST.SHARED_MATH_FOLDER + "/";
 
                 configListenerLanguage(mMediaManager.getLanguageFeature(mTutor));
-                mMediaManager.addSoundPackage(mTutor, MEDIA_STORY, new CMediaPackage(LANG_AUTO, AUDIOSOURCEPATH));
-
+                mMediaManager.addSoundPackage(mTutor, TCONST.MEDIA_STORY, new CMediaPackage(TCONST.LANG_AUTO, AUDIOSOURCEPATH));
 
                 // ZZZ how to change this???
 
                 loadStory(STORYSOURCEPATH, "ASB_Data", TCONST.EXTERN_SHARED, SHAREDPATH);
-
             } else if (dataNameDescriptor.startsWith(TCONST.SONG)) {
-
                 String storyFolder = dataNameDescriptor.substring(TCONST.SONG.length()).toLowerCase();
-
                 String levelFolder = "songs";
 
                 DATASOURCEPATH = TCONST.ROBOTUTOR_ASSETS + "/" + TCONST.STORY_ASSETS + "/" + mMediaManager.getLanguageIANA_2(mTutor) + "/";
@@ -647,13 +519,12 @@ public class TRtComponent extends CRt_Component implements IBehaviorManager, ITu
                 // "cmu/xprize/story_reading/songs/<xyz>"
 
                 configListenerLanguage(mMediaManager.getLanguageFeature(mTutor));
-                mMediaManager.addSoundPackage(mTutor, MEDIA_STORY, new CMediaPackage(LANG_AUTO, AUDIOSOURCEPATH));
+                mMediaManager.addSoundPackage(mTutor, TCONST.MEDIA_STORY, new CMediaPackage(TCONST.LANG_AUTO, AUDIOSOURCEPATH));
 
                 // ZZZ load story!!!
                 // ZZZ STORYSOURCEPATH contains storydata.json and images
                 // ZZZ EXTERN is... TCONST.EXTERN
                 loadStory(STORYSOURCEPATH, "ASB_Data", TCONST.EXTERN);
-
             } else if (dataNameDescriptor.startsWith(TCONST.WORD_PROBLEMS)) {
                 String storyFolder = dataNameDescriptor.substring(WORD_PROBLEMS.length()).toLowerCase();
                 storyFolder = storyFolder.substring("math.".length());
@@ -668,19 +539,16 @@ public class TRtComponent extends CRt_Component implements IBehaviorManager, ITu
                 mMediaManager.addSoundPackage(mTutor, MEDIA_STORY, new CMediaPackage(LANG_AUTO, AUDIOSOURCEPATH));
 
                 loadStory(STORYSOURCEPATH, "ASB_Data", TCONST.EXTERN);
-            }
-
-            // Note that here the {file] load-type semantics is for an external file and [asset] may be used
-            // for internal assets.
-            //
-            // TODO: work toward consistent [file] semantics as externally sourced files
-            //
-            else if (dataNameDescriptor.startsWith(TCONST.SOURCEFILE)) {
+            } else if (dataNameDescriptor.startsWith(TCONST.SOURCEFILE)) {
+                // Note that here the {file] load-type semantics is for an external file and [asset] may be used
+                // for internal assets.
+                //
+                // TODO: work toward consistent [file] semantics as externally sourced files
+                //
 
                 // The story index is appended as a int
-                String[] storyval   = dataNameDescriptor.split(":");
-                int      storyIndex = Integer.parseInt(storyval[1]);
-
+                String[] storyval = dataNameDescriptor.split(":");
+                int storyIndex = Integer.parseInt(storyval[1]);
                 String dataFile = storyval[0].substring(TCONST.SOURCEFILE.length()).toLowerCase();
 
                 DATASOURCEPATH = TCONST.ROBOTUTOR_ASSETS + "/" +  TCONST.STORY_ASSETS + "/" + mMediaManager.getLanguageIANA_2(mTutor) + "/";
@@ -689,13 +557,11 @@ public class TRtComponent extends CRt_Component implements IBehaviorManager, ITu
 
                 // Load the datasource in the component module - i.e. the superclass
                 //
-                loadJSON(new JSONObject(jsonData), mTutor.getScope() );
+                loadJSON(new JSONObject(jsonData), mTutor.getScope());
 
                 configListenerLanguage(mMediaManager.getLanguageFeature(mTutor));
                 setStory(dataSource[storyIndex].storyName, TCONST.EXTERN);
-
             } else if (dataNameDescriptor.startsWith(TCONST.ASSETFILE)) {
-
                 String dataFile = dataNameDescriptor.substring(TCONST.ASSETFILE.length());
 
                 // Generate a langauage specific path to the data source -
@@ -709,21 +575,17 @@ public class TRtComponent extends CRt_Component implements IBehaviorManager, ITu
 
                 // Load the datasource in the component module - i.e. the superclass
                 //
-                loadJSON(new JSONObject(jsonData), mTutor.getScope() );
+                loadJSON(new JSONObject(jsonData), mTutor.getScope());
 
                 configListenerLanguage(mMediaManager.getLanguageFeature(mTutor));
                 setStory(dataSource[0].storyName, TCONST.ASSETS);
-
             } else if (dataNameDescriptor.startsWith("db|")) {
             } else if (dataNameDescriptor.startsWith("{")) {
-
                 loadJSON(new JSONObject(dataNameDescriptor), null);
-
             } else {
                 throw (new Exception("BadDataSource"));
             }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             CErrorManager.logEvent(TAG, "Invalid Data Source for : " + mTutor.getTutorName(), e, true);
         }
         System.out.println("AUDIOSOURCEPATH: "+AUDIOSOURCEPATH);
@@ -731,24 +593,21 @@ public class TRtComponent extends CRt_Component implements IBehaviorManager, ITu
         System.out.println("DATASOURCEPATH: "+DATASOURCEPATH);
     }
 
-
     /**
-     *  Inject the listener into the MediaManageer
+     *  Inject the listener into the MediaManager
      */
     @Override
     public void setListener(ListenerBase listener) {
         CMediaController.setListener(listener);
     }
 
-
     /**
-     *  Remove the listener from the MediaManageer
+     *  Remove the listener from the MediaManager
      */
     @Override
     public void removeListener(ListenerBase listener) {
         CMediaController.removeListener(listener);
     }
-
 
 
     //************************************************************************
@@ -761,7 +620,6 @@ public class TRtComponent extends CRt_Component implements IBehaviorManager, ITu
 
     @Override
     public void publishValue(String varName, String value) {
-
         _StringVar.put(varName,value);
 
         // update the response variable  "<ComponentName>.<varName>"
@@ -770,7 +628,6 @@ public class TRtComponent extends CRt_Component implements IBehaviorManager, ITu
 
     @Override
     public void publishValue(String varName, int value) {
-
         _IntegerVar.put(varName,value);
 
         // update the response variable  "<ComponentName>.<varName>"
@@ -779,31 +636,22 @@ public class TRtComponent extends CRt_Component implements IBehaviorManager, ITu
 
     @Override
     public void publishFeatureSet(String featureSet) {
-
         // Add new features - no duplicates
         List<String> featArray = Arrays.asList(featureSet.split(","));
 
-        for (String feature : featArray) {
-
-            publishFeature(feature);
-        }
+        for (String feature : featArray) publishFeature(feature);
     }
 
     @Override
     public void retractFeatureSet(String featureSet) {
-
         // Add new features - no duplicates
         List<String> featArray = Arrays.asList(featureSet.split(","));
 
-        for (String feature : featArray) {
-
-            retractFeature(feature);
-        }
+        for (String feature : featArray) retractFeature(feature);
     }
 
     @Override
     public void publishFeature(String feature) {
-
         _FeatureMap.put(feature, true);
         mTutor.addFeature(feature);
     }
@@ -817,11 +665,9 @@ public class TRtComponent extends CRt_Component implements IBehaviorManager, ITu
      */
     @Override
     public void retractFeature(String feature) {
-
         _FeatureMap.put(feature, false);
         mTutor.delFeature(feature);
     }
-
 
     /**
      *
@@ -829,23 +675,10 @@ public class TRtComponent extends CRt_Component implements IBehaviorManager, ITu
      */
     @Override
     public void publishFeatureMap(HashMap featureMap) {
-
-        Iterator<?> tObjects = featureMap.entrySet().iterator();
-
-        while (tObjects.hasNext()) {
-
-            Map.Entry entry = (Map.Entry) tObjects.next();
-
-            Boolean active = (Boolean)entry.getValue();
-
-            if (active) {
-                String feature = (String)entry.getKey();
-
-                mTutor.addFeature(feature);
-            }
+        for (Object entry : featureMap.entrySet()) {
+            if ((Boolean)((Map.Entry)entry).getValue()) mTutor.addFeature((String)((Map.Entry)entry).getKey());
         }
     }
-
 
     /**
      *
@@ -853,23 +686,10 @@ public class TRtComponent extends CRt_Component implements IBehaviorManager, ITu
      */
     @Override
     public void retractFeatureMap(HashMap featureMap) {
-
-        Iterator<?> tObjects = featureMap.entrySet().iterator();
-
-        while (tObjects.hasNext()) {
-
-            Map.Entry entry = (Map.Entry) tObjects.next();
-
-            Boolean active = (Boolean)entry.getValue();
-
-            if (active) {
-                String feature = (String)entry.getKey();
-
-                mTutor.delFeature(feature);
-            }
+        for (Object entry : featureMap.entrySet()) {
+            if ((Boolean)((Map.Entry)entry).getValue()) mTutor.delFeature((String)((Map.Entry)entry).getKey());
         }
     }
-
 
     // publish component state data - EBD
     //************************************************************************
@@ -880,82 +700,74 @@ public class TRtComponent extends CRt_Component implements IBehaviorManager, ITu
     //**********************************************************
     //*****************  Scripting Interface
 
-
     @Override
     public void setVisibility(String visible) {
-
         mSceneObject.setVisibility(visible);
     }
-
 
     /**
      * Defer to the base-class
      *
      * @param storyName
      */
+    @Override
     public void setStory(String storyName, String assetLocation) {
-
         super.setStory(storyName, assetLocation);
     }
 
-
     @Override
     public void setFeature(String feature, boolean fadd) {
-
-        if (fadd) {
-            publishFeature(feature);
-        } else {
-            retractFeature(feature);
-        }
+        if (fadd) publishFeature(feature);
+        else retractFeature(feature);
     }
-
 
     @Override
     public boolean testFeature(String feature) {
-
         return mTutor.testFeature(feature);
     }
 
-
-    public void next() {
-
-        reset();
-
-        super.next();
-
-        if (dataExhausted())
-            publishFeature(TCONST.FTR_EOI);
+    @Override
+    public String getTutorVariant() {
+        return mTutor.getTutorVariant();
     }
 
+    @Override
+    public void setTutorFeatures(String variant) {
+        mTutor.setTutorFeatures(variant, null);
+    }
 
+    @Override
+    public void next() {
+        reset();
+        super.next();
+        if (dataExhausted()) publishFeature(TCONST.FTR_EOI);
+    }
+
+    @Override
     public void startStory() {
         super.startStory();
     }
 
-
     public TBoolean test() {
         boolean correct = isCorrect();
 
-        if (correct)
-            publishFeature("FTR_RIGHT");
-        else
-            publishFeature("FTR_WRONG");
+        if (correct) publishFeature("FTR_RIGHT");
+        else publishFeature("FTR_WRONG");
 
         return new TBoolean(correct);
     }
 
-
+    @Override
     public void setPageFlipButton(String command) {
         super.setPageFlipButton(command);
     }
 
+    @Override
     public void setSpeakButton(String command) {
         super.setSpeakButton(command);
     }
 
-
     public void onButtonClick(String buttonName) {
-
         switch (buttonName) {
             case TCONST.PAGEFLIP_BUTTON:
                 applyBehavior(buttonName);
@@ -967,10 +779,8 @@ public class TRtComponent extends CRt_Component implements IBehaviorManager, ITu
         }
     }
 
-
     @Override
     public void updateContext(String sentence, int index, String[] wordList, int wordIndex, String word, int attempts, boolean virtual, boolean correct) {
-
         currentSentence = sentence;
         currentIndex = index;
         sentenceWords = wordList;
@@ -981,21 +791,15 @@ public class TRtComponent extends CRt_Component implements IBehaviorManager, ITu
         trackAndLogPerformance("WORD", correct);
     }
 
-
     @Override
     public void UpdateValue(boolean correct) {
-
         reset();
 
-        if (correct)
-            publishFeature(TCONST.GENERIC_RIGHT);
-        else
-            publishFeature(TCONST.GENERIC_WRONG);
+        if (correct) publishFeature(TCONST.GENERIC_RIGHT);
+        else publishFeature(TCONST.GENERIC_WRONG);
     }
 
-
     public void reset() {
-
         retractFeature(TCONST.GENERIC_RIGHT);
         retractFeature(TCONST.GENERIC_WRONG);
     }
@@ -1085,7 +889,6 @@ public class TRtComponent extends CRt_Component implements IBehaviorManager, ITu
         mViewManager.continueListening();
     }
 
-
     // Scripting Interface  End
     //************************************************************************
     //************************************************************************
@@ -1112,7 +915,6 @@ public class TRtComponent extends CRt_Component implements IBehaviorManager, ITu
 
     @Override
     public void setTutor(CTutor tutor) {
-
         mTutor = tutor;
         mSceneObject.setTutor(tutor);
 
@@ -1140,7 +942,6 @@ public class TRtComponent extends CRt_Component implements IBehaviorManager, ITu
 
     // *** Serialization
 
-
     /**
      * Load the data source
      *
@@ -1148,13 +949,11 @@ public class TRtComponent extends CRt_Component implements IBehaviorManager, ITu
      */
     @Override
     public void loadJSON(JSONObject jsonObj, IScope scope) {
-
         // Log.d(TAG, "Loader iteration");
         super.loadJSON(jsonObj, (IScope2) scope);
     }
 
     private void trackAndLogPerformance(String task, boolean correct) {
-
         PerformanceLogItem event = new PerformanceLogItem();
 
         event.setUserId(RoboTutor.STUDENT_ID);
@@ -1167,12 +966,9 @@ public class TRtComponent extends CRt_Component implements IBehaviorManager, ITu
         event.setPromotionMode(RoboTutor.getPromotionMode(event.getMatrixName()));
         event.setLevelName(task);
         event.setTaskName("story");
-        String cleanedSentence = currentSentence.replaceAll(",", "").replaceAll("\"", ""); // logger handles commas and quotes weird
-        event.setProblemName(cleanedSentence);
+        if (currentSentence != null) event.setProblemName(currentSentence.replaceAll(",", "").replaceAll("\"", ""));
         event.setProblemNumber(currentIndex);
-        if (dataSource != null) {
-            event.setTotalProblemsCount(dataSource.length);
-        }
+        if (dataSource != null) event.setTotalProblemsCount(dataSource.length);
         event.setSubstepNumber(expectedWordIndex);
         event.setAttemptNumber(attemptCount);
         event.setExpectedAnswer(sentenceWords != null && expectedWordIndex < sentenceWords.length ? sentenceWords[expectedWordIndex] : "");

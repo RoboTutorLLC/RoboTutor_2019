@@ -33,7 +33,6 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
 import cmu.xprize.comp_logging.CLogManager;
@@ -92,12 +91,11 @@ public class CTutorEngine implements ILoadableObject2 {
     private String                          EXPECTED_VERSION = "1.0";
 
     // json loadable
-    static public String                         descr_version;                 //
+    static public String                         desc_version;                 //
     static public String                         defTutor; // defined in engine_descriptor.json
     static public HashMap<String, defvar_tutor>  tutorVariants;
     static public HashMap<String, defdata_tutor> bindingPatterns;
     static public String                         language;                       // Accessed from a static context
-
 
     final static private String TAG         = "CTutorEngine";
 
@@ -113,7 +111,6 @@ public class CTutorEngine implements ILoadableObject2 {
      * @param context
      */
     private CTutorEngine(RoboTutor context) {
-
         mRootScope      = new TScope(null, "root", null);
 
         Activity        = context;
@@ -132,14 +129,10 @@ public class CTutorEngine implements ILoadableObject2 {
      * @return
      */
     static public CTutorEngine getTutorEngine(RoboTutor context) {
-
-        if(singletonTutorEngine == null) {
-            singletonTutorEngine = new CTutorEngine(context);
-        }
+        if (singletonTutorEngine == null) singletonTutorEngine = new CTutorEngine(context);
 
         return singletonTutorEngine;
     }
-
 
     /**
      * This is primarily intended as a development API to allow updating the working language
@@ -154,7 +147,6 @@ public class CTutorEngine implements ILoadableObject2 {
         promotionMechanism = new PromotionMechanism(studentModel, matrix);
     }
 
-
     /**
      * This is primarily intended as a development API to allow updating the working language
      * at runtime.
@@ -163,36 +155,24 @@ public class CTutorEngine implements ILoadableObject2 {
         return language;
     }
 
-
     static public TScope getScope() {
-
         return mRootScope;
     }
-
 
     static public Activity getActivity() {
         return Activity;
     }
 
-
     static public void pauseTutor() {
-
     }
-
 
     /**
      *  Used to destroy all tutors when the system calls onDestroy for the app
      *
      */
     static public void killAllTutors() {
-
-        while(tutorMap.size() > 0) {
-
-            Iterator<?> tutorObjects = tutorMap.entrySet().iterator();
-
-            Map.Entry entry = (Map.Entry) tutorObjects.next();
-
-            CTutor tutor = ((CTutor) (entry.getValue()));
+        for (Object entry : tutorMap.entrySet()) {
+            CTutor tutor = (CTutor)((Map.Entry)entry).getValue();
 
             // Note the endTutor call will invalidate this iterator so recreate it
             // on each pass
@@ -200,18 +180,13 @@ public class CTutorEngine implements ILoadableObject2 {
             //tutor.terminateQueue();
             //tutor.endTutor();
         }
-
         singletonTutorEngine = null;
     }
 
-
     static public void startSessionManager() {
-
         defdata_tutor tutorBindings = null;
 
-        if(bindingPatterns != null) {
-            tutorBindings = bindingPatterns.get(defTutor);
-        }
+        if (bindingPatterns != null) tutorBindings = bindingPatterns.get(defTutor);
 
         // These features are based on the current tutor selection model
         // When no tutor has been selected it should run the tutor select
@@ -235,7 +210,7 @@ public class CTutorEngine implements ILoadableObject2 {
             }
         }
 
-        createAndLaunchTutor(defTutor, RoboTutor.SELECTOR_MODE, null, tutorBindings); // where Activity Selector is launched
+        createAndLaunchTutor(defTutor, null, RoboTutor.SELECTOR_MODE, null, tutorBindings); // where Activity Selector is launched
     }
 
     /**
@@ -243,14 +218,12 @@ public class CTutorEngine implements ILoadableObject2 {
      * This launches a new tutor immediately at startup. Used for quick debugging.
      */
     static public void quickLaunch(String tutorVariant, String tutorId, String tutorFile) {
+        for (String name : tutorVariants.keySet()){
 
-        for (String name: tutorVariants.keySet()){
-
-            String key =name.toString();
+            String key = name.toString();
             String value = tutorVariants.get(name).tutorName;
             String feats = tutorVariants.get(name).features;
             System.out.println(key + " tutorName: " + value + " Features: " + feats);
-
         }
         String value = tutorVariants.get(tutorVariant).tutorName;
         String feats = tutorVariants.get(tutorVariant).features;
@@ -260,12 +233,12 @@ public class CTutorEngine implements ILoadableObject2 {
 
         initializeBindingPattern(tutorBinding, tutorFile);
 
-        createAndLaunchTutor(tutorDescriptor.tutorName , tutorDescriptor.features, tutorId, tutorBinding);
+        createAndLaunchTutor(tutorDescriptor.tutorName, tutorVariant, tutorDescriptor.features, tutorId, tutorBinding);
     }
 
     /**
      * Here a tutor is destroying itself - so we need to manage the follow-on process -
-     * i.e. start some other activity / tutor or session mamagement task.
+     * i.e. start some other activity / tutor or session management task.
      */
     static public void destroyCurrentTutor() {
 
@@ -289,12 +262,10 @@ public class CTutorEngine implements ILoadableObject2 {
         deadTutor = null;
     }
 
-
     /**
      * Here a tutor has been killed off externally and need to be cleaned up.
      */
     static public void killDeadTutor() {
-
         Log.d(TAG, "killDeadTutor: " + deadTutor.getTutorName());
 
         // Get the tutor being killed and do a depth first destruction to allow
@@ -304,17 +275,13 @@ public class CTutorEngine implements ILoadableObject2 {
         deadTutor = null;
     }
 
-
     /**
      * Here a tutor is being destroying externally
      */
     static public void killActiveTutor() {
-
         // GRAY_SCREEN_BUG
-        if(activeTutor != null) {
-
+        if (activeTutor != null) {
             deadTutor = activeTutor;
-
             activeTutor = null;
 
             Log.d(TAG, "Killing Tutor: " + deadTutor.getTutorName());
@@ -327,15 +294,13 @@ public class CTutorEngine implements ILoadableObject2 {
         }
     }
 
-
     /**
      * Create a tutor by name - if a tutor is running already then kill it off first
      *
      * @param tutorName
      * @param features
      */
-    static private void createAndLaunchTutor(String tutorName, String features, String tutorId, defdata_tutor dataSource) {
-
+    static private void createAndLaunchTutor(String tutorName, String tutorVariant, String features, String tutorId, defdata_tutor dataSource) {
         Log.d(TCONST.DEBUG_GRAY_SCREEN_TAG, "r4: killActiveTutor called from createAndLaunchTutor(" + tutorName + ")");
         killActiveTutor();
 
@@ -353,29 +318,24 @@ public class CTutorEngine implements ILoadableObject2 {
         // GRAY_SCREEN_BUG CTutor created --> Media Manager created --> added to map
         Log.d(TCONST.DEBUG_GRAY_SCREEN_TAG, "p2: Initializing tutor: " + tutorName);
 
-        activeTutor = new CTutor(Activity, tutorName, tutorId, (ITutorManager)tutorContainer, TutorLogManager, mRootScope, language, features);
+        activeTutor = new CTutor(Activity, tutorName, tutorId, tutorVariant, (ITutorManager)tutorContainer, TutorLogManager, mRootScope, language, features);
 
         activeTutor.launchTutor(dataSource);
     }
 
-
     static private defdata_scenes parseSceneData(defdata_tutor dataPattern, String[] componentSet) {
-
         defdata_scenes          sceneData = new defdata_scenes();
         ArrayList<databinding>  bindings  = new ArrayList<>();
 
         String compData   = null;
         String compName   = null;
 
-        for(String component : componentSet) {
-
+        for (String component : componentSet) {
             String[] dataSet = component.split(":");
 
             if (dataSet.length == 1) {
-
                 compName = "*";
                 compData = dataSet[0];
-
             } else {
                 compName = dataSet[0];
                 compData = dataSet[1];
@@ -384,35 +344,27 @@ public class CTutorEngine implements ILoadableObject2 {
             bindings.add(new databinding(compName, compData));
         }
 
-        sceneData.databindings = (databinding[]) bindings.toArray(new databinding[bindings.size()]);
+        sceneData.databindings = bindings.toArray(new databinding[bindings.size()]);
 
         return sceneData;
     }
 
-
     static private defdata_tutor parseDataSpec(String dataSpec) {
-
         defdata_tutor   dataPattern = new defdata_tutor();
         defdata_scenes  sceneData   = null;
         String          sceneName   = null;
 
-        String[] sceneSet = dataSpec.split(";");
-
-        for(String scene : sceneSet) {
-
+        for (String scene : dataSpec.split(";")) {
             String[] sceneElements = scene.split("\\|");
 
             // If there is only 1 element then there is only one scene and its name is implied
             //
-            if(sceneElements.length == 1) {
-
+            if (sceneElements.length == 1) {
                 sceneName = "*";
                 sceneData = parseSceneData(dataPattern, sceneElements);
-            }
-            else {
-                sceneName     = sceneElements[0];
+            } else {
+                sceneName = sceneElements[0];
                 sceneElements = Arrays.copyOfRange(sceneElements, 1, sceneElements.length);
-
                 sceneData = parseSceneData(dataPattern, sceneElements);
             }
 
@@ -422,60 +374,37 @@ public class CTutorEngine implements ILoadableObject2 {
         return dataPattern;
     }
 
-
-    static private void  initComponentBindings(databinding[] targetbindings, databinding[] databindings) {
-
-        for(databinding binding : databindings) {
-
-            if(binding.name.equals("*")) {
-                if(targetbindings.length == 1) {
-                    targetbindings[0].datasource = binding.datasource;
-                }
-                else {
-                    Log.e(TAG, "ERROR: Incompatible datasource");
-                }
-            }
-            else {
-                for(databinding tbinding : targetbindings) {
-                    if(tbinding.name.equals(binding.name)) {
+    static private void initComponentBindings(databinding[] targetbindings, databinding[] databindings) {
+        for (databinding binding : databindings) {
+            if (binding.name.equals("*")) {
+                if (targetbindings.length == 1) targetbindings[0].datasource = binding.datasource;
+                else Log.e(TAG, "ERROR: Incompatible datasource");
+            } else {
+                for (databinding tbinding : targetbindings) {
+                    if (tbinding.name.equals(binding.name)) {
                         tbinding.datasource = binding.datasource;
                         break;
                     }
                 }
             }
-
         }
     }
 
-
-    static private void  initSceneBindings(defdata_tutor bindingPattern, String sceneName, databinding[] databindings) {
-
-        if(sceneName.equals("*")) {
-            System.out.println(bindingPattern.scene_bindings.isEmpty());
-            if(bindingPattern.scene_bindings.size() == 1) {
-
-                Iterator<?> scenes = bindingPattern.scene_bindings.entrySet().iterator();
-                while(scenes.hasNext() ) {
-
-                    Map.Entry scene = (Map.Entry) scenes.next();
-
-                    databinding[] scenebindings = ((defdata_scenes)scene.getValue()).databindings;
-
+    static private void initSceneBindings(defdata_tutor bindingPattern, String sceneName, databinding[] databindings) {
+        if (sceneName.equals("*")) {
+            if (bindingPattern.scene_bindings.size() == 1) {
+                for (Object scene : bindingPattern.scene_bindings.entrySet()) {
+                    databinding[] scenebindings = ((defdata_scenes)((Map.Entry)scene).getValue()).databindings;
                     initComponentBindings(scenebindings, databindings);
                 }
-            }
-            else {
+            } else {
                 Log.e(TAG, "ERROR: Incompatible datasource");
             }
-        }
-        else {
+        } else {
             defdata_scenes compData = bindingPattern.scene_bindings.get(sceneName);
-
             initComponentBindings(compData.databindings, databindings);
         }
-
     }
-
 
     /**
      * The data spec is encoded as:
@@ -485,8 +414,8 @@ public class CTutorEngine implements ILoadableObject2 {
      *  <scenedata> = component:datasource
      *
      *  e.g.
-     *      tutor_scene1|sceme_compD:[dataencoding]datasource|sceme_compM:[dataencoding]datasource;
-     *      tutor_scene2|sceme_compQ:[dataencoding]datasource; ...
+     *      tutor_scene1|scene_compD:[dataencoding]datasource|scene_compM:[dataencoding]datasource;
+     *      tutor_scene2|scene_compQ:[dataencoding]datasource; ...
      *
      *
      *
@@ -494,23 +423,11 @@ public class CTutorEngine implements ILoadableObject2 {
      * @param dataSpec
      */
     static private void initializeBindingPattern(defdata_tutor bindingPattern, String dataSpec) {
-        System.out.print("dataSpec: ");
-        System.out.println(dataSpec);
-        defdata_tutor dataBindings = parseDataSpec(dataSpec);
-
-        Iterator<?> scenes = dataBindings.scene_bindings.entrySet().iterator();
-
-        while(scenes.hasNext() ) {
-
-            Map.Entry scene = (Map.Entry) scenes.next();
-
-            String sceneName           = (String)scene.getKey();
-            databinding[] databindings = ((defdata_scenes)scene.getValue()).databindings;
-
-            initSceneBindings(bindingPattern, sceneName, databindings);
+        for (Object scene : parseDataSpec(dataSpec).scene_bindings.entrySet()) {
+            databinding[] databindings = ((defdata_scenes)((Map.Entry)scene).getValue()).databindings;
+            initSceneBindings(bindingPattern, (String)((Map.Entry)scene).getKey(), databindings);
         }
     }
-
 
     /**
      *  Scriptable Launch command
@@ -519,7 +436,6 @@ public class CTutorEngine implements ILoadableObject2 {
      * @param intentType
      */
     static public void launch(String intentType, String tutorVariant, String dataSource, String tutorId) {
-
         Log.d(TAG, "launch: tutorId=" + tutorId);
 
         Intent extIntent = new Intent();
@@ -534,28 +450,22 @@ public class CTutorEngine implements ILoadableObject2 {
         //
         initializeBindingPattern(tutorBinding, dataSource);
 
-        switch(intentType) {
-
+        switch (intentType) {
             // Create a native tutor with the given base features
             // These features are used to determine basic tutor functionality when
             // multiple tutors share a single scenegraph
             //
             case "native":
-
                 Log.d(TCONST.DEBUG_GRAY_SCREEN_TAG, "p3b: Creating Tutor in 'CTutor.launch': " + tutorDescriptor.tutorName);
-                createAndLaunchTutor(tutorDescriptor.tutorName, tutorDescriptor.features, tutorId, tutorBinding);
+                createAndLaunchTutor(tutorDescriptor.tutorName, tutorVariant, tutorDescriptor.features, tutorId, tutorBinding);
                 break;
 
             case "browser":
-
                 extIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("file:///" + tutorVariant));
-
                 getActivity().startActivity(extIntent);
-
                 break;
 
             default:
-
                 // This a special allowance for MARi which placed their activities in a different
                 // package from their app - so we check for intent of the form "<pkgPath>:<appPath>"
                 //
@@ -563,13 +473,12 @@ public class CTutorEngine implements ILoadableObject2 {
 
                 // If it is "<pkgPath>:<appPath>"
                 //
-                if(intentParts.length > 1) {
+                if (intentParts.length > 1) {
                     extPackage = intentParts[0];
-                    tutorVariant     = intentParts[1];
-                }
-                // Otherwise we expect the activities to be right off the package.
-                //
-                else {
+                    tutorVariant = intentParts[1];
+                } else {
+                    // Otherwise we expect the activities to be right off the package.
+                    //
                     extPackage = tutorVariant.substring(0, tutorVariant.lastIndexOf('.'));
                 }
 
@@ -578,8 +487,7 @@ public class CTutorEngine implements ILoadableObject2 {
 
                 try {
                     getActivity().startActivity(extIntent);
-                }
-                catch(Exception e) {
+                } catch(Exception e) {
                     Log.e(TAG, "Launch Error: " + e + " : " + tutorVariant);
                 }
                 break;
@@ -589,20 +497,18 @@ public class CTutorEngine implements ILoadableObject2 {
 
     //************ Serialization
 
-
     /**
      * Load the Tutor engine specification from JSON file data
      * from assets/tutors/engine_descriptor.json
      *
      */
     public void loadEngineDescr() {
-
         try {
             loadJSON(new JSONObject(JSON_Helper.cacheData(TCONST.TUTORROOT + "/" + TCONST.EDESC)), (IScope2)mRootScope);
 
-            // TODO : Use build Variant to ensure release configurations
+            // TODO: Use build Variant to ensure release configurations
             //
-            if(Configuration.languageOverride(getActivity())) {
+            if (Configuration.languageOverride(getActivity())) {
                 language = Configuration.getLanguageFeatureID(getActivity());
                 //  any time the language changes, so should the Transition Matrix and the Student Model
             } else {
@@ -673,7 +579,6 @@ public class CTutorEngine implements ILoadableObject2 {
         return matrix;
     }
 
-
     /**
      * Load the Tutor specification from JSON file data
      *
@@ -681,13 +586,12 @@ public class CTutorEngine implements ILoadableObject2 {
      */
     @Override
     public void loadJSON(JSONObject jsonData, IScope2 scope) {
-
       JSON_Helper.parseSelf(jsonData, this, CClassMap2.classMap, scope);
     }
+
     @Override
     public void loadJSON(JSONObject jsonObj, IScope scope) {
         // Log.d(TAG, "Loader iteration");
         loadJSON(jsonObj, (IScope2) scope);
     }
-
 }

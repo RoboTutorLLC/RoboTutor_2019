@@ -20,8 +20,6 @@ package cmu.xprize.util;
 
 // global tutor constants
 
-import android.os.Environment;
-
 import java.util.HashMap;
 
 public class TCONST {
@@ -39,13 +37,11 @@ public class TCONST {
     public static final String FTR_GOODBYE = "GOODBYE";
     public static final int NUM_GOODBYE_SOUND_CLIPS = 9;    // make sure this matches the number of sound clips in
                                                             // the "EXIT_BUTTON_BEHAVIOR" object in activity_selector/animator_graph.json
-
     public static final String SKILL_WRITING    = "letters";
     public static final String SKILL_STORIES    = "stories";
     public static final String SKILL_MATH       = "numbers";
 
     public static final String FINISH           = "FINISH";
-
 
     // RoboTutor Version spec Index meaning 0.1.2.3
     // Given 4.23.9.8
@@ -56,14 +52,12 @@ public class TCONST {
     public static final int FIX_RELEASE     = 2;
     public static final int ASSET_VERSION   = 3;
 
-
     // Spec elements for asset zip files releases
     // For assets to be compatible with Robotutor the ASSET_CODE_VERSION must match the ASSET_VERSION
     //
     public static final int ASSET_CODE_VERSION    = 0;
     public static final int ASSET_RELEASE_VERSION = 1;
     public static final int ASSET_UPDATE_VERSION  = 2;
-
 
     // These represent the base name for assets delivered in Zip files and loaded
     // through calls to updateZipAsset
@@ -106,7 +100,6 @@ public class TCONST {
     public static final String SAY_STIMULUS     = "FTR_SAY";
     public static final String SHOW_STIMULUS    = "FTR_SHOW";
 
-
     public static final String ASM_DIGIT_OR_OVERHEAD_CORRECT   = "ASM_DIGIT_OR_OVERHEAD_CORRECT";
     public static final String ASM_DIGIT_OR_OVERHEAD_WRONG     = "ASM_DIGIT_OR_OVERHEAD_WRONG";
     public static final String ASM_CLICK_ON_DOT                = "ASM_CLICK_ON_DOT";
@@ -136,7 +129,6 @@ public class TCONST {
 //    public static final String AUDIO_REF        = "audio_ref";
     public static final String SET_BANNER_COLOR = "SET_BANNER_COLOR";
     public static final String LAST_ATTEMPT     = "FTR_LASTATTEMPT";
-
 
     public static final String  FONT_FOLDER     = "fonts/";
     public static final String  SHOWICONS       = "SHOWICONS";
@@ -221,6 +213,7 @@ public class TCONST {
     public static final String FTR_USER_HIDE       = "FTR_USER_HIDE";
     public static final String FTR_USER_REVEAL     = "FTR_USER_REVEAL";
     public static final String FTR_USER_PARROT     = "FTR_USER_PARROT";
+    public static final String FTR_USER_PROMPT     = "FTR_USER_PROMPT";
     public static final String FTR_USER_READING    = "FTR_USER_READING";
     // UHQ
     public static final String FTR_GEN             = "FTR_GEN";
@@ -245,8 +238,6 @@ public class TCONST {
     public static final int    MAX_AKDATA          = 10;
 
     public static final String FTR_COMPLETE      = "FTR_COMPLETE";
-    public static final String FTR_PROMPT        = "FTR_PROMPT";
-    public static final String FTR_PAGE_PROMPT   = "FTR_PAGE_PROMPT";
 
     public static final String START_PROGRESSIVE_UPDATE   = "START_PROGRESSIVE_UPDATE";
     public static final String START_INDETERMINATE_UPDATE = "START_INDETERMINATE_UPDATE";
@@ -268,7 +259,6 @@ public class TCONST {
     public static final String PICMATCH_WRONG                = "PICMATCH_WRONG";
     public static final String NEXT_SCENE                 = "NEXT_SCENE";
     public static final String NEXT_WORD                  = "NEXT_WORD";
-
 
     // Core log message types - anumation scenegraph and queued scenegraph
     //
@@ -296,7 +286,6 @@ public class TCONST {
     public static final String SESSION_ID_VAR = "sessionId";
     public static final String LAST_TUTOR = "LAST_TUTOR_PLAYED";
 
-
     static public HashMap<String, Integer> colorMap = new HashMap<String,Integer>();
     //
     // This is used to map "states" to colors
@@ -320,7 +309,6 @@ public class TCONST {
 
     public static final int STROKE_STIM_UNDERLINE  = 5;
 
-
     static public HashMap<String, String> fontMap = new HashMap<String, String>();
 
     static {
@@ -328,7 +316,6 @@ public class TCONST {
         fontMap.put("grundschrift-kontur",  FONT_FOLDER + "Grundschrift-Kontur.otf");
         fontMap.put("grundschrift-punkt",   FONT_FOLDER + "Grundschrift-Punkt.otf");
     }
-
 
     //*** Reading Tutor compatible string combinations
 
@@ -338,7 +325,6 @@ public class TCONST {
         numberMap.put("LANG_EN", "AND,ZERO,ONE,TWO,THREE,FOUR,FIVE,SIX,SEVEN,EIGHT,NINE,TEN,ELEVEN,TWELVE,THIRTEEN,FORTEEN,FIFTEEN,SIXTEEN,SEVENTEEN,EIGHTEEN,NINETEEN,TWENTY,THIRTY,FORTY,FIFTY,SIXTY,SEVENTY,EIGHTY,NINETY,HUNDRED,THOUSAND,MILLION,BILLION,TRILLION,QUADRILLION");
         numberMap.put("LANG_SW", "NA,SIFURI,MOJA,MBILI,TATU,NNE,TANO,SITA,SABA,NANE,TISA,KUMI,ISHIRINI,THELATHINI,AROBAINI,HAMSINI,SITINI,SABINI,THEMANINI,TISINI,MIA,ELFU,MILIONI,BILIONI,TRILIONI,KWADRILIONI");
     }
-
 
     // This is used to map "language features" to the story resources
     // these are located in the assets/<lang>
@@ -360,7 +346,6 @@ public class TCONST {
     }
 
     // JSON parameter constants
-
 
     // Loader Constants
     static final public String TUTORROOT          = "tutors";
@@ -422,7 +407,6 @@ public class TCONST {
     public static final String FIRST_SCENE     = "GOTO_FIRST_SCENE";
     public static final String REC_GLYPH       = "REC_GLYPH";
 
-
     // CActionTrack track types
     // Note these must case-match the layer names in the Flash
     // timeline specification from which CActionTrack is derived
@@ -477,7 +461,6 @@ public class TCONST {
     public static final String SUBGRAPH_RETURN_AND_GO   = "SUBGRAPH_RETURN_AND_GO";
     public static final String SUBGRAPH_RETURN_AND_WAIT = "SUBGRAPH_RETURN_AND_WAIT";
 
-
     // Condition parser FSM states
     public static final int STARTSTATE = 0;
     public static final int PARSESTATE = 1;
@@ -504,14 +487,12 @@ public class TCONST {
 
     public static final char EOT = '\04';
 
-
     // type_action - command types
     public static final String CMD_DEBUG        = "DEBUG";
     public static final String CMD_WAIT         = "WAIT";
     public static final String CMD_GOTO         = "GOTONODE";
     public static final String CMD_NEXT         = "NEXT";
     public static final String CMD_LAUNCH       = "LAUNCH-TUTOR";
-
 
     // Intrinsic types
     public static final String TREFERENCE  = "TReference";
@@ -529,13 +510,16 @@ public class TCONST {
     public static final String STARE_STOP  = "STARE_STOP";
 
     public static final String FTR_STORY_STARTING = "FTR_STORY_STARTING";
+    public static final String FTR_PLAY_PROMPT = "FTR_PLAY_PROMPT";
+    public static final String FTR_PROMPT = "FTR_PROMPT";
+    public static final String FTR_PAGE_PROMPT = "FTR_PAGE_PROMPT";
 
     public static final String FWCORRECT    = "FTR_RIGHT";
     public static final String FWINCORRECT  = "FTR_WRONG";
     public static final String FWUNKNOWN    = "FTR_UNRECOGNIZED";
     public static final String FTR_EOI      = "FTR_NOWORDS";
     public static final String FTR_EOD      = "FTR_EOD";
-    public static final String CONTINUE      = "CONTINUE";
+    public static final String CONTINUE     = "CONTINUE";
     public static final String ALL_CORRECT  = "ALL_CORRECT";
 
     public static final String LOG_CORRECT = "CORRECT";
@@ -547,7 +531,6 @@ public class TCONST {
     public static final String RECTICON     = "RECTICON";
     public static final String RAND         = "random";
     public static final String MINUSONE     = "-1";
-
 
     // PocketSphinx Recognizer Constants
     public static final int UNKNOWNEVENT_TYPE  = 0;
@@ -569,7 +552,6 @@ public class TCONST {
     public static final int ERROR_EVENT        = 0x101;
 
     public static final int ALL_EVENTS         = 0xFFFFFFFF;
-
 
     public static final String ASR_TIMED_START_EVENT    = "ASR_TIMED_START_EVENT";
     public static final String ASR_RECOGNITION_EVENT    = "ASR_RECOGNITION_EVENT";
@@ -604,8 +586,6 @@ public class TCONST {
         ASREventMap.put(ASR_ALL_EVENTS,TCONST.ALL_EVENTS);
     }
 
-
-
     public static final int NOINTERVENTION = 0;
     public static final int INSPEECH       = 1;
     public static final int SAYWORD        = 2;
@@ -616,12 +596,10 @@ public class TCONST {
     public static final String SOURCEFILE  = "[file]";
     public static final String ASSETFILE   = "[asset]";
 
-
     public static final String TTS         = "TTS";
     public static final String ASR         = "ASR";
 
     public static final String GLYPH_DATA  = "GLYPH_DATA";
-
 
     // LTK messaging constants
     public static final String FW_STIMULUS = "FW_UPDATED";
@@ -639,17 +617,14 @@ public class TCONST {
     public static final String ROBOTUTOR_ASSET_FOLDER   = "/robotutor_assets/";
     public static final String GLYPHS_FOLDER            = "/glyphs/";
 
-
     // Listener Control message types
     public static final String LISTENER_RESPONSE = "LISTENER_RESPONSE";
-
 
     // TTS command constants
     public static final String SAY             = "SAY";
     public static final String SET_RATE        = "SET_RATE";
 
-
-    // Number Listeneing Component
+    // Number Listening Component
     private static final String[]    placeValue = {".ones",".tens",".hundreds",".thousands",".millions",".billions"};
 
     public static final String ERR_SINGLEDIGIT  = "Single Digit Error";
@@ -684,12 +659,10 @@ public class TCONST {
     public static final boolean FALSE_NOERROR = false;
     public static final boolean FALSE_ERROR   = false;
 
-
     // MediaManager constants.
     public static final String MEDIA_AUDIO           = "MEDIA_AUDIO";
     public static final String MEDIA_TIMELINE        = "MEDIA_TIMELINE";
     public static final String DEFAULT_SOUND_PACKAGE = "default";
-
 
     // ASR (automated speech recognition) constants
     public static final Long   STABLE_TIME        = 300L;    // Time a word has to be stable before it is emitted.
@@ -746,7 +719,6 @@ public class TCONST {
     public static final int ERRW2N_INVALID_HUNDREDS      = 36;      // e.g. saying "thousand hundred"
     public static final int ERRW2N_INVALID_POWER         = 37;      // e.g. saying "and thousand"
 
-
     public static final String[] W2N_ERRORMSG = {"NO_ERROR","NO_DATA","LEADING_CONJ","NONTERM_ZERO","NONSOLITARY_ZERO","MISSING_CONJ","MISSING_HUNDRED_MULTI","HUNDRED_ADDED_CONJ","INCREASING_POWER","REPEATED_POWER","POWER_CONJ","INCREASING_MULTIPLIER","REPEAT_CONJ","INTERNAL","ZERO_HUNDRED_MULTI","INVALID_TEXT"};
 
     // W2N Warning types
@@ -766,7 +738,6 @@ public class TCONST {
     // ASB constants
     public static final int NEXTPAGE =  1;
     public static final int PREVPAGE = -1;
-
 
     // READING Tutor State names  -- RTC Reading Tutor Component
 
@@ -810,14 +781,14 @@ public class TCONST {
     public static final String RTC_CLEAR             = "";
 
     public static final String RTC_VAR_PROMPT      = ".prompt";
-    public static final String RTC_VAR_PAGE_PROMPT = ".page_prompt";
+    public static final String RTC_VAR_PAGE_PROMPT = ".pagePrompt";
     public static final String RTC_VAR_WORDVALUE   = ".currentWord";
     public static final String RTC_VAR_INDEX       = ".wordindex";
     public static final String RTC_VAR_REMAINING   = ".remainingWords";
     public static final String RTC_VAR_SENTENCE    = ".sentence";
     public static final String RTC_VAR_UTTERANCE   = ".utterance";
 
-    //Akira Game Prompt Situation
+    // Akira Game Prompt Situation
     public static final String PROMPT_1LEFT = "PROMPT_1LEFT";
     public static final String PROMPT_1MID = "PROMPT_1MID";
     public static final String PROMPT_1RIGHT = "PROMPT_1RIGHT";
@@ -827,13 +798,11 @@ public class TCONST {
     public static final String PROMPT_3 = "PROMPT_3";
     public static final String PROMPT_3V = "PROMPT_3V";
 
-
     // Writing behavior...
     public static final int WRITING_DATA_LIMIT = 10;
 
     // Counting
     public static final String COUNTING_DEBUG_LOG = "COUNTING_DEBUG_LOG";
-
 
     // Data source debugger
 
@@ -851,7 +820,6 @@ public class TCONST {
     public static final String ROBO_DEBUG_FILE_AKIRA = "akira_test.json";
     public static final String ROBO_DEBUG_FILE_ASM = "math_test.json";
     public static final String ROBO_DEBUG_FILE_BPOP = "bpop.json";
-
 
     // Debugger Thumb key words
     // NEW_THUMBS trace me

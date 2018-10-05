@@ -34,7 +34,6 @@ public class CASB_Seg implements ILoadableObject {
 
     @Override
     public void loadJSON(JSONObject jsonObj, IScope scope) {
-
         JSON_Helper.parseSelf(jsonObj, this, CClassMap.classMap, scope);
     }
 }

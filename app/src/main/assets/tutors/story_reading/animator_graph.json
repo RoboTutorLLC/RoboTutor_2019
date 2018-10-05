@@ -21,8 +21,7 @@
             {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SstoryReading", "method": "logState", "parms": "type#prompt,value#SPEAK_WORD_BEHAVIOR:String", "features": ""},
 
             {"type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SstoryReading.currentWord}}.mp3", "soundpackage": "words", "mode": "flow", "features": ""},
-            {"type": "QUEUEDCOMMAND", "id": "SstoryReading", "method": "post", "parms": "NEXT_WORD:String" , "features": ""}
-
+            {"type": "QUEUEDCOMMAND", "id": "SstoryReading", "method": "post", "parms": "NEXT_WORD:String", "features": ""}
           ],
           "preexit": [],
           "edges": []
@@ -38,9 +37,9 @@
             // NOTE: the button must be in a valid state before showing
             // TODO: put check in to catch invalid behaviors
 
-            {"type": "QUEUEDCOMMAND", "id": "SstoryReading", "method": "setStickyBehavior", "parms": "SPEAK_CLICK:String|SPEAK_WORD_BEHAVIOR:String" , "features": ""},
-            {"type": "QUEUEDCOMMAND", "id": "SstoryReading", "method": "setSpeakButton",    "parms": "ENABLE:String",     "features": ""},
-            {"type": "QUEUEDCOMMAND", "id": "SstoryReading", "method": "setSpeakButton",    "parms": "SHOW:String",       "features": ""}
+            {"type": "QUEUEDCOMMAND", "id": "SstoryReading", "method": "setStickyBehavior", "parms": "SPEAK_CLICK:String|SPEAK_WORD_BEHAVIOR:String", "features": ""},
+            {"type": "QUEUEDCOMMAND", "id": "SstoryReading", "method": "setSpeakButton", "parms": "ENABLE:String", "features": ""},
+            {"type": "QUEUEDCOMMAND", "id": "SstoryReading", "method": "setSpeakButton", "parms": "SHOW:String", "features": ""}
           ]
         },
 
@@ -53,7 +52,7 @@
           "tracks": [
             {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SstoryReading", "method": "logState", "parms": "type#behavior,value#NARRATE_SENTENCE_BEHAVIOR:String", "features": ""},
 
-            {"type": "QUEUEDCOMMAND", "id": "SstoryReading", "method": "post", "parms": "START_NARRATION:String|1000:long" , "features": ""}
+            {"type": "QUEUEDCOMMAND", "id": "SstoryReading", "method": "post", "parms": "START_NARRATION:String|1000:long", "features": ""}
           ],
           "preexit": [],
           "edges": []
@@ -67,7 +66,8 @@
           "tracks": [
             {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SstoryReading", "method": "logState", "parms": "type#behavior,value#SPEAK_UTTERANCE_BEHAVIOR:String", "features": ""},
 
-            {"type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SstoryReading.utterance}}.mp3", "listeners": "SstoryReading", "oncomplete": "TRACK_SEGMENT" , "soundpackage": "story", "mode": "flow", "features": ""}
+            {"type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SstoryReading.utterance}}.mp3", "listeners": "SstoryReading", "oncomplete": "TRACK_SEGMENT", "mode": "flow", "features": "FTR_PROMPT"},
+            {"type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SstoryReading.utterance}}.mp3", "listeners": "SstoryReading", "oncomplete": "TRACK_SEGMENT", "soundpackage": "story", "mode": "flow", "features": "!FTR_PROMPT"}
           ],
           "preexit": [],
           "edges": []
@@ -81,13 +81,13 @@
           "tracks": [
             {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SstoryReading", "method": "logState", "parms": "type#behavior,value#SPEAK_SENTENCE_BEHAVIOR:String", "features": ""},
 
-            {"type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SstoryReading.sentence}}.mp3", "listeners": "SstoryReading", "oncomplete": "TRACK_SEGMENT", "soundpackage": "story", "mode": "flow", "features": ""},
-            {"type": "QUEUEDCOMMAND", "id": "SstoryReading", "method": "nextSentence" , "features": ""}
+            {"type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SstoryReading.sentence}}.mp3", "listeners": "SstoryReading", "oncomplete": "TRACK_SEGMENT", "mode": "flow", "features": "FTR_PROMPT"},
+            {"type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SstoryReading.sentence}}.mp3", "listeners": "SstoryReading", "oncomplete": "TRACK_SEGMENT", "soundpackage": "story", "mode": "flow", "features": "!FTR_PROMPT"},
+            {"type": "QUEUEDCOMMAND", "id": "SstoryReading", "method": "nextSentence", "features": ""}
           ],
           "preexit": [],
           "edges": []
         }
-
       },
 
       "nodeMap": {
@@ -99,7 +99,7 @@
           "COMMENT": "Intro Clip",
           "preenter": ["SET_VERSION"],
           "maptype": "moduleMap",
-          "mapname": "PLAYINTRO",
+          "mapname": "PLAY_INTRO",
           "preexit": [],
           "edges": [
             {"constraint": "", "edge": "NEXT_STEP"}
@@ -131,6 +131,18 @@
           "maptype": "actionMap",
           "mapname": "START_STORY",
           "preenter": ["SET_NARRATOR", "SET_UTTERANCE"],
+          "preexit": [],
+          "edges": [
+            {"constraint": "", "edge": "PLAY_PROMPT_NODE"}
+          ]
+        },
+
+        "PLAY_PROMPT_NODE": {
+          "type": "NODE",
+          "COMMENT": "Play mode prompt",
+          "preenter": [],
+          "maptype": "moduleMap",
+          "mapname": "PLAY_PROMPT",
           "preexit": [],
           "edges": [
             {"constraint": "", "edge": "LISTEN"}
@@ -202,7 +214,7 @@
         "PARROT_LINE_NODE": {
           "type": "NODE",
           "COMMENT": "When in parrot mode - we listen to the student repeat the last line",
-          "maptype": "moduleMap",
+          "maptype": "actionMap",
           "mapname": "PARROT_LINE",
           "preenter": [],
           "preexit": [],
@@ -213,7 +225,7 @@
 
         "NEXT_WORD_NODE": {
           "type": "NODE",
-          "COMMENT": "When module is complete - move to next scene in the scenegraph",
+          "COMMENT": "When word is complete - move to next word in the scenegraph",
           "maptype": "moduleMap",
           "mapname": "PREP_NEXT_WORD",
           "preenter": [],
@@ -225,43 +237,43 @@
 
         "NEXT_LINE_NODE": {
           "type": "NODE",
-          "COMMENT": "When module is complete - move to next scene in the scenegraph",
+          "COMMENT": "When line is complete - move to next line in the scenegraph",
           "maptype": "actionMap",
           "mapname": "NEXT_LINE",
           "preenter": [],
           "preexit": [],
           "edges": [
-            {"constraint": "", "edge": "LISTEN"}
+            {"constraint": "", "edge": "PLAY_PROMPT_NODE"}
           ]
         },
 
         "NEXT_PARA_NODE": {
           "type": "NODE",
-          "COMMENT": "When module is complete - move to next scene in the scenegraph",
+          "COMMENT": "When paragraph is complete - move to next paragraph in the scenegraph",
           "maptype": "actionMap",
           "mapname": "NEXT_PARA",
           "preenter": [],
           "preexit": [],
           "edges": [
-            {"constraint": "", "edge": "LISTEN"}
+            {"constraint": "", "edge": "PLAY_PROMPT_NODE"}
           ]
         },
 
         "NEXT_PAGE_NODE": {
           "type": "NODE",
-          "COMMENT": "When module is complete - move to next scene in the scenegraph",
-          "maptype": "moduleMap",
-          "mapname": "PAGEFLIP",
+          "COMMENT": "When page is complete - move to next page in the scenegraph",
+          "maptype": "actionMap",
+          "mapname": "NEXT_PAGE",
           "preenter": [],
           "preexit": [],
           "edges": [
-            {"constraint": "", "edge": "LISTEN"}
+            {"constraint": "", "edge": "PLAY_PROMPT_NODE"}
           ]
         },
 
         "NEXT_SCENE": {
           "type": "NODE",
-          "COMMENT": "When module is complete - move to next scene in the scenegraph",
+          "COMMENT": "When scene is complete - move to next scene in the scenegraph",
           "maptype": "moduleMap",
           "mapname": "SCENEFLIP",
           "preenter": [],
@@ -274,20 +286,24 @@
       "moduleMap": {
 
         "COMMENT": "@@@@@  CModules  @@@@@",
-        "PLAYINTRO": {
+
+        "PLAY_INTRO": {
           "type": "MODULE",
           "reuse": true,
           "COMMENT": "TBD",
           "tracks": [
-            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SstoryReading", "method": "logState", "parms": "type#node,value#PLAYINTRO:String", "features": ""},
+            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SstoryReading", "method": "logState", "parms": "type#node,value#PLAYINTRO:String", "features": ""}
+          ]
+        },
 
-            // Note that the sw actually says "please read the story aloud'
-            //
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SstoryReading.prompt}}", "mode": "flow", "features": "FTR_PROMPT"},
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "Please read aloud.mp3", "mode": "flow", "features": "!FTR_PROMPT&FTR_USER_READ|!FTR_PROMPT&FTR_USER_ECHO|!FTR_PROMPT&FTR_USER_REVEAL"},
-            //{"type": "AUDIO", "command": "PLAY", "soundsource": "Now lets listen to a story.mp3", "mode": "flow", "features": "!FTR_PROMPT&FTR_USER_HEAR|!FTR_PROMPT&FTR_USER_HIDE"},
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "Listen carefully.mp3", "mode": "flow", "features": "!FTR_PROMPT&FTR_USER_HEAR|!FTR_PROMPT&FTR_USER_HIDE"},
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "Please listen and repeat after me.mp3", "mode": "flow", "features": "!FTR_PROMPT&FTR_USER_PARROT"}
+        "PLAY_PROMPT": {
+          "type": "MODULE",
+          "reuse": true,
+          "COMMENT": "TBD",
+          "tracks": [
+            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SstoryReading", "method": "logState", "parms": "type#node,value#PLAY_PROMPT:String", "features": ""},
+
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SstoryReading.prompt}}", "mode": "flow", "features": "FTR_PLAY_PROMPT"}
           ]
         },
 
@@ -298,6 +314,7 @@
           "tracks": [
             {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SstoryReading", "method": "logState", "parms": "type#node,value#LISTENING:String", "features": ""},
 
+            {"type": "COMMAND", "id": "SstoryReading", "method": "continueListening", "features": ""},
             {"type": "COMMAND", "cmd": "WAIT"}
           ]
         },
@@ -308,20 +325,6 @@
           "COMMENT": "TBD",
           "tracks": [
             {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SstoryReading", "method": "logState", "parms": "type#node,value#PLAYCORRECT:String", "features": ""}
-
-          ]
-        },
-
-        "PARROT_LINE": {
-          "type": "MODULE",
-          "reuse": true,
-          "COMMENT": "TBD",
-          "tracks": [
-            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SstoryReading", "method": "logState", "parms": "type#node,value#PARROT_LINE:String", "features": ""},
-
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SstoryReading.page_prompt}}", "mode": "flow", "features": "FTR_PAGE_PROMPT"},
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "Repeat after me.mp3", "mode": "flow", "features": "!FTR_PAGE_PROMPT"},
-            {"type": "COMMAND", "id": "SstoryReading", "method": "parrotLine" , "features": ""}
           ]
         },
 
@@ -343,7 +346,7 @@
           "tracks": [
             {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SstoryReading", "method": "logState", "parms": "type#node,value#CHECK_COMPLETE:String", "features": ""},
 
-            {"type": "COMMAND", "id": "SstoryReading", "method": "setSpeakButton",        "parms": "HIDE:String",    "features": ""}
+            {"type": "COMMAND", "id": "SstoryReading", "method": "setSpeakButton", "parms": "HIDE:String", "features": ""}
           ]
         },
 
@@ -363,8 +366,8 @@
           "tracks": [
             {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SstoryReading", "method": "logState", "parms": "type#node,value#PREP_NEXT_WORD:String", "features": ""},
 
-            {"type": "COMMAND", "id": "SstoryReading", "method": "setSpeakButton",        "parms": "HIDE:String",    "features": ""},
-            {"type": "COMMAND", "id": "SstoryReading", "method": "setPageFlipButton",     "parms": "DISABLE:String", "features": "FTR_MANUAL"}
+            {"type": "COMMAND", "id": "SstoryReading", "method": "setSpeakButton", "parms": "HIDE:String", "features": ""},
+            {"type": "COMMAND", "id": "SstoryReading", "method": "setPageFlipButton", "parms": "DISABLE:String", "features": "FTR_MANUAL"}
           ]
         },
 
@@ -375,15 +378,15 @@
           "tracks": [
             {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SstoryReading", "method": "logState", "parms": "type#node,value#PAGEFLIP:String", "features": ""},
 
-            {"type": "COMMAND", "id": "SstoryReading", "method": "setPageFlipButton",    "parms": "ENABLE:String",                        "features": "FTR_MANUAL"},
-            {"type": "COMMAND", "id": "SstoryReading", "method": "setVolatileBehavior", "parms": "ON_PAGE_FLIP:String|NEXT_NODE:String" , "features": "FTR_MANUAL"},
+            {"type": "COMMAND", "id": "SstoryReading", "method": "setPageFlipButton", "parms": "ENABLE:String", "features": "FTR_MANUAL"},
+            {"type": "COMMAND", "id": "SstoryReading", "method": "setVolatileBehavior", "parms": "ON_PAGE_FLIP:String|NEXT_NODE:String", "features": "FTR_MANUAL"},
 
             {"type": "COMMAND", "cmd": "WAIT", "features": "FTR_MANUAL"},
 
-            {"type": "COMMAND", "id": "SstoryReading", "method": "setPageFlipButton",   "parms": "DISABLE:String", "features": "FTR_MANUAL"},
+            {"type": "COMMAND", "id": "SstoryReading", "method": "setPageFlipButton", "parms": "DISABLE:String", "features": "FTR_MANUAL"},
 
-            {"type": "COMMAND", "id": "SstoryReading", "method": "post", "parms": "NEXT_PAGE:String|500:long" , "features": "!FTR_MANUAL"},
-            {"type": "COMMAND", "id": "SstoryReading", "method": "post", "parms": "NEXT_PAGE:String"          , "features": "FTR_MANUAL"}
+            {"type": "COMMAND", "id": "SstoryReading", "method": "post", "parms": "NEXT_PAGE:String|500:long", "features": "!FTR_MANUAL"},
+            {"type": "COMMAND", "id": "SstoryReading", "method": "post", "parms": "NEXT_PAGE:String", "features": "FTR_MANUAL"}
           ]
         },
 
@@ -394,15 +397,15 @@
           "tracks": [
             {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SstoryReading", "method": "logState", "parms": "type#node,value#SCENEFLIP:String", "features": ""},
 
-            {"name": "ENABLE_PAGEFLIP",   "type": "COMMAND", "id": "SstoryReading", "method": "setPageFlipButton",    "parms": "ENABLE:String",                   "features": "FTR_MANUAL"},
-            {"name": "SET_FLIP_BEHAVIOR", "type": "COMMAND", "id": "SstoryReading", "method": "setVolatileBehavior", "parms": "ON_PAGE_FLIP:String|NEXT_NODE:String" , "features": "FTR_MANUAL"},
+            {"name": "ENABLE_PAGEFLIP", "type": "COMMAND", "id": "SstoryReading", "method": "setPageFlipButton", "parms": "ENABLE:String", "features": "FTR_MANUAL"},
+            {"name": "SET_FLIP_BEHAVIOR", "type": "COMMAND", "id": "SstoryReading", "method": "setVolatileBehavior", "parms": "ON_PAGE_FLIP:String|NEXT_NODE:String", "features": "FTR_MANUAL"},
 
-            {"name": "WAIT_FOR_BUTTON", "type": "COMMAND", "cmd": "WAIT",                                                                   "features": "FTR_MANUAL"},
+            {"name": "WAIT_FOR_BUTTON", "type": "COMMAND", "cmd": "WAIT", "features": "FTR_MANUAL"},
 
-            {"name": "DISABLE_PAGEFLIP", "type": "COMMAND", "id": "SstoryReading", "method": "setPageFlipButton",   "parms": "DISABLE:String", "features": "FTR_MANUAL"},
+            {"name": "DISABLE_PAGEFLIP", "type": "COMMAND", "id": "SstoryReading", "method": "setPageFlipButton", "parms": "DISABLE:String", "features": "FTR_MANUAL"},
 
-            {"name": "POST-NEXT_SCENE delayed", "type": "COMMAND", "id": "SstoryReading", "method": "post", "parms": "NEXT_SCENE:String|2000:long" , "features": "!FTR_MANUAL"},
-            {"name": "POST-NEXT_SCENE",         "type": "COMMAND", "id": "SstoryReading", "method": "post", "parms": "NEXT_SCENE:String"           , "features": "FTR_MANUAL"},
+            {"name": "POST-NEXT_SCENE delayed", "type": "COMMAND", "id": "SstoryReading", "method": "post", "parms": "NEXT_SCENE:String|2000:long", "features": "!FTR_MANUAL"},
+            {"name": "POST-NEXT_SCENE", "type": "COMMAND", "id": "SstoryReading", "method": "post", "parms": "NEXT_SCENE:String", "features": "FTR_MANUAL"},
 
             {"name": "WAIT_POSTED_EXIT", "type": "COMMAND", "cmd": "WAIT", "features": ""}
           ]
@@ -416,7 +419,7 @@
             {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SstoryReading", "method": "logState", "parms": "type#node,value#PLAYWRONG:String", "features": ""},
 
             {"type": "COMMAND", "id": "SstoryReading", "method": "setHighLight", "parms": "red:String"},
-            {"type": "COMMAND", "id": "SstoryReading", "method": "continueListening"  , "features": ""}
+            {"type": "COMMAND", "id": "SstoryReading", "method": "continueListening", "features": ""}
           ]
         }
       },
@@ -427,68 +430,69 @@
 
         "SET_VERSION": {"type": "COMMAND", "id": "Sbanner", "method": "setVersionID", "parms": "v.0.0.1:String", "features": ""},
 
-        "START_STORY":   {"type": "COMMAND", "id": "SstoryReading", "method": "startStory", "features": ""},
+        "START_STORY": {"type": "COMMAND", "id": "SstoryReading", "method": "startStory", "features": ""},
         "INIT_LISTENER": {"type": "COMMAND", "id": "SstoryReading", "method": "initListener", "features": "FTR_USER_PARROT"},
 
-        "HESTITATION_TIMER":   {"type": "COMMAND", "id": "SstoryReading", "method": "setVolatileBehavior", "parms": "ASR_TIMED_START_EVENT:String|HESITATION_PROMPT:String|5000:Integer" , "features": ""},
-        "HESTITATION_RESET":   {"type": "COMMAND", "id": "SstoryReading", "method": "setVolatileBehavior", "parms": "ASR_TIMED_START_EVENT:String|NULL:String|0:Integer" , "features": ""},
+        "HESITATION_TIMER": {"type": "COMMAND", "id": "SstoryReading", "method": "setVolatileBehavior", "parms": "ASR_TIMED_START_EVENT:String|HESITATION_PROMPT:String|5000:Integer", "features": ""},
+        "HESITATION_RESET": {"type": "COMMAND", "id": "SstoryReading", "method": "setVolatileBehavior", "parms": "ASR_TIMED_START_EVENT:String|NULL:String|0:Integer", "features": ""},
 
-        "SET_WORD_EVENT":   {"type": "COMMAND", "id": "SstoryReading", "method": "setVolatileBehavior", "parms": "ASR_WORD_EVENT:String|HESTITATION_RESET:String" , "features": ""},
-        "RESET_WORD_EVENT": {"type": "COMMAND", "id": "SstoryReading", "method": "setVolatileBehavior", "parms": "ASR_WORD_EVENT:String|NULL:String" , "features": ""},
+        "SET_WORD_EVENT": {"type": "COMMAND", "id": "SstoryReading", "method": "setVolatileBehavior", "parms": "ASR_WORD_EVENT:String|HESITATION_RESET:String", "features": ""},
+        "RESET_WORD_EVENT": {"type": "COMMAND", "id": "SstoryReading", "method": "setVolatileBehavior", "parms": "ASR_WORD_EVENT:String|NULL:String", "features": ""},
 
-        "SET_UTTERANCE_BEHAVIOR":  {"type": "COMMAND", "id": "SstoryReading", "method": "setStickyBehavior", "parms": "UTTERANCE_COMPLETE_EVENT:String|NEXT_NODE:String" , "features": ""},
-        "SET_HYPOTHESIS_BEHAVIOR": {"type": "COMMAND", "id": "SstoryReading", "method": "setVolatileBehavior", "parms": "ASR_RECOGNITION_EVENT:String|NEXT_NODE:String" , "features": ""},
-        "CLR_HYPOTHESIS_BEHAVIOR": {"type": "COMMAND", "id": "SstoryReading", "method": "setVolatileBehavior", "parms": "ASR_RECOGNITION_EVENT:String|NULL:String" , "features": ""},
+        "SET_UTTERANCE_BEHAVIOR": {"type": "COMMAND", "id": "SstoryReading", "method": "setStickyBehavior", "parms": "UTTERANCE_COMPLETE_EVENT:String|NEXT_NODE:String", "features": ""},
+        "SET_HYPOTHESIS_BEHAVIOR": {"type": "COMMAND", "id": "SstoryReading", "method": "setVolatileBehavior", "parms": "ASR_RECOGNITION_EVENT:String|NEXT_NODE:String", "features": ""},
+        "CLR_HYPOTHESIS_BEHAVIOR": {"type": "COMMAND", "id": "SstoryReading", "method": "setVolatileBehavior", "parms": "ASR_RECOGNITION_EVENT:String|NULL:String", "features": ""},
 
         "HIGHLIGHT_ERROR": {"type": "COMMAND", "id": "SstoryReading", "method": "setHighLight", "parms": "red:String"},
-        "CONTINUE":        {"type": "COMMAND", "id": "SstoryReading", "method": "continueListening"  , "features": ""},
+        "CONTINUE": {"type": "COMMAND", "id": "SstoryReading", "method": "continueListening"  , "features": ""},
 
         "NEXT_WORD": {"type": "COMMAND", "id": "SstoryReading", "method": "nextWord" , "features": ""},
-        "ECHO_LINE": {"type": "COMMAND", "id": "SstoryReading", "method": "echoLine" , "features": ""},
         "NEXT_LINE": {"type": "COMMAND", "id": "SstoryReading", "method": "nextLine" , "features": ""},
         "NEXT_PARA": {"type": "COMMAND", "id": "SstoryReading", "method": "nextPara" , "features": ""},
         "NEXT_PAGE": {"type": "COMMAND", "id": "SstoryReading", "method": "nextPage" , "features": ""},
+        "ECHO_LINE": {"type": "COMMAND", "id": "SstoryReading", "method": "echoLine" , "features": ""},
+        "PARROT_LINE": {"type": "COMMAND", "id": "SstoryReading", "method": "parrotLine", "features": ""},
 
         "SET_ONCLICK_SPEAK_WORD": {"type": "COMMAND", "id": "SstoryReading", "method": "setVolatileBehavior", "parms": "ON_CLICK:String|SPEAK_WORD_BEHAVIOR:String" , "features": "FTR_USER_READ|FTR_USER_READING"},
-        "CLR_ONCLICK":            {"type": "COMMAND", "id": "SstoryReading", "method": "setVolatileBehavior", "parms": "ON_CLICK:String|NULL:String" , "features": ""},
+        "CLR_ONCLICK": {"type": "COMMAND", "id": "SstoryReading", "method": "setVolatileBehavior", "parms": "ON_CLICK:String|NULL:String" , "features": ""},
 
-        "TIMER_HINT_WORD":        {"type": "TIMER", "id": "HintWordTimer", "startdelay": "0", "period": "3000", "repeat": "false", "action": "CREATEANDSTART", "ontimer": "SPEAK_WORD_BEHAVIOR", "features": "FTR_USER_READ|FTR_USER_READING"},
+        "TIMER_HINT_WORD": {"type": "TIMER", "id": "HintWordTimer", "startdelay": "0", "period": "3000", "repeat": "false", "action": "CREATEANDSTART", "ontimer": "SPEAK_WORD_BEHAVIOR", "features": "FTR_USER_READ|FTR_USER_READING"},
         "TIMER_CANCEL_HINT_WORD": {"type": "TIMER", "id": "HintWordTimer", "action": "CANCEL", "features": ""},
 
-        "TIMER_HINT_BUTTON":        {"type": "TIMER", "id": "HintWordTimer", "startdelay": "0", "period": "3500", "repeat": "false", "action": "CREATEANDSTART", "ontimer": "CONFIG_SPEAK_BUTTON", "features": "FTR_USER_READ|FTR_USER_READING"},
+        "TIMER_HINT_BUTTON": {"type": "TIMER", "id": "HintWordTimer", "startdelay": "0", "period": "3500", "repeat": "false", "action": "CREATEANDSTART", "ontimer": "CONFIG_SPEAK_BUTTON", "features": "FTR_USER_READ|FTR_USER_READING"},
         "TIMER_CANCEL_HINT_BUTTON": {"type": "TIMER", "id": "HintWordTimer", "action": "CANCEL", "features": ""},
 
-        "FLIP_BUTTON_ENABLE":  {"type": "COMMAND", "id": "SstoryReading", "method": "setPageFlipButton",     "parms": "ENABLE:String", "features": ""},
-        "FLIP_BUTTON_DISABLE": {"type": "COMMAND", "id": "SstoryReading", "method": "setPageFlipButton",     "parms": "DISABLE:String", "features": ""},
-        "FLIP_BUTTON_SHOW":    {"type": "COMMAND", "id": "SstoryReading", "method": "setPageFlipButton",     "parms": "SHOW:String", "features": ""},
-        "FLIP_BUTTON_HIDE":    {"type": "COMMAND", "id": "SstoryReading", "method": "setPageFlipButton",     "parms": "HIDE:String", "features": ""},
+        "FLIP_BUTTON_ENABLE": {"type": "COMMAND", "id": "SstoryReading", "method": "setPageFlipButton", "parms": "ENABLE:String", "features": ""},
+        "FLIP_BUTTON_DISABLE": {"type": "COMMAND", "id": "SstoryReading", "method": "setPageFlipButton", "parms": "DISABLE:String", "features": ""},
+        "FLIP_BUTTON_SHOW": {"type": "COMMAND", "id": "SstoryReading", "method": "setPageFlipButton", "parms": "SHOW:String", "features": ""},
+        "FLIP_BUTTON_HIDE": {"type": "COMMAND", "id": "SstoryReading", "method": "setPageFlipButton", "parms": "HIDE:String", "features": ""},
 
-        "SPEAK_BUTTON_ENABLE":  {"type": "COMMAND", "id": "SstoryReading", "method": "setSpeakButton",     "parms": "ENABLE:String",  "features": ""},
-        "SPEAK_BUTTON_DISABLE": {"type": "COMMAND", "id": "SstoryReading", "method": "setSpeakButton",     "parms": "DISABLE:String", "features": ""},
-        "SPEAK_BUTTON_SHOW":    {"type": "COMMAND", "id": "SstoryReading", "method": "setSpeakButton",     "parms": "SHOW:String",    "features": ""},
-        "SPEAK_BUTTON_HIDE":    {"type": "COMMAND", "id": "SstoryReading", "method": "setSpeakButton",     "parms": "HIDE:String",    "features": ""},
+        "SPEAK_BUTTON_ENABLE": {"type": "COMMAND", "id": "SstoryReading", "method": "setSpeakButton", "parms": "ENABLE:String", "features": ""},
+        "SPEAK_BUTTON_DISABLE": {"type": "COMMAND", "id": "SstoryReading", "method": "setSpeakButton", "parms": "DISABLE:String", "features": ""},
+        "SPEAK_BUTTON_SHOW": {"type": "COMMAND", "id": "SstoryReading", "method": "setSpeakButton", "parms": "SHOW:String", "features": ""},
+        "SPEAK_BUTTON_HIDE": {"type": "COMMAND", "id": "SstoryReading", "method": "setSpeakButton", "parms": "HIDE:String", "features": ""},
 
-        "SET_FLIP_NEXTPAGE":   {"type": "COMMAND", "id": "SstoryReading", "method": "setVolatileBehavior", "parms": "PAGE_FLIP_CLICK:String|NEXT_PAGE:String" , "features": ""},
-        "RESET_FLIP_ONCLICK":  {"type": "COMMAND", "id": "SstoryReading", "method": "setVolatileBehavior", "parms": "PAGE_FLIP_CLICK:String|NULL:String" , "features": ""},
+        "SET_FLIP_NEXTPAGE": {"type": "COMMAND", "id": "SstoryReading", "method": "setVolatileBehavior", "parms": "PAGE_FLIP_CLICK:String|NEXT_PAGE:String", "features": ""},
+        "RESET_FLIP_ONCLICK": {"type": "COMMAND", "id": "SstoryReading", "method": "setVolatileBehavior", "parms": "PAGE_FLIP_CLICK:String|NULL:String", "features": ""},
 
-        "SET_SPEAK_EVENT":      {"type": "COMMAND", "id": "SstoryReading", "method": "setVolatileBehavior",   "parms": "SPEAK_EVENT:String|SPEAK_WORD_BEHAVIOR:String" , "features": ""},
-        "CLR_SPEAK_EVENT":      {"type": "COMMAND", "id": "SstoryReading", "method": "setVolatileBehavior",   "parms": "SPEAK_EVENT:String|NULL:String" , "features": ""},
+        "SET_SPEAK_EVENT": {"type": "COMMAND", "id": "SstoryReading", "method": "setVolatileBehavior", "parms": "SPEAK_EVENT:String|SPEAK_WORD_BEHAVIOR:String", "features": ""},
+        "CLR_SPEAK_EVENT": {"type": "COMMAND", "id": "SstoryReading", "method": "setVolatileBehavior", "parms": "SPEAK_EVENT:String|NULL:String", "features": ""},
 
-        "SET_SPEAK_WORD":      {"type": "COMMAND", "id": "SstoryReading", "method": "setStickyBehavior",   "parms": "SPEAK_CLICK:String|SPEAK_WORD_BEHAVIOR:String" , "features": ""},
-        "SET_SPEAK_SENTENCE":  {"type": "COMMAND", "id": "SstoryReading", "method": "setVolatileBehavior", "parms": "SPEAK_CLICK:String|SPEAK_SENTENCE_BEHAVIOR:String" , "features": ""},
-        "RESET_SPEAK_ONCLICK": {"type": "COMMAND", "id": "SstoryReading", "method": "setVolatileBehavior", "parms": "SPEAK_CLICK:String|NULL:String" , "features": ""},
+        "SET_SPEAK_WORD": {"type": "COMMAND", "id": "SstoryReading", "method": "setStickyBehavior", "parms": "SPEAK_CLICK:String|SPEAK_WORD_BEHAVIOR:String", "features": ""},
+        "SET_SPEAK_SENTENCE": {"type": "COMMAND", "id": "SstoryReading", "method": "setVolatileBehavior", "parms": "SPEAK_CLICK:String|SPEAK_SENTENCE_BEHAVIOR:String", "features": ""},
+        "RESET_SPEAK_ONCLICK": {"type": "COMMAND", "id": "SstoryReading", "method": "setVolatileBehavior", "parms": "SPEAK_CLICK:String|NULL:String", "features": ""},
 
-        "SET_NARRATOR":        {"type": "COMMAND", "id": "SstoryReading", "method": "setStickyBehavior", "parms": "NARRATE_STORY:String|NARRATE_SENTENCE_BEHAVIOR:String" , "features": ""},
-        "SET_UTTERANCE":       {"type": "COMMAND", "id": "SstoryReading", "method": "setStickyBehavior", "parms": "SPEAK_UTTERANCE:String|SPEAK_UTTERANCE_BEHAVIOR:String" , "features": ""},
+        "SET_NARRATOR": {"type": "COMMAND", "id": "SstoryReading", "method": "setStickyBehavior", "parms": "NARRATE_STORY:String|NARRATE_SENTENCE_BEHAVIOR:String", "features": ""},
+        "SET_UTTERANCE": {"type": "COMMAND", "id": "SstoryReading", "method": "setStickyBehavior", "parms": "SPEAK_UTTERANCE:String|SPEAK_UTTERANCE_BEHAVIOR:String", "features": ""},
 
-        "EMPTY_ACTION":    {"type": "COMMAND", "cmd": "NOOP"},
-        "GOTONEXTSCENE":   {"type": "COMMAND", "cmd": "NEXTSCENE"},
-        "RETURN_AND_GO":   {"type": "COMMAND", "cmd": "SUBGRAPH_RETURN_AND_GO"},
+        "EMPTY_ACTION": {"type": "COMMAND", "cmd": "NOOP"},
+        "GOTONEXTSCENE": {"type": "COMMAND", "cmd": "NEXTSCENE"},
+        "RETURN_AND_GO": {"type": "COMMAND", "cmd": "SUBGRAPH_RETURN_AND_GO"},
         "RETURN_AND_WAIT": {"type": "COMMAND", "cmd": "SUBGRAPH_RETURN_AND_WAIT"},
         "CANCEL_FEEDBACK": {"type": "COMMAND", "cmd": "CANCEL_NODE"},
-        "NEXT_NODE":       {"type": "COMMAND", "cmd": "NEXT"  },
-        "WAIT":            {"type": "COMMAND", "cmd": "WAIT"  },
-        "PAUSE":           {"type": "COMMAND", "cmd": "WAIT"}
+        "NEXT_NODE": {"type": "COMMAND", "cmd": "NEXT"},
+        "WAIT": {"type": "COMMAND", "cmd": "WAIT"},
+        "PAUSE": {"type": "COMMAND", "cmd": "WAIT"}
       },
 
       "constraintMap": {
@@ -509,7 +513,7 @@
           "Else": "false"
         },
 
-        // Note that we don't have operator precidence so we must use ( ) to enforce precidence
+        // Note that we don't have operator precedence so we must use ( ) to enforce precedence
         //
         "STORY_COMPLETE": {
           "type": "CONDITION",
@@ -556,7 +560,7 @@
         "STORY_STARTING": {
             "type": "CONDITION",
             "test": "FTR_STORY_STARTING"
-          },
+        },
 
         "FTR_RIGHT": {
           "type": "CONDITION",

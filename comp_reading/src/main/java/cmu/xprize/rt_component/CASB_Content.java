@@ -30,6 +30,7 @@ public class CASB_Content implements ILoadableObject {
     // json loadable
     public CASB_Narration narration[];
     public String         sentence;
+    public String         variant;
 
     @Override
     public void loadJSON(JSONObject jsonObj, IScope scope) {
