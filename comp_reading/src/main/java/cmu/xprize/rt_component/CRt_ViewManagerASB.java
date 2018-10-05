@@ -100,7 +100,8 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
     private int                     mParaCount;
     private int                     mLineCount;
     private int                     mWordCount;
-    private int                     attemptNum = 1;
+    private int                     attemptNum = 0;
+    private boolean                 skippedWord = false;
     private boolean                 storyBooting;
 
     private String[]                wordsToDisplay;                      // current sentence words to display - contain punctuation
@@ -111,6 +112,7 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
     private CASB_Narration[]        rawNarration;                        // The narration segmentation info for the active sentence
     private String                  rawSentence;                         // currently displayed sentence that need to be recognized
     private CASB_Seg                narrationSegment;
+    private ArrayList<String>       prevFmtSentence;
     private String[]                splitSegment;
     private int                     splitIndex = TCONST.INITSPLIT;
     private boolean                 endOfSentence = false;
@@ -133,6 +135,7 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
     private String                  futureSentences = "";
     private boolean                 showWords;
     private boolean                 showFutureWords;
+    private boolean                 skippingWords = true;
     private boolean                 listenFutureContent = false;
     private String                  assetLocation;
 
@@ -208,7 +211,6 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
 
     /**
      *  NOTE: we reset mCurrWord - last parm in seekToStoryPosition
-     *
      */
     public void startStory() {
         // reset boot flag to inhibit future calls
@@ -268,7 +270,6 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
                 break;
         }
         // Ensure the buttons reflect the current states
-        //
         updateButtons();
     }
 
@@ -290,14 +291,11 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
                 break;
         }
         // Ensure the buttons reflect the current states
-        //
         updateButtons();
     }
 
     private void updateButtons() {
-        // Make the button states insensitive to the page - So the script does not have to
-        // worry about timing of setting button states.
-        //
+        // Make the button states insensitive to the page - So the script does not have to worry about timing of setting button states.
         setButtonState(mPageFlip, pageButtonEnable);
         setButtonState(mPageFlip, pageButtonShow);
 
@@ -325,11 +323,9 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
      *  This configures the target display components to be populated with data.
      *
      *  mPageImage - mPageText
-     *
      */
     public void flipPage() {
         // Note that we use zero based indexing so page zero is first page - i.e. odd
-        //
         if (mCurrPage % 2 == 0) {
             mCurrViewIndex = mOddIndex;
             mPageImage = (ImageView) mOddPage.findViewById(R.id.SpageImage);
@@ -346,7 +342,6 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
             mSay      = (ImageButton) mEvenPage.findViewById(R.id.Sspeak);
         }
         // Ensure the buttons reflect the current states
-        //
         updateButtons();
     }
 
@@ -474,14 +469,12 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
         //
         if (!mCurrEffectiveVariant.equals("story.prompt") && (currPara > 0 || currLine > 0)) {
             // First generate all completed paragraphs in their entirety
-            //
             for (int paraIndex = 0; paraIndex < currPara; paraIndex++) {
                 int paraLength = data[currPage].text[paraIndex].length;
                 for (int lineIndex = 0; lineIndex < paraLength; lineIndex++) {
                     rawSentence = data[currPage].text[paraIndex][lineIndex].sentence;
                     // Add the previous line to the list of spoken words used to build the
                     // language model - so it allows all on screen words to be spoken
-                    //
                     for (String word : splitIntoWords(rawSentence)) wordsSpoken.add(word);
                     String variant = computeEffectiveVariant(currPage, paraIndex, lineIndex);
                     if (!variant.equals("story.prompt") && !variant.equals("story.hide")) completedSentences += processRawSentence(rawSentence) + TCONST.SENTENCE_SPACE;
@@ -490,19 +483,16 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
             }
 
             // Then generate all completed sentences from the current paragraph
-            //
             for (int lineIndex = 0; lineIndex < currLine; lineIndex++) {
                 rawSentence = data[currPage].text[currPara][lineIndex].sentence;
                 // Add the previous line to the list of spoken words used to build the
                 // language model - so it allows all on screen words to be spoken
-                //
                 for (String word : splitIntoWords(rawSentence)) wordsSpoken.add(word);
                 String variant = computeEffectiveVariant(currPage, currPara, lineIndex);
                 if (!variant.equals("story.prompt") && !variant.equals("story.hide")) completedSentences += processRawSentence(rawSentence) + TCONST.SENTENCE_SPACE;
             }
 
             // Note that we add a space after the sentence.
-            //
             completedSentencesFmtd = "<font color='#AAAAAA'>";
             completedSentencesFmtd += completedSentences;
             completedSentencesFmtd += "</font>";
@@ -532,12 +522,11 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
         // display if they contain apostrophes or hyphens into sub "words" - e.g. "thing's" -> "thing" "'s"
         // these are reconstructed by the highlight logic without adding spaces which it otherwise inserts
         // automatically.
-        //
         wordsToDisplay = splitRawSentence(rawSentence);
+        if (currWord == 0) prevFmtSentence = new ArrayList<>();
 
         // TODO: strip word-final or -initial apostrophes as in James' or 'cause.
         // Currently assuming hyphenated expressions split into two Asr words.
-        //
         wordsToSpeak = splitIntoWords(rawSentence);
         mCurrWord = currWord;
         mWordCount = wordsToSpeak.length;
@@ -552,13 +541,11 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
         // 2. A list of future words to be spoken - for use in the Sphinx language model
         //
         // Generate all remaining sentences from the current paragraph
-        //
         if (!mCurrEffectiveVariant.equals("story.prompt")) {
             for (int lineIndex = currLine + 1; lineIndex < mLineCount; lineIndex++) {
                 rawSentence = data[currPage].text[currPara][lineIndex].sentence;
                 // Add the previous line to the list of spoken words used to build the
                 // language model - so it allows all on screen words to be spoken
-                //
                 for (String word : splitIntoWords(rawSentence)) futureSpoken.add(word);
                 String variant = computeEffectiveVariant(currPage, currPara, lineIndex);
                 if (!variant.equals("story.prompt") && !variant.equals("story.hide") && !variant.equals("story.reveal")) futureSentences += processRawSentence(rawSentence) + TCONST.SENTENCE_SPACE;
@@ -575,7 +562,6 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
                     rawSentence = data[currPage].text[paraIndex][lineIndex].sentence;
                     // Add the previous line to the list of spoken words used to build the
                     // language model - so it allows all on screen words to be spoken
-                    //
                     for (String word : splitIntoWords(rawSentence)) futureSpoken.add(word);
                     String variant = computeEffectiveVariant(currPage, paraIndex, lineIndex);
                     if (!variant.equals("story.prompt") && !variant.equals("story.hide") && !variant.equals("story.reveal")) futureSentences += processRawSentence(rawSentence) + TCONST.SENTENCE_SPACE;
@@ -600,10 +586,10 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
     private void initSegmentation(int _uttNdx) {
         Log.d(TAG, "initSegmentation: _uttNdx = " + _uttNdx);
 
-        utteranceNdx  = _uttNdx;
-        numUtterance  = rawNarration.length;
+        utteranceNdx = _uttNdx;
+        numUtterance = rawNarration.length;
         currUtterance = rawNarration[utteranceNdx];
-        segmentArray  = rawNarration[utteranceNdx].segmentation;
+        segmentArray = rawNarration[utteranceNdx].segmentation;
         if (segmentArray == null || segmentArray.length == 0) {
             String[] words = splitIntoWords(currUtterance.utterances);
             segmentArray = new CASB_Seg[words.length];
@@ -615,13 +601,12 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
             }
         }
 
-        segmentNdx    = 0;
-        numSegments   = segmentArray.length;
+        segmentNdx = 0;
+        numSegments = segmentArray.length;
         utterancePrev = utteranceNdx == 0 ? 0 : rawNarration[utteranceNdx - 1].until;
-        segmentPrev   = utterancePrev;
+        segmentPrev = utterancePrev;
 
         // Publish the current utterance within sentence
-        //
         String filename = currUtterance.audio.toLowerCase();
         if (filename.endsWith(".wav") || filename.endsWith(".mp3")) filename = filename.substring(0, filename.length() - 4);
         mParent.publishValue(TCONST.RTC_VAR_UTTERANCE, filename);
@@ -636,8 +621,8 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
         Log.d(TAG, "trackNarration: start = " + start);
 
         if (start) {
-            mHeardWord    = 0;
-            splitIndex    = TCONST.INITSPLIT;
+            mHeardWord = 0;
+            splitIndex = TCONST.INITSPLIT;
             endOfSentence = false;
 
             initSegmentation(0);
@@ -645,7 +630,6 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
             spokenWords = new ArrayList<String>();
 
             // Tell the script to speak the new utterance
-            //
             trackSegment();
         } else {
             // NOTE: The narration mode uses the ASR logic to simplify operation.  In doing this
@@ -658,7 +642,6 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
             // This is a kludge to account for the fact that segmentation data does not split words with
             // hyphens or apostrophes into separate "words" the way the wordstospeak does.
             // Without this the narration will get out of sync
-            //
             if (splitIndex == TCONST.INITSPLIT) {
                 splitSegment = narrationSegment.word.toUpperCase().split("[\\-']");
                 splitIndex = 0;
@@ -666,12 +649,10 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
             if (splitIndex < splitSegment.length) spokenWords.add(splitSegment[splitIndex++]);
 
             // Update the display
-            //
             onUpdate(spokenWords.toArray(new String[spokenWords.size()]));
 
             // If the segment word is complete continue to the next segment - note that this is
             // generally the case.  Words are not usually split by punctuation
-            //
             if (splitIndex >= splitSegment.length) {
                 splitIndex = TCONST.INITSPLIT;
 
@@ -681,26 +662,22 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
                 // Note the last segment is not timed.  It is driven by the TRACK_COMPLETE event
                 // from the audio mp3 playing.  This is required as the segmentation data is not
                 // sufficiently accurate to ensure we don't interrupt a playing utterance.
-                //
                 if (++segmentNdx >= numSegments) {
                     // If we haven't consumed all the utterances (i.e "narrations") in the
                     // sentence prep the next
                     //
                     // NOTE: Prep the state and wait for the TRACK_COMPLETE event to invoke
                     // trackSegment to continue or terminate
-                    //
                     if (++utteranceNdx < numUtterance) initSegmentation(utteranceNdx);
                     else endOfSentence = true;
                 } else {
                     // All the segments except the last one are timed based on the segmentation data.
                     // i.e. the audio plays and this highlights words based on prerecorded durations.
-                    //
                     postDelayedTracker();
                 }
             } else {
                 // If the segment word is split due to apostrophes or hyphens then consume them
                 // before continuing to the next segment.
-                //
                 mParent.post(TCONST.TRACK_NARRATION, 0);
             }
         }
@@ -767,7 +744,6 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
 
     /**
      * Push the state out to the tutor domain.
-     *
      */
     private void publishStateValues() {
         Log.d(TAG, "publishStateValues: mCurrWord = " + mCurrWord + ", mWordCount = " + mWordCount);
@@ -775,7 +751,6 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
         String cumulativeState = TCONST.RTC_CLEAR;
 
         // ensure echo state has a valid value.
-        //
         mParent.publishValue(TCONST.RTC_VAR_ECHOSTATE, TCONST.FALSE);
         mParent.publishValue(TCONST.RTC_VAR_PARROTSTATE, TCONST.FALSE);
 
@@ -785,40 +760,26 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
         mParent.setFeature(TCONST.FTR_PLAY_PROMPT, mParent.testFeature(TCONST.FTR_USER_PROMPT) || mPrevEffectiveVariant.equals("story.prompt") || mCurrPrompt.equals(mPrevPrompt) ? TCONST.DEL_FEATURE : TCONST.ADD_FEATURE);
 
         // Set the scriptable flag indicating the current state.
-        //
         if (mCurrWord >= mWordCount) {
-            // In echo mode - After line has been echoed we switch to Read mode and
-            // read the next sentence.
-            //
             if (mParent.testFeature(TCONST.FTR_USER_ECHO) || mParent.testFeature(TCONST.FTR_USER_REVEAL) || mParent.testFeature(TCONST.FTR_USER_PARROT)) {
                 if (hearRead.equals(TCONST.FTR_USER_READ)) {
-                    // Read Mode - When user finishes reading switch to Narrate mode and
-                    // narrate the same sentence - i.e. echo
-                    //
+                    // Read Mode - When user finishes reading switch to Narrate mode and narrate the same sentence - i.e. echo
                     if (!mParent.testFeature(TCONST.FTR_USER_PARROT)) mParent.publishValue(TCONST.RTC_VAR_ECHOSTATE, TCONST.TRUE);
                     mParent.retractFeature(TCONST.FTR_USER_READING);
 
                     Log.d("ISREADING", "NO");
 
-                    cumulativeState = TCONST.RTC_LINECOMPLETE;
-                    mParent.publishValue(TCONST.RTC_VAR_WORDSTATE, TCONST.LAST);
-
                     mListener.setPauseListener(true);
                 } else {
-                    // Narrate mode - switch back to READ and set line complete flags
-                    //
+                    // Narrate mode - switch back to READ
                     if (mParent.testFeature(TCONST.FTR_USER_PARROT)) mParent.publishValue(TCONST.RTC_VAR_PARROTSTATE, TCONST.TRUE);
                     mParent.publishFeature(TCONST.FTR_USER_READING);
 
                     Log.d("ISREADING", "YES");
-
-                    cumulativeState = TCONST.RTC_LINECOMPLETE;
-                    mParent.publishValue(TCONST.RTC_VAR_WORDSTATE, TCONST.LAST);
                 }
-            } else {
-                cumulativeState = TCONST.RTC_LINECOMPLETE;
-                mParent.publishValue(TCONST.RTC_VAR_WORDSTATE, TCONST.LAST);
             }
+            cumulativeState = TCONST.RTC_LINECOMPLETE;
+            mParent.publishValue(TCONST.RTC_VAR_WORDSTATE, TCONST.LAST);
         } else
             mParent.publishValue(TCONST.RTC_VAR_WORDSTATE, TCONST.NOT_LAST);
 
@@ -841,7 +802,6 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
             mParent.publishValue(TCONST.RTC_VAR_PAGESTATE, TCONST.NOT_LAST);
 
         // Publish the cumulative state out to the scripting scope in the tutor
-        //
         mParent.publishValue(TCONST.RTC_VAR_STATE, cumulativeState);
     }
 
@@ -866,7 +826,6 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
         if (mCurrPage < mPageCount - 1) incPage(TCONST.INCR);
 
         // Actually do the page animation
-        //
         mParent.animatePageFlip(true, mCurrViewIndex);
     }
 
@@ -883,14 +842,12 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
 
         // This configures the target display components to be populated with data.
         // mPageImage - mPageText
-        //
         flipPage();
         configurePageImage();
 
         // Update the state vars
         // Note that this must be done after flip and configure so the target text and image views are defined
         // NOTE: we reset mCurrPara, mCurrLine and mCurrWord
-        //
         setTutorFeatures(mCurrPage, TCONST.ZERO, TCONST.ZERO);
         seekToStoryPosition(mCurrPage, TCONST.ZERO, TCONST.ZERO, TCONST.ZERO);
     }
@@ -926,7 +883,6 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
         mCurrPara += incr;
 
         // Update the state vars
-        //
         setTutorFeatures(mCurrPage, mCurrPara, TCONST.ZERO);
         seekToStoryPosition(mCurrPage, mCurrPara, TCONST.ZERO, TCONST.ZERO);
     }
@@ -959,18 +915,15 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
 
     /**
      *  NOTE: we reset mCurrWord - last parm in seekToStoryPosition
-     *
      */
     private void incLine(int incr) {
         // reset boot flag to
-        //
         if (storyBooting) {
             storyBooting = false;
         } else {
             mCurrLine += incr;
 
             // Update the state vars
-            //
             setTutorFeatures(mCurrPage, mCurrPara, mCurrLine);
             seekToStoryPosition(mCurrPage, mCurrPara, mCurrLine, TCONST.ZERO);
         }
@@ -978,7 +931,6 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
 
     /**
      *  NOTE: we reset mCurrWord - last parm in seekToStoryPosition
-     *
      */
     @Override
     public void echoLine() {
@@ -986,7 +938,6 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
         hearRead = TCONST.FTR_USER_HEAR;
 
         // Update the state vars
-        //
         seekToStoryPosition(mCurrPage, mCurrPara, mCurrLine, TCONST.ZERO);
     }
 
@@ -999,7 +950,6 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
         hearRead = TCONST.FTR_USER_READ;
 
         // Update the state vars
-        //
         seekToStoryPosition(mCurrPage, mCurrPara, mCurrLine, TCONST.ZERO);
     }
 
@@ -1044,7 +994,6 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
 
         // For instances where we are advancing the word manually through a script it is required
         // that you reset the highlight and the FTR_WRONG so the next word is highlighted correctly
-        //
         setHighLight(TCONST.EMPTY, false);
         mParent.UpdateValue(true);
 
@@ -1079,7 +1028,6 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
         // Narration Mode (i.e. USER_HEAR) always narrates the story otherwise we
         // start with USER_READ where the student reads aloud and if USER_ECHO
         // is in effect we then toggle between READ and HEAR for each sentence.
-        //
         if (mParent.testFeature(TCONST.FTR_USER_PROMPT) || mParent.testFeature(TCONST.FTR_USER_HEAR) || mParent.testFeature(TCONST.FTR_USER_HIDE) || mParent.testFeature(TCONST.FTR_USER_PARROT)) {
             hearRead = TCONST.FTR_USER_HEAR;
             mParent.setFeature(TCONST.FTR_USER_READING, TCONST.DEL_FEATURE);
@@ -1122,7 +1070,6 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
         // 3. Add the words already spoken from the other lines - just to permit them
         //
         // "Permit them": So the language model is listening for them as possibilities.
-        //
         wordsToListenFor = new ArrayList<>();
 
         for (int i1 = mCurrWord; i1 < wordsToSpeak.length; i1++) wordsToListenFor.add(wordsToSpeak[i1]);
@@ -1130,11 +1077,9 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
         for (String word : wordsSpoken) wordsToListenFor.add(word);
 
         // If we want to listen for all the words that are visible
-        //
         if (listenFutureContent) for (String word : futureSpoken) wordsToListenFor.add(word);
 
         // Start listening
-        //
         if (mListener != null) {
             // reset the relative position of mCurrWord in the incoming PLRT heardWords array
             mHeardWord = 0;
@@ -1169,7 +1114,13 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
             for (int index = 0; index < wordsToDisplay.length; index++) {
                 String styledWord = wordsToDisplay[index];                           // default plain
 
-                if (index < mCurrWord) styledWord = "<font color='#00B600'>" + styledWord + "</font>";
+                if (index < mCurrWord) {
+                    if (index < prevFmtSentence.size()) styledWord = prevFmtSentence.get(index);
+                    else {
+                        if (!skippedWord) styledWord = "<font color='#00B600'>" + styledWord + "</font>";
+                        prevFmtSentence.add(index, styledWord);
+                    }
+                }
 
                 if (showFutureWords && index == mCurrWord) {
                     if (!mCurrHighlight.equals(TCONST.EMPTY)) styledWord = "<font color='" + mCurrHighlight + "'>" + styledWord + "</font>";
@@ -1185,7 +1136,6 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
         }
 
         // Generate the text to be displayed
-        //
         String content = completedSentencesFmtd + fmtSentence + TCONST.SENTENCE_SPACE + futureSentencesFmtd;
         mPageText.setText(Html.fromHtml(content));
 
@@ -1194,7 +1144,6 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
         if (showWords && (showFutureWords || mCurrWord > 0)) broadcastActiveTextPos(mPageText, wordsToDisplay);
 
         // Publish the current word / sentence / remaining words for use in scripts
-        //
         if (mCurrWord < wordsToSpeak.length) {
             mParent.publishValue(TCONST.RTC_VAR_WORDVALUE, wordsToSpeak[mCurrWord]);
             mParent.publishValue(TCONST.RTC_VAR_REMAINING, TextUtils.join(" ", Arrays.copyOfRange(wordsToSpeak, mCurrWord, wordsToSpeak.length)));
@@ -1226,9 +1175,7 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
                 // Look at the end of the target word
                 charPos -= 1;
 
-                // Note that sending a value greater than maxPos will corrupt the textView - so
-                // guarantee this will never happen.
-                //
+                // Note that sending a value greater than maxPos will corrupt the textView - so guarantee this will never happen.
                 maxPos = text.getText().length();
                 charPos = (charPos > maxPos) ? maxPos : charPos;
 
@@ -1308,22 +1255,44 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
             }
 
             while ((mCurrWord < wordsToSpeak.length) && (mHeardWord < heardWords.length)) {
-                if (wordsToSpeak[mCurrWord].equals(heardWords[mHeardWord].hypWord)) {
+                if (wordsToSpeak[mCurrWord].equals(heardWords[mHeardWord].hypWord) // || ("START_" + wordsToSpeak[mCurrWord]).equals(heardWords[mHeardWord].hypWord)
+                        ) {
+                    Log.i("ASR", "RIGHT");
+
+                    skippedWord = false;
                     nextWord();
                     mHeardWord++;
                     mListener.updateNextWordIndex(mHeardWord);
-
-                    Log.i("ASR", "RIGHT");
                     attemptNum = 0;
                     result = true;
-                    mParent.updateContext(rawSentence, mCurrLine, wordsToSpeak, mCurrWord - 1, heardWords[mHeardWord - 1].hypWord, attemptNum, heardWords[mHeardWord - 1].utteranceId == "", result);
-                } else {
-                    mListener.setPauseListener(true);
+                    mParent.updateContext(rawSentence, mCurrLine, wordsToSpeak, mCurrWord - 1, heardWords[mHeardWord - 1].hypWord, attemptNum, heardWords[mHeardWord - 1].utteranceId == "", true);
+                } else if (skippingWords && !skippedWord && attemptNum == 0 && mCurrWord + 1 < wordsToSpeak.length && (wordsToSpeak[mCurrWord + 1].equals(heardWords[mHeardWord].hypWord) // || ("START_" + wordsToSpeak[mCurrWord]).equals(heardWords[mHeardWord].hypWord)
+                        )) {
+                    Log.i("ASR", "SKIPPED");
 
+                    skippedWord = true;
+                    nextWord();
+                    attemptNum = 0;
+                    result = true;
+                    mParent.updateContext(rawSentence, mCurrLine, wordsToSpeak, mCurrWord - 1, "SKIPPED", attemptNum, heardWords[mHeardWord].utteranceId == "", false);
+                } else if (skippingWords && !skippedWord && attemptNum == 0) {
+                    Log.i("ASR", "SKIPPED WRONG");
+
+                    skippedWord = true;
+                    nextWord();
+                    mHeardWord++;
+                    mListener.updateNextWordIndex(mHeardWord);
+                    attemptNum = 0;
+                    result = true;
+                    mParent.updateContext(rawSentence, mCurrLine, wordsToSpeak, mCurrWord - 1, "SKIPPED_" + heardWords[mHeardWord - 1].hypWord, attemptNum, heardWords[mHeardWord - 1].utteranceId == "", false);
+                } else {
                     Log.i("ASR", "WRONG");
+
+                    skippedWord = false;
+                    mListener.setPauseListener(true);
                     attemptNum++;
                     result = false;
-                    mParent.updateContext(rawSentence, mCurrLine, wordsToSpeak, mCurrWord, heardWords[mHeardWord].hypWord, attemptNum, heardWords[mHeardWord].utteranceId == "", result);
+                    mParent.updateContext(rawSentence, mCurrLine, wordsToSpeak, mCurrWord, heardWords[mHeardWord].hypWord, attemptNum, heardWords[mHeardWord].utteranceId == "", false);
                     break;
                 }
             }
