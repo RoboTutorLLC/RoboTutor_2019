@@ -145,7 +145,7 @@ public class TLangToggle extends ToggleButton implements ITutorObject, View.OnCl
     @Override
     public void onCreate() {
 
-        mLangState = (mMediaManager.getLanguageFeature(mTutor).equals(TCONST.LANG_EN));
+        mLangState = (mMediaManager.getLanguageFeature(mTutor).equals(TCONST.LANG_EN));  // ZAMBIA something here...
         setChecked(mLangState);
     }
 

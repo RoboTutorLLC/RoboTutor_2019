@@ -86,6 +86,7 @@ public class ListenerBase {
 
     static {
         dictMap.put("LANG_EN", "CMU07A-CAPS.DIC");
+        dictMap.put("LANG_ZM", "CMU07A-CAPS.DIC");
         dictMap.put("LANG_SW", "SWAHILI.DIC");
     }
 

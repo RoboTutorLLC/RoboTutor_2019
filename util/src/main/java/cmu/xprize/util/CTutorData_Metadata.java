@@ -701,13 +701,19 @@ public class CTutorData_Metadata {
                 }
 
                 String ltrName;
-                if (suffixSplit[0].equals(suffixSplit[2])) {
-                    ltrName = suffixSplit[0];
-                    if (lc) ltrName = ltrName.toLowerCase();
-                } else {
-                    ltrName = "letters"; // all letters
+                try {
+                    if (suffixSplit[0].equals(suffixSplit[2])) {
+                        ltrName = suffixSplit[0];
+                        if (lc) ltrName = ltrName.toLowerCase();
+                    } else {
+                        ltrName = "letters"; // all letters
+                    }
+
+                    result.add(String.format("Identify the %s %s", caps, ltrName));
+                } catch (ArrayIndexOutOfBoundsException e) {
+                    break;
                 }
-                result.add(String.format("Identify the %s %s", caps, ltrName));
+
 
                 ltrOrder = suffixSplit[4];
                 String ltrOrderText;
