@@ -14,7 +14,9 @@ public class CClassMap {
     // This is used to map "type" (class names) used in json HashMap specs to real classes
 
     static {
-        classMap.put("CSpelling_Data", CSpelling_Data.class);
+        classMap.put("CSpellingSW_Data", CSpellingSW_Data.class);
+        classMap.put("CSpellingEN_Data", CSpellingEN_Data.class);
+        classMap.put("CPhoneme", CPhoneme.class);
 
         classMap.put("string", String.class);
         classMap.put("bool", Boolean.class);

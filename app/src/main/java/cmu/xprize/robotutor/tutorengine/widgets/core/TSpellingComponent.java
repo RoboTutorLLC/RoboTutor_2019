@@ -178,7 +178,12 @@ public class TSpellingComponent extends CSpelling_Component implements ITutorObj
 
                 String jsonData = JSON_Helper.cacheDataByName(dataPath + dataFile);
                 loadJSON(new JSONObject(jsonData), mTutor.getScope());
-                setDataSource(dataSource);
+
+                if (dataSource != null) {
+                    setDataSource(dataSource);
+                } else {
+                    setDataSource(pDataSource);
+                }
 
 
 
@@ -199,7 +204,11 @@ public class TSpellingComponent extends CSpelling_Component implements ITutorObj
                 JSONObject jsonObj = new JSONObject(jsonData);
                 // Load the datasource in the component module - i.e. the superclass
                 loadJSON(jsonObj, mTutor.getScope() );
-                setDataSource(dataSource);
+                if (dataSource != null) {
+                    setDataSource(dataSource);
+                } else {
+                    setDataSource(pDataSource);
+                }
 
                 // preprocess the datasource e.g. populate instance arrays with general types
                 //
@@ -540,11 +549,13 @@ public class TSpellingComponent extends CSpelling_Component implements ITutorObj
         event.setLevelName(level);
         event.setTaskName(task);
         event.setProblemName("write_" + _fullword);
-        event.setTotalProblemsCount(_data.size());
+        int size = _data != null ? _data.size() : _pData.size(); // PHONEME_HERE
+        event.setTotalProblemsCount(size);
         event.setProblemNumber(_dataIndex);
         event.setSubstepNumber(_currentLetterIndex + 1);
         event.setAttemptNumber(_attemptCount);
-        event.setExpectedAnswer(_word.get(_currentLetterIndex));
+        String expected = _word != null ? _word.get(_currentLetterIndex) : _pWord.get(_currentLetterIndex).letters; // PHONEME_HERE
+        event.setExpectedAnswer(expected);
         event.setUserResponse(selectedSyllable);
         event.setCorrectness(isCorrect ? TCONST.LOG_CORRECT : TCONST.LOG_INCORRECT);
         event.setPromotionMode(RoboTutor.getPromotionMode(event.getMatrixName()));

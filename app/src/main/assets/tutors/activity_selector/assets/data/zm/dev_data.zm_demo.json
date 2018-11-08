@@ -133,9 +133,9 @@
       "cell_column": "1",
       "same": "bigmath:add.by.rand.10..89.AllCarryBorrow.lev11",
       "next": "bigmath:sub.by.rand.10..98.AllCarryBorrow.lev13",
-      "next_next": "bigmath:add.by.rand.10..89.AllCarryBorrow.lev11",
+      "next_next": "phoneme:ae.1syl",
       "prev": "numcompare:3d.compare.mix",
-      "harder": "bigmath:sub.by.rand.10..98.AllCarryBorrow.lev13",
+      "harder": "phoneme:ae.1syl",
       "easier": "numcompare:3d.compare.mix"
     },
     "bigmath:sub.by.rand.10..98.AllCarryBorrow.lev13": {
@@ -147,17 +147,32 @@
       "cell_row": "5",
       "cell_column": "2",
       "same": "bigmath:sub.by.rand.10..98.AllCarryBorrow.lev13",
-      "next": "bigmath:sub.by.rand.10..98.AllCarryBorrow.lev13",
+      "next": "phoneme:ae.1syl",
       "next_next": "bigmath:sub.by.rand.10..98.AllCarryBorrow.lev13",
       "prev": "bigmath:add.by.rand.10..89.AllCarryBorrow.lev11",
-      "harder": "bigmath:add.by.rand.10..89.AllCarryBorrow.lev11",
+      "harder": "phoneme:ae.1syl",
       "easier": "numcompare:2d.compare.mix"
+    },
+    "phoneme:ae.1syl": {
+      "type": "TRANSITION",
+      "skill": "letters",
+      "tutor_id": "phoneme:ae.1syl",
+      "tutor_desc": "phoneme",
+      "tutor_data": "[file]phoneme_ae.1syl.json",
+      "cell_row": "6",
+      "cell_column": "1",
+      "same": "phoneme:ae.1syl",
+      "next": "phoneme:ae.1syl",
+      "next_next": "phoneme:ae.1syl",
+      "prev": "bigmath:sub.by.rand.10..98.AllCarryBorrow.lev13",
+      "harder": "phoneme:ae.1syl",
+      "easier": "bigmath:sub.by.rand.10..98.AllCarryBorrow.lev13"
     }
   },
   "storyTransitions": {
     "bpop.ltr.lc:vow": {
       "type": "TRANSITION",
-      "skill": "stories",
+      "skill": "letters",
       "tutor_id": "bpop.ltr.lc:vow",
       "tutor_desc": "bpop.ltr.lc",
       "tutor_data": "[file]bpop.ltr.lc_vow.json",
@@ -172,7 +187,7 @@
     },
     "bpop.ltr.uc:vow": {
       "type": "TRANSITION",
-      "skill": "stories",
+      "skill": "letters",
       "tutor_id": "bpop.ltr.uc:vow",
       "tutor_desc": "bpop.ltr.uc",
       "tutor_data": "[file]bpop.ltr.uc_vow.json",
@@ -187,7 +202,7 @@
     },
     "bpop.num:0..9.by.1.asc.q2q.AV.2.mc": {
       "type": "TRANSITION",
-      "skill": "stories",
+      "skill": "letters",
       "tutor_id": "bpop.num:0..9.by.1.asc.q2q.AV.2.mc",
       "tutor_desc": "bpop.num",
       "tutor_data": "[file]bpop.num_0..9.by.1.asc.q2q.AV.2.mc.json",
@@ -202,7 +217,7 @@
     },
     "bpop.num:0..9.by.1.asc.q2q.AV.2.rise": {
       "type": "TRANSITION",
-      "skill": "stories",
+      "skill": "letters",
       "tutor_id": "bpop.num:0..9.by.1.asc.q2q.AV.2.rise",
       "tutor_desc": "bpop.num",
       "tutor_data": "[file]bpop.num_0..9.by.1.asc.q2q.AV.2.rise.json",
@@ -217,7 +232,7 @@
     },
     "countingx:1_10": {
       "type": "TRANSITION",
-      "skill": "stories",
+      "skill": "letters",
       "tutor_id": "countingx:1_10",
       "tutor_desc": "countingx",
       "tutor_data": "[file]countingx_1_10.json",
@@ -232,7 +247,7 @@
     },
     "place.value:pv-100..499.3D.diff2.30": {
       "type": "TRANSITION",
-      "skill": "stories",
+      "skill": "letters",
       "tutor_id": "place.value:pv-100..499.3D.diff2.30",
       "tutor_desc": "place.value",
       "tutor_data": "[file]place.value_pv-100..499.3D.diff2.30.json",
@@ -247,7 +262,7 @@
     },
     "numcompare:2d.compare.mix": {
       "type": "TRANSITION",
-      "skill": "stories",
+      "skill": "letters",
       "tutor_id": "numcompare:2d.compare.mix",
       "tutor_desc": "numcompare",
       "tutor_data": "[file]numcompare_2d.compare.mix.json",
@@ -262,7 +277,7 @@
     },
     "numcompare:3d.compare.mix": {
       "type": "TRANSITION",
-      "skill": "stories",
+      "skill": "letters",
       "tutor_id": "numcompare:3d.compare.mix",
       "tutor_desc": "numcompare",
       "tutor_data": "[file]numcompare_3d.compare.mix.json",
@@ -277,7 +292,7 @@
     },
     "bigmath:add.by.rand.10..89.AllCarryBorrow.lev11": {
       "type": "TRANSITION",
-      "skill": "stories",
+      "skill": "letters",
       "tutor_id": "bigmath:add.by.rand.10..89.AllCarryBorrow.lev11",
       "tutor_desc": "bigmath",
       "tutor_data": "[file]bigmath_add.by.rand.10..89.AllCarryBorrow.lev11.json",
@@ -285,31 +300,46 @@
       "cell_column": "1",
       "same": "bigmath:add.by.rand.10..89.AllCarryBorrow.lev11",
       "next": "bigmath:sub.by.rand.10..98.AllCarryBorrow.lev13",
-      "next_next": "bigmath:add.by.rand.10..89.AllCarryBorrow.lev11",
+      "next_next": "phoneme:ae.1syl",
       "prev": "numcompare:3d.compare.mix",
-      "harder": "bigmath:sub.by.rand.10..98.AllCarryBorrow.lev13",
+      "harder": "phoneme:ae.1syl",
       "easier": "numcompare:3d.compare.mix"
     },
     "bigmath:sub.by.rand.10..98.AllCarryBorrow.lev13": {
       "type": "TRANSITION",
-      "skill": "stories",
+      "skill": "letters",
       "tutor_id": "bigmath:sub.by.rand.10..98.AllCarryBorrow.lev13",
       "tutor_desc": "bigmath",
       "tutor_data": "[file]bigmath_sub.by.rand.10..98.AllCarryBorrow.lev13.json",
       "cell_row": "5",
       "cell_column": "2",
       "same": "bigmath:sub.by.rand.10..98.AllCarryBorrow.lev13",
-      "next": "bigmath:sub.by.rand.10..98.AllCarryBorrow.lev13",
+      "next": "phoneme:ae.1syl",
       "next_next": "bigmath:sub.by.rand.10..98.AllCarryBorrow.lev13",
       "prev": "bigmath:add.by.rand.10..89.AllCarryBorrow.lev11",
-      "harder": "bigmath:add.by.rand.10..89.AllCarryBorrow.lev11",
+      "harder": "phoneme:ae.1syl",
       "easier": "numcompare:2d.compare.mix"
+    },
+    "phoneme:ae.1syl": {
+      "type": "TRANSITION",
+      "skill": "letters",
+      "tutor_id": "phoneme:ae.1syl",
+      "tutor_desc": "phoneme",
+      "tutor_data": "[file]phoneme_ae.1syl.json",
+      "cell_row": "6",
+      "cell_column": "1",
+      "same": "phoneme:ae.1syl",
+      "next": "phoneme:ae.1syl",
+      "next_next": "phoneme:ae.1syl",
+      "prev": "bigmath:sub.by.rand.10..98.AllCarryBorrow.lev13",
+      "harder": "phoneme:ae.1syl",
+      "easier": "bigmath:sub.by.rand.10..98.AllCarryBorrow.lev13"
     }
   },
   "mathTransitions": {
     "bpop.ltr.lc:vow": {
       "type": "TRANSITION",
-      "skill": "numbers",
+      "skill": "letters",
       "tutor_id": "bpop.ltr.lc:vow",
       "tutor_desc": "bpop.ltr.lc",
       "tutor_data": "[file]bpop.ltr.lc_vow.json",
@@ -324,7 +354,7 @@
     },
     "bpop.ltr.uc:vow": {
       "type": "TRANSITION",
-      "skill": "numbers",
+      "skill": "letters",
       "tutor_id": "bpop.ltr.uc:vow",
       "tutor_desc": "bpop.ltr.uc",
       "tutor_data": "[file]bpop.ltr.uc_vow.json",
@@ -339,7 +369,7 @@
     },
     "bpop.num:0..9.by.1.asc.q2q.AV.2.mc": {
       "type": "TRANSITION",
-      "skill": "numbers",
+      "skill": "letters",
       "tutor_id": "bpop.num:0..9.by.1.asc.q2q.AV.2.mc",
       "tutor_desc": "bpop.num",
       "tutor_data": "[file]bpop.num_0..9.by.1.asc.q2q.AV.2.mc.json",
@@ -354,7 +384,7 @@
     },
     "bpop.num:0..9.by.1.asc.q2q.AV.2.rise": {
       "type": "TRANSITION",
-      "skill": "numbers",
+      "skill": "letters",
       "tutor_id": "bpop.num:0..9.by.1.asc.q2q.AV.2.rise",
       "tutor_desc": "bpop.num",
       "tutor_data": "[file]bpop.num_0..9.by.1.asc.q2q.AV.2.rise.json",
@@ -369,7 +399,7 @@
     },
     "countingx:1_10": {
       "type": "TRANSITION",
-      "skill": "numbers",
+      "skill": "letters",
       "tutor_id": "countingx:1_10",
       "tutor_desc": "countingx",
       "tutor_data": "[file]countingx_1_10.json",
@@ -384,7 +414,7 @@
     },
     "place.value:pv-100..499.3D.diff2.30": {
       "type": "TRANSITION",
-      "skill": "numbers",
+      "skill": "letters",
       "tutor_id": "place.value:pv-100..499.3D.diff2.30",
       "tutor_desc": "place.value",
       "tutor_data": "[file]place.value_pv-100..499.3D.diff2.30.json",
@@ -399,7 +429,7 @@
     },
     "numcompare:2d.compare.mix": {
       "type": "TRANSITION",
-      "skill": "numbers",
+      "skill": "letters",
       "tutor_id": "numcompare:2d.compare.mix",
       "tutor_desc": "numcompare",
       "tutor_data": "[file]numcompare_2d.compare.mix.json",
@@ -414,7 +444,7 @@
     },
     "numcompare:3d.compare.mix": {
       "type": "TRANSITION",
-      "skill": "numbers",
+      "skill": "letters",
       "tutor_id": "numcompare:3d.compare.mix",
       "tutor_desc": "numcompare",
       "tutor_data": "[file]numcompare_3d.compare.mix.json",
@@ -429,7 +459,7 @@
     },
     "bigmath:add.by.rand.10..89.AllCarryBorrow.lev11": {
       "type": "TRANSITION",
-      "skill": "numbers",
+      "skill": "letters",
       "tutor_id": "bigmath:add.by.rand.10..89.AllCarryBorrow.lev11",
       "tutor_desc": "bigmath",
       "tutor_data": "[file]bigmath_add.by.rand.10..89.AllCarryBorrow.lev11.json",
@@ -437,25 +467,40 @@
       "cell_column": "1",
       "same": "bigmath:add.by.rand.10..89.AllCarryBorrow.lev11",
       "next": "bigmath:sub.by.rand.10..98.AllCarryBorrow.lev13",
-      "next_next": "bigmath:add.by.rand.10..89.AllCarryBorrow.lev11",
+      "next_next": "phoneme:ae.1syl",
       "prev": "numcompare:3d.compare.mix",
-      "harder": "bigmath:sub.by.rand.10..98.AllCarryBorrow.lev13",
+      "harder": "phoneme:ae.1syl",
       "easier": "numcompare:3d.compare.mix"
     },
     "bigmath:sub.by.rand.10..98.AllCarryBorrow.lev13": {
       "type": "TRANSITION",
-      "skill": "numbers",
+      "skill": "letters",
       "tutor_id": "bigmath:sub.by.rand.10..98.AllCarryBorrow.lev13",
       "tutor_desc": "bigmath",
       "tutor_data": "[file]bigmath_sub.by.rand.10..98.AllCarryBorrow.lev13.json",
       "cell_row": "5",
       "cell_column": "2",
       "same": "bigmath:sub.by.rand.10..98.AllCarryBorrow.lev13",
-      "next": "bigmath:sub.by.rand.10..98.AllCarryBorrow.lev13",
+      "next": "phoneme:ae.1syl",
       "next_next": "bigmath:sub.by.rand.10..98.AllCarryBorrow.lev13",
       "prev": "bigmath:add.by.rand.10..89.AllCarryBorrow.lev11",
-      "harder": "bigmath:add.by.rand.10..89.AllCarryBorrow.lev11",
+      "harder": "phoneme:ae.1syl",
       "easier": "numcompare:2d.compare.mix"
+    },
+    "phoneme:ae.1syl": {
+      "type": "TRANSITION",
+      "skill": "letters",
+      "tutor_id": "phoneme:ae.1syl",
+      "tutor_desc": "phoneme",
+      "tutor_data": "[file]phoneme_ae.1syl.json",
+      "cell_row": "6",
+      "cell_column": "1",
+      "same": "phoneme:ae.1syl",
+      "next": "phoneme:ae.1syl",
+      "next_next": "phoneme:ae.1syl",
+      "prev": "bigmath:sub.by.rand.10..98.AllCarryBorrow.lev13",
+      "harder": "phoneme:ae.1syl",
+      "easier": "bigmath:sub.by.rand.10..98.AllCarryBorrow.lev13"
     }
   }
 }

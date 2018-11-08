@@ -2,7 +2,7 @@
   "bootFeatures": "",
   "dataSource": [
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_4",
       "task": "Spell word",
       "word": [
@@ -15,7 +15,7 @@
       "sound": "akalala.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_4",
       "task": "Spell word",
       "word": [
@@ -28,7 +28,7 @@
       "sound": "alicheza.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_4",
       "task": "Spell word",
       "word": [
@@ -41,7 +41,7 @@
       "sound": "anacheza.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_4",
       "task": "Spell word",
       "word": [
@@ -54,7 +54,7 @@
       "sound": "anakula.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_4",
       "task": "Spell word",
       "word": [
@@ -67,7 +67,7 @@
       "sound": "anaoga.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_4",
       "task": "Spell word",
       "word": [
@@ -80,7 +80,7 @@
       "sound": "anasoma.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_4",
       "task": "Spell word",
       "word": [
@@ -94,7 +94,7 @@
       "sound": "baisikeli.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_4",
       "task": "Spell word",
       "word": [
@@ -107,7 +107,7 @@
       "sound": "barabara.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_4",
       "task": "Spell word",
       "word": [
@@ -120,7 +120,7 @@
       "sound": "bodaboda.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_4",
       "task": "Spell word",
       "word": [
@@ -133,7 +133,7 @@
       "sound": "buibui.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_4",
       "task": "Spell word",
       "word": [
@@ -146,7 +146,7 @@
       "sound": "familia.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_4",
       "task": "Spell word",
       "word": [
@@ -160,7 +160,7 @@
       "sound": "helikopta.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_4",
       "task": "Spell word",
       "word": [
@@ -174,7 +174,7 @@
       "sound": "hospitali.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_4",
       "task": "Spell word",
       "word": [
@@ -187,7 +187,7 @@
       "sound": "imejaa.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_4",
       "task": "Spell word",
       "word": [
@@ -200,7 +200,7 @@
       "sound": "katikati.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_4",
       "task": "Spell word",
       "word": [
@@ -214,7 +214,7 @@
       "sound": "kilimanjaro.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_4",
       "task": "Spell word",
       "word": [
@@ -227,7 +227,7 @@
       "sound": "kipepeo.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_4",
       "task": "Spell word",
       "word": [
@@ -240,7 +240,7 @@
       "sound": "kitambaa.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_4",
       "task": "Spell word",
       "word": [
@@ -253,7 +253,7 @@
       "sound": "kitunguu.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_4",
       "task": "Spell word",
       "word": [
@@ -266,7 +266,7 @@
       "sound": "kuchakuro.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_4",
       "task": "Spell word",
       "word": [
@@ -279,7 +279,7 @@
       "sound": "kutembea.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_4",
       "task": "Spell word",
       "word": [
@@ -292,7 +292,7 @@
       "sound": "maharage.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_4",
       "task": "Spell word",
       "word": [
@@ -305,7 +305,7 @@
       "sound": "mkulima.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_4",
       "task": "Spell word",
       "word": [
@@ -318,7 +318,7 @@
       "sound": "mpapai.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_4",
       "task": "Spell word",
       "word": [
@@ -331,7 +331,7 @@
       "sound": "mwanafunzi.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_4",
       "task": "Spell word",
       "word": [
@@ -344,7 +344,7 @@
       "sound": "ogelea.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_4",
       "task": "Spell word",
       "word": [
@@ -357,7 +357,7 @@
       "sound": "ovaroli.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_4",
       "task": "Spell word",
       "word": [
@@ -370,7 +370,7 @@
       "sound": "parachichi.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_4",
       "task": "Spell word",
       "word": [
@@ -383,7 +383,7 @@
       "sound": "pilipili.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_4",
       "task": "Spell word",
       "word": [
@@ -397,7 +397,7 @@
       "sound": "pundamilia.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_4",
       "task": "Spell word",
       "word": [
@@ -410,7 +410,7 @@
       "sound": "sufuria.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_4",
       "task": "Spell word",
       "word": [
@@ -423,7 +423,7 @@
       "sound": "tabasamu.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_4",
       "task": "Spell word",
       "word": [
@@ -437,7 +437,7 @@
       "sound": "tikitimaji.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_4",
       "task": "Spell word",
       "word": [
@@ -450,7 +450,7 @@
       "sound": "ukulima.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_4",
       "task": "Spell word",
       "word": [
@@ -463,7 +463,7 @@
       "sound": "vipepeo.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_4",
       "task": "Spell word",
       "word": [
@@ -476,7 +476,7 @@
       "sound": "vitumbua.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_4",
       "task": "Spell word",
       "word": [
@@ -489,7 +489,7 @@
       "sound": "wakiruka.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_4",
       "task": "Spell word",
       "word": [
@@ -503,7 +503,7 @@
       "sound": "wakitembea.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_4",
       "task": "Spell word",
       "word": [
@@ -516,7 +516,7 @@
       "sound": "wakulima.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_4",
       "task": "Spell word",
       "word": [

@@ -2,7 +2,7 @@
   "bootFeatures": "",
   "dataSource": [
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_3",
       "task": "Spell word",
       "word": [
@@ -14,7 +14,7 @@
       "sound": "andazi.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_3",
       "task": "Spell word",
       "word": [
@@ -26,7 +26,7 @@
       "sound": "andika.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_3",
       "task": "Spell word",
       "word": [
@@ -38,7 +38,7 @@
       "sound": "angani.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_3",
       "task": "Spell word",
       "word": [
@@ -50,7 +50,7 @@
       "sound": "anguka.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_3",
       "task": "Spell word",
       "word": [
@@ -62,7 +62,7 @@
       "sound": "asali.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_3",
       "task": "Spell word",
       "word": [
@@ -74,7 +74,7 @@
       "sound": "baridi.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_3",
       "task": "Spell word",
       "word": [
@@ -86,7 +86,7 @@
       "sound": "bendera.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_3",
       "task": "Spell word",
       "word": [
@@ -98,7 +98,7 @@
       "sound": "chakula.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_3",
       "task": "Spell word",
       "word": [
@@ -110,7 +110,7 @@
       "sound": "chapati.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_3",
       "task": "Spell word",
       "word": [
@@ -122,7 +122,7 @@
       "sound": "dereva.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_3",
       "task": "Spell word",
       "word": [
@@ -134,7 +134,7 @@
       "sound": "elimu.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_3",
       "task": "Spell word",
       "word": [
@@ -146,7 +146,7 @@
       "sound": "endesha.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_3",
       "task": "Spell word",
       "word": [
@@ -158,7 +158,7 @@
       "sound": "fagio.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_3",
       "task": "Spell word",
       "word": [
@@ -170,7 +170,7 @@
       "sound": "farasi.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_3",
       "task": "Spell word",
       "word": [
@@ -182,7 +182,7 @@
       "sound": "fulana.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_3",
       "task": "Spell word",
       "word": [
@@ -194,7 +194,7 @@
       "sound": "gauni.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_3",
       "task": "Spell word",
       "word": [
@@ -206,7 +206,7 @@
       "sound": "godoro.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_3",
       "task": "Spell word",
       "word": [
@@ -218,7 +218,7 @@
       "sound": "gunia.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_3",
       "task": "Spell word",
       "word": [
@@ -230,7 +230,7 @@
       "sound": "haraka.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_3",
       "task": "Spell word",
       "word": [
@@ -242,7 +242,7 @@
       "sound": "harufu.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_3",
       "task": "Spell word",
       "word": [
@@ -254,7 +254,7 @@
       "sound": "harusi.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_3",
       "task": "Spell word",
       "word": [
@@ -266,7 +266,7 @@
       "sound": "hasira.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_3",
       "task": "Spell word",
       "word": [
@@ -278,7 +278,7 @@
       "sound": "hujambo.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_3",
       "task": "Spell word",
       "word": [
@@ -290,7 +290,7 @@
       "sound": "hunywa.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_3",
       "task": "Spell word",
       "word": [
@@ -302,7 +302,7 @@
       "sound": "iliki.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_3",
       "task": "Spell word",
       "word": [
@@ -314,7 +314,7 @@
       "sound": "ingia.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_3",
       "task": "Spell word",
       "word": [
@@ -326,7 +326,7 @@
       "sound": "jekundu.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_3",
       "task": "Spell word",
       "word": [
@@ -338,7 +338,7 @@
       "sound": "jikoni.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_3",
       "task": "Spell word",
       "word": [
@@ -350,7 +350,7 @@
       "sound": "kalamu.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_3",
       "task": "Spell word",
       "word": [
@@ -362,7 +362,7 @@
       "sound": "karoti.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_3",
       "task": "Spell word",
       "word": [
@@ -374,7 +374,7 @@
       "sound": "kiatu.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_3",
       "task": "Spell word",
       "word": [
@@ -386,7 +386,7 @@
       "sound": "kiboko.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_3",
       "task": "Spell word",
       "word": [
@@ -398,7 +398,7 @@
       "sound": "kijiko.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_3",
       "task": "Spell word",
       "word": [
@@ -410,7 +410,7 @@
       "sound": "kikombe.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_3",
       "task": "Spell word",
       "word": [
@@ -422,7 +422,7 @@
       "sound": "kinyozi.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_3",
       "task": "Spell word",
       "word": [
@@ -434,7 +434,7 @@
       "sound": "kitabu.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_3",
       "task": "Spell word",
       "word": [
@@ -446,7 +446,7 @@
       "sound": "kitenge.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_3",
       "task": "Spell word",
       "word": [
@@ -458,7 +458,7 @@
       "sound": "kofia.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_3",
       "task": "Spell word",
       "word": [
@@ -470,7 +470,7 @@
       "sound": "kondoo.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_3",
       "task": "Spell word",
       "word": [
@@ -482,7 +482,7 @@
       "sound": "kusoma.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_3",
       "task": "Spell word",
       "word": [
@@ -494,7 +494,7 @@
       "sound": "kwaheri.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_3",
       "task": "Spell word",
       "word": [
@@ -506,7 +506,7 @@
       "sound": "laini.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_3",
       "task": "Spell word",
       "word": [
@@ -518,7 +518,7 @@
       "sound": "limau.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_3",
       "task": "Spell word",
       "word": [
@@ -530,7 +530,7 @@
       "sound": "mahindi.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_3",
       "task": "Spell word",
       "word": [
@@ -542,7 +542,7 @@
       "sound": "mashua.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_3",
       "task": "Spell word",
       "word": [
@@ -554,7 +554,7 @@
       "sound": "maua.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_3",
       "task": "Spell word",
       "word": [
@@ -566,7 +566,7 @@
       "sound": "maziwa.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_3",
       "task": "Spell word",
       "word": [
@@ -578,7 +578,7 @@
       "sound": "mchicha.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_3",
       "task": "Spell word",
       "word": [
@@ -590,7 +590,7 @@
       "sound": "mdomo.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_3",
       "task": "Spell word",
       "word": [
@@ -602,7 +602,7 @@
       "sound": "mguu.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_3",
       "task": "Spell word",
       "word": [
@@ -614,7 +614,7 @@
       "sound": "mikono.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_3",
       "task": "Spell word",
       "word": [
@@ -626,7 +626,7 @@
       "sound": "mjomba.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_3",
       "task": "Spell word",
       "word": [
@@ -638,7 +638,7 @@
       "sound": "mkono.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_3",
       "task": "Spell word",
       "word": [
@@ -650,7 +650,7 @@
       "sound": "mlango.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_3",
       "task": "Spell word",
       "word": [
@@ -662,7 +662,7 @@
       "sound": "mlima.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_3",
       "task": "Spell word",
       "word": [
@@ -674,7 +674,7 @@
       "sound": "mpira.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_3",
       "task": "Spell word",
       "word": [
@@ -686,7 +686,7 @@
       "sound": "mswaki.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_3",
       "task": "Spell word",
       "word": [
@@ -698,7 +698,7 @@
       "sound": "muhogo.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_3",
       "task": "Spell word",
       "word": [
@@ -710,7 +710,7 @@
       "sound": "mvua.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_3",
       "task": "Spell word",
       "word": [
@@ -722,7 +722,7 @@
       "sound": "mwalimu.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_3",
       "task": "Spell word",
       "word": [
@@ -734,7 +734,7 @@
       "sound": "nanasi.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_3",
       "task": "Spell word",
       "word": [
@@ -746,7 +746,7 @@
       "sound": "nguruwe.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_3",
       "task": "Spell word",
       "word": [
@@ -758,7 +758,7 @@
       "sound": "nywele.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_3",
       "task": "Spell word",
       "word": [
@@ -770,7 +770,7 @@
       "sound": "ofisi.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_3",
       "task": "Spell word",
       "word": [
@@ -782,7 +782,7 @@
       "sound": "papai.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_3",
       "task": "Spell word",
       "word": [
@@ -794,7 +794,7 @@
       "sound": "polisi.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_3",
       "task": "Spell word",
       "word": [
@@ -806,7 +806,7 @@
       "sound": "rafiki.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_3",
       "task": "Spell word",
       "word": [
@@ -818,7 +818,7 @@
       "sound": "ramani.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_3",
       "task": "Spell word",
       "word": [
@@ -830,7 +830,7 @@
       "sound": "redio.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_3",
       "task": "Spell word",
       "word": [
@@ -842,7 +842,7 @@
       "sound": "runinga.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_3",
       "task": "Spell word",
       "word": [
@@ -854,7 +854,7 @@
       "sound": "sabuni.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_3",
       "task": "Spell word",
       "word": [
@@ -866,7 +866,7 @@
       "sound": "sahani.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_3",
       "task": "Spell word",
       "word": [
@@ -878,7 +878,7 @@
       "sound": "samaki.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_3",
       "task": "Spell word",
       "word": [
@@ -890,7 +890,7 @@
       "sound": "shangazi.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_3",
       "task": "Spell word",
       "word": [
@@ -902,7 +902,7 @@
       "sound": "sikio.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_3",
       "task": "Spell word",
       "word": [
@@ -914,7 +914,7 @@
       "sound": "simama.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_3",
       "task": "Spell word",
       "word": [
@@ -926,7 +926,7 @@
       "sound": "sungura.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_3",
       "task": "Spell word",
       "word": [
@@ -938,7 +938,7 @@
       "sound": "tausi.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_3",
       "task": "Spell word",
       "word": [
@@ -950,7 +950,7 @@
       "sound": "toroli.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_3",
       "task": "Spell word",
       "word": [
@@ -962,7 +962,7 @@
       "sound": "treni.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_3",
       "task": "Spell word",
       "word": [
@@ -974,7 +974,7 @@
       "sound": "ubao.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_3",
       "task": "Spell word",
       "word": [
@@ -986,7 +986,7 @@
       "sound": "udongo.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_3",
       "task": "Spell word",
       "word": [
@@ -998,7 +998,7 @@
       "sound": "ugali.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_3",
       "task": "Spell word",
       "word": [
@@ -1010,7 +1010,7 @@
       "sound": "ukuta.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_3",
       "task": "Spell word",
       "word": [
@@ -1022,7 +1022,7 @@
       "sound": "uyoga.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_3",
       "task": "Spell word",
       "word": [
@@ -1034,7 +1034,7 @@
       "sound": "viatu.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_3",
       "task": "Spell word",
       "word": [
@@ -1046,7 +1046,7 @@
       "sound": "viazi.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_3",
       "task": "Spell word",
       "word": [
@@ -1058,7 +1058,7 @@
       "sound": "vidole.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_3",
       "task": "Spell word",
       "word": [
@@ -1070,7 +1070,7 @@
       "sound": "vijiti.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_3",
       "task": "Spell word",
       "word": [
@@ -1082,7 +1082,7 @@
       "sound": "vikapu.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_3",
       "task": "Spell word",
       "word": [
@@ -1094,7 +1094,7 @@
       "sound": "wadudu.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_3",
       "task": "Spell word",
       "word": [
@@ -1106,7 +1106,7 @@
       "sound": "walimu.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_3",
       "task": "Spell word",
       "word": [
@@ -1118,7 +1118,7 @@
       "sound": "watoto.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_3",
       "task": "Spell word",
       "word": [
@@ -1130,7 +1130,7 @@
       "sound": "zabibu.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_3",
       "task": "Spell word",
       "word": [
@@ -1142,7 +1142,7 @@
       "sound": "zaidi.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_3",
       "task": "Spell word",
       "word": [

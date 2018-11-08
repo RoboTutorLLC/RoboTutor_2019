@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.graphics.PointF;
 import android.support.constraint.ConstraintLayout;
-import android.support.constraint.Guideline;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -56,13 +55,19 @@ public class CSpelling_Component extends ConstraintLayout implements ILoadableOb
 
     // json loadable
     public String bootFeatures;
-    public CSpelling_Data[] dataSource;
-    protected List<CSpelling_Data> _data;
+    public CSpellingSW_Data[] dataSource;
+    protected List<CSpellingSW_Data> _data;
 
-    protected List<String> _word;
+    public CSpellingEN_Data[] pDataSource; // PHONEME_HERE
+    protected List<CSpellingEN_Data> _pData;
+
+    protected List<String> _word; // PHONEME_HERE
+    protected List<CPhoneme> _pWord; // PHONEME_HERE
     protected int _currentLetterIndex;
     protected List<String> _selectableLetters;
+    protected List<CPhoneme> _selectablePhonemes;
     protected List<String> _selectedLetters;
+    protected List<CPhoneme> _selectedPhonemes;
     protected String _imageFileName;
     protected String _fullword;
     protected int _attemptCount;
@@ -186,7 +191,7 @@ public class CSpelling_Component extends ConstraintLayout implements ILoadableOb
     //endregion
 
     //region View
-    public void onLetterTouch(String letter, int index, CLetter_Tile lt) {
+    public void onLetterTouch(String letter, String phoneme, int index, CLetter_Tile lt) {
 
         Log.d("ddd", "Touch: " + letter);
 
@@ -195,25 +200,48 @@ public class CSpelling_Component extends ConstraintLayout implements ILoadableOb
 
         lockLetters();
 
-        String current = "" + _word.get(_currentLetterIndex);
+        String current;
+        if (_word != null) {
+            current = "" + _word.get(_currentLetterIndex);
+        } else {
+            // PHONEME_HERE
+            current = "" + _pWord.get(_currentLetterIndex).letters;
+        }
 
         // publish the syllable to be pronounced
-        String pronunciation = mapLetterToVerbal(letter);
-        publishValue(SP_CONST.SYLLABLE_STIM, pronunciation);
+        String pronunciation;
+        if (phoneme == null) {
+            pronunciation = mapLetterToVerbal(letter);
+        } else {
+            pronunciation = phoneme + "_phoneme";
+        }
+        publishValue(SP_CONST.SYLLABLE_STIM, pronunciation); // PHONEME_HERE
 
         boolean isCorrect = letter.equalsIgnoreCase(current);
         trackAndLogPerformance(isCorrect, letter);
         if (isCorrect) {
             Log.d("ddd", "Correct");
-            _selectedLetters.add(letter);
-            _selectableLetters.set(index, null);
+            if (_selectableLetters != null) {
+                _selectedLetters.add(letter);
+                _selectableLetters.set(index, null);
 
-            applyBehaviorNode("SAY_SYLLABLE");
-            updateLetter();
+                applyBehaviorNode("SAY_SYLLABLE");
+                updateLetters();
+            } else { // PHONEME_HERE
+                CPhoneme p = new CPhoneme();
+                p.letters = letter;
+                p.phoneme = phoneme;
+                _selectedPhonemes.add(p);
+                _selectablePhonemes.set(index, null);
+
+                applyBehaviorNode("SAY_SYLLABLE");
+                updatePhonemes();
+            }
+
             _currentLetterIndex++;
             // if correct
             //publishFeature(SP_CONST.FTR_CORRECT);
-            if (_currentLetterIndex >= _word.size()) {
+            if (_currentLetterIndex >= (_word != null ? _word.size() : _pWord.size() )) { // PHONEME_HERE
                 Log.d("ddd", "end of word");
 
                 lastSyllable = true;
@@ -287,33 +315,67 @@ public class CSpelling_Component extends ConstraintLayout implements ILoadableOb
         }
     }
 
-    public void updateLetter() {
+    public void updateLetters() {
 
         mLetterHolder.removeAllViewsInLayout();
         mSelectedLetterHolder.removeAllViewsInLayout();
 
         int i = 0;
-        for (String l : _selectableLetters) {
+        for (String letter : _selectableLetters) {
 
-            CLetter_Tile letter;
-            if (l == null) {
-                letter = new CLetter_Tile(mContext, null, i, this);
+            CLetter_Tile letterTile;
+            if (letter == null) {
+                letterTile = new CLetter_Tile(mContext, null, null, i, this);
             } else {
-                letter = new CLetter_Tile(mContext, l, i, this);
+                letterTile = new CLetter_Tile(mContext, letter, null, i, this);
             }
             i++;
-            mLetterHolder.addView(letter);
+            mLetterHolder.addView(letterTile);
         }
 
         int j = 0;
         for (String l : _selectedLetters) {
-            CLetter_Tile letter = new CLetter_Tile(mContext, l, j, this);
+            CLetter_Tile letter = new CLetter_Tile(mContext, l, null, j, this);
             letter.markCorrect();
             j++;
             mSelectedLetterHolder.addView(letter);
         }
 
         for (int k = _word.size(); k > j; k--) {
+            CBlank_Letter b = new CBlank_Letter(mContext);
+            mSelectedLetterHolder.addView(b);
+        }
+    }
+
+    /**
+     * PHONEME_HERE Similar to above method
+     */
+    public void updatePhonemes() {
+        mLetterHolder.removeAllViewsInLayout();
+        mSelectedLetterHolder.removeAllViewsInLayout();
+
+        int i = 0;
+        for (CPhoneme phoneme : _selectablePhonemes) {
+
+            CLetter_Tile letterTile;
+            if (phoneme == null) {
+                letterTile = new CLetter_Tile(mContext, null, null, i, this);
+            } else {
+                letterTile = new CLetter_Tile(mContext, phoneme.letters, phoneme.phoneme, i, this);
+            }
+            i++;
+            mLetterHolder.addView(letterTile);
+        }
+
+        int j = 0;
+        for (CPhoneme phoneme : _selectedPhonemes) {
+            CLetter_Tile letterTile = new CLetter_Tile(mContext, phoneme.letters, phoneme.phoneme, j, this);
+            letterTile.markCorrect();
+            j++;
+            mSelectedLetterHolder.addView(letterTile);
+        }
+
+        for (int k = _pWord.size(); k > j; k--) {
             CBlank_Letter b = new CBlank_Letter(mContext);
             mSelectedLetterHolder.addView(b);
         }
@@ -385,9 +447,15 @@ public class CSpelling_Component extends ConstraintLayout implements ILoadableOb
 
         try {
             if (_data != null) {
+
                 updateDataSet(_data.get(_dataIndex));
                 _dataIndex++;
+            } else if (_pData != null) {
+
+                updateDataSet(_pData.get(_dataIndex)); // PHONEME_HERE messy
+                _dataIndex++;
             }
+
         } catch (Exception e) {
             CErrorManager.logEvent(SP_CONST.TAG, "Data Exhuasted: call past end of data", e, true);
         }
@@ -399,11 +467,19 @@ public class CSpelling_Component extends ConstraintLayout implements ILoadableOb
 
     public boolean dataExhausted() {
 
-        return _dataIndex >= _data.size();
+        if (_data != null)
+            return _dataIndex >= _data.size();
+        else
+            return _dataIndex >= _pData.size();
     }
 
-    protected void updateDataSet(CSpelling_Data data) {
+    protected void updateDataSet(CSpellingSW_Data data) {
 
+        loadDataSet(data);
+        updateStimulus();
+    }
+
+    protected void updateDataSet(CSpellingEN_Data data) {
         loadDataSet(data);
         updateStimulus();
     }
@@ -413,7 +489,7 @@ public class CSpelling_Component extends ConstraintLayout implements ILoadableOb
      *
      * @param data the current element in the DataSource array.
      */
-    protected void loadDataSet(CSpelling_Data data) {
+    protected void loadDataSet(CSpellingSW_Data data) {
 
         lastSyllable = false;
 
@@ -443,17 +519,51 @@ public class CSpelling_Component extends ConstraintLayout implements ILoadableOb
         publishValue(SP_CONST.WORD_STIM, _sound);
     }
 
+    protected void loadDataSet(CSpellingEN_Data data) {
+
+        lastSyllable = false;
+        level = data.level;
+        task = data.task;
+        layout = data.layout;
+        _pWord = new ArrayList<>(Arrays.asList(data.word));
+        _attemptCount = 1;
+        _currentLetterIndex = 0;
+
+        _sound = data.sound;
+
+        // TODO: Is there a join function?
+        StringBuilder sb = new StringBuilder();
+        for (CPhoneme c : _pWord) {
+            sb.append(c.letters);
+        }
+        _fullword = sb.toString();
+
+        retractFeature(SP_CONST.FTR_EOP);
+        _selectablePhonemes = new ArrayList<>(_pWord);
+        Collections.shuffle(_selectablePhonemes);
+
+        _selectedPhonemes = new ArrayList<>();
+        _imageFileName = data.image;
+
+        publishValue(SP_CONST.WORD_STIM, _sound);
+
+    }
+
     /**
      * Updates the stimulus.
      */
     protected void updateStimulus() {
 
-        updateLetter();
+        if (dataSource != null) {
+            updateLetters();
+        } else if (pDataSource != null) {
+            updatePhonemes();
+        }
         updateImage();
     }
 
-    public void setDataSource(CSpelling_Data[] dataSource) {
-        ArrayList<CSpelling_Data> dataset = new ArrayList<>(Arrays.asList(dataSource));
+    public void setDataSource(CSpellingSW_Data[] dataSource) {
+        ArrayList<CSpellingSW_Data> dataset = new ArrayList<>(Arrays.asList(dataSource));
 
         _data = new ArrayList<>();
 
@@ -461,6 +571,18 @@ public class CSpelling_Component extends ConstraintLayout implements ILoadableOb
         // used to be : dataSet.size()
         Collections.shuffle(dataset);
         _data = dataset.subList(0, SP_CONST.NUM_PROBLEMS);
+        _dataIndex = 0;
+
+        IMAGES_PATH = getImagePath();
+    }
+
+    protected void setDataSource(CSpellingEN_Data[] pDataSource) {
+        ArrayList<CSpellingEN_Data> dataset = new ArrayList<>(Arrays.asList(pDataSource));
+
+        _pData = new ArrayList<>();
+
+        Collections.shuffle(dataset);
+        _pData = dataset.subList(0, SP_CONST.NUM_PROBLEMS);
         _dataIndex = 0;
 
         IMAGES_PATH = getImagePath();

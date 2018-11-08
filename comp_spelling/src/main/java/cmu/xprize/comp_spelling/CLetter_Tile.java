@@ -41,6 +41,7 @@ public class CLetter_Tile extends TextView {
 
     private boolean _isBlank;
     private String _letter;
+    private String _phoneme;
     private int _index;
     private CSpelling_Component _parent;
     private boolean _isLocked;
@@ -67,11 +68,12 @@ public class CLetter_Tile extends TextView {
         init(context, attrs);
     }
 
-    public CLetter_Tile(Context context, String letter, int letterIndex, CSpelling_Component parent) {
+    public CLetter_Tile(Context context, String letter, String phoneme, int letterIndex, CSpelling_Component parent) {
 
         super(context);
         _isBlank = letter == null;
         _letter = letter;
+        _phoneme = phoneme;
         _index = letterIndex;
         _parent = parent;
         _isLocked = false;
@@ -123,7 +125,7 @@ public class CLetter_Tile extends TextView {
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
             Log.d("ddd", "Touching: " + _isLocked);
             if (!_isLocked && !_isBlank && !_isCorrect) {
-                _parent.onLetterTouch(_letter, _index, this);
+                _parent.onLetterTouch(_letter, _phoneme, _index, this);
             }
         }
 

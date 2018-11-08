@@ -29,6 +29,11 @@
       "tutorName": "spelling",
       "features": ""
     },
+    "phoneme": {
+      "type": "TUTORVAR_MAP",
+      "tutorName": "spelling",
+      "features": ""
+    },
     "numberscale": {
       "type": "TUTORVAR_MAP",
       "tutorName": "numberscale",

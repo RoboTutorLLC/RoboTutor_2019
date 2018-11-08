@@ -2,7 +2,7 @@
   "bootFeatures": "",
   "dataSource": [
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_2",
       "task": "Spell word",
       "word": [
@@ -13,7 +13,7 @@
       "sound": "baba.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_2",
       "task": "Spell word",
       "word": [
@@ -24,7 +24,7 @@
       "sound": "babu.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_2",
       "task": "Spell word",
       "word": [
@@ -35,7 +35,7 @@
       "sound": "basi.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_2",
       "task": "Spell word",
       "word": [
@@ -46,7 +46,7 @@
       "sound": "bata.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_2",
       "task": "Spell word",
       "word": [
@@ -57,7 +57,7 @@
       "sound": "bega.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_2",
       "task": "Spell word",
       "word": [
@@ -68,7 +68,7 @@
       "sound": "bibi.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_2",
       "task": "Spell word",
       "word": [
@@ -79,7 +79,7 @@
       "sound": "boga.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_2",
       "task": "Spell word",
       "word": [
@@ -90,7 +90,7 @@
       "sound": "chai.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_2",
       "task": "Spell word",
       "word": [
@@ -101,7 +101,7 @@
       "sound": "chombo.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_2",
       "task": "Spell word",
       "word": [
@@ -112,7 +112,7 @@
       "sound": "choo.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_2",
       "task": "Spell word",
       "word": [
@@ -123,7 +123,7 @@
       "sound": "chui.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_2",
       "task": "Spell word",
       "word": [
@@ -134,7 +134,7 @@
       "sound": "chungu.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_2",
       "task": "Spell word",
       "word": [
@@ -145,7 +145,7 @@
       "sound": "chungwa.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_2",
       "task": "Spell word",
       "word": [
@@ -156,7 +156,7 @@
       "sound": "chura.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_2",
       "task": "Spell word",
       "word": [
@@ -167,7 +167,7 @@
       "sound": "dada.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_2",
       "task": "Spell word",
       "word": [
@@ -178,7 +178,7 @@
       "sound": "dau.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_2",
       "task": "Spell word",
       "word": [
@@ -189,7 +189,7 @@
       "sound": "debe.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_2",
       "task": "Spell word",
       "word": [
@@ -200,7 +200,7 @@
       "sound": "dobi.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_2",
       "task": "Spell word",
       "word": [
@@ -211,7 +211,7 @@
       "sound": "dogo.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_2",
       "task": "Spell word",
       "word": [
@@ -222,7 +222,7 @@
       "sound": "dudu.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_2",
       "task": "Spell word",
       "word": [
@@ -233,7 +233,7 @@
       "sound": "duma.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_2",
       "task": "Spell word",
       "word": [
@@ -244,7 +244,7 @@
       "sound": "embe.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_2",
       "task": "Spell word",
       "word": [
@@ -255,7 +255,7 @@
       "sound": "fisi.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_2",
       "task": "Spell word",
       "word": [
@@ -266,7 +266,7 @@
       "sound": "fupi.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_2",
       "task": "Spell word",
       "word": [
@@ -277,7 +277,7 @@
       "sound": "gari.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_2",
       "task": "Spell word",
       "word": [
@@ -288,7 +288,7 @@
       "sound": "giza.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_2",
       "task": "Spell word",
       "word": [
@@ -299,7 +299,7 @@
       "sound": "gogo.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_2",
       "task": "Spell word",
       "word": [
@@ -310,7 +310,7 @@
       "sound": "goli.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_2",
       "task": "Spell word",
       "word": [
@@ -321,7 +321,7 @@
       "sound": "goti.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_2",
       "task": "Spell word",
       "word": [
@@ -332,7 +332,7 @@
       "sound": "hema.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_2",
       "task": "Spell word",
       "word": [
@@ -343,7 +343,7 @@
       "sound": "hoho.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_2",
       "task": "Spell word",
       "word": [
@@ -354,7 +354,7 @@
       "sound": "imba.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_2",
       "task": "Spell word",
       "word": [
@@ -365,7 +365,7 @@
       "sound": "jani.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_2",
       "task": "Spell word",
       "word": [
@@ -376,7 +376,7 @@
       "sound": "jasho.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_2",
       "task": "Spell word",
       "word": [
@@ -387,7 +387,7 @@
       "sound": "jembe.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_2",
       "task": "Spell word",
       "word": [
@@ -398,7 +398,7 @@
       "sound": "jicho.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_2",
       "task": "Spell word",
       "word": [
@@ -409,7 +409,7 @@
       "sound": "jiko.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_2",
       "task": "Spell word",
       "word": [
@@ -420,7 +420,7 @@
       "sound": "jiwe.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_2",
       "task": "Spell word",
       "word": [
@@ -431,7 +431,7 @@
       "sound": "jua.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_2",
       "task": "Spell word",
       "word": [
@@ -442,7 +442,7 @@
       "sound": "kaa.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_2",
       "task": "Spell word",
       "word": [
@@ -453,7 +453,7 @@
       "sound": "kaka.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_2",
       "task": "Spell word",
       "word": [
@@ -464,7 +464,7 @@
       "sound": "kichwa.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_2",
       "task": "Spell word",
       "word": [
@@ -475,7 +475,7 @@
       "sound": "kinu.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_2",
       "task": "Spell word",
       "word": [
@@ -486,7 +486,7 @@
       "sound": "kiti.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_2",
       "task": "Spell word",
       "word": [
@@ -497,7 +497,7 @@
       "sound": "kobe.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_2",
       "task": "Spell word",
       "word": [
@@ -508,7 +508,7 @@
       "sound": "kombe.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_2",
       "task": "Spell word",
       "word": [
@@ -519,7 +519,7 @@
       "sound": "kuku.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_2",
       "task": "Spell word",
       "word": [
@@ -530,7 +530,7 @@
       "sound": "kula.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_2",
       "task": "Spell word",
       "word": [
@@ -541,7 +541,7 @@
       "sound": "kundi.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_2",
       "task": "Spell word",
       "word": [
@@ -552,7 +552,7 @@
       "sound": "kuni.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_2",
       "task": "Spell word",
       "word": [
@@ -563,7 +563,7 @@
       "sound": "lala.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_2",
       "task": "Spell word",
       "word": [
@@ -574,7 +574,7 @@
       "sound": "lamba.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_2",
       "task": "Spell word",
       "word": [
@@ -585,7 +585,7 @@
       "sound": "lima.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_2",
       "task": "Spell word",
       "word": [
@@ -596,7 +596,7 @@
       "sound": "lori.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_2",
       "task": "Spell word",
       "word": [
@@ -607,7 +607,7 @@
       "sound": "maji.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_2",
       "task": "Spell word",
       "word": [
@@ -618,7 +618,7 @@
       "sound": "mama.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_2",
       "task": "Spell word",
       "word": [
@@ -629,7 +629,7 @@
       "sound": "mamba.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_2",
       "task": "Spell word",
       "word": [
@@ -640,7 +640,7 @@
       "sound": "mboga.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_2",
       "task": "Spell word",
       "word": [
@@ -651,7 +651,7 @@
       "sound": "mbuni.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_2",
       "task": "Spell word",
       "word": [
@@ -662,7 +662,7 @@
       "sound": "mbuzi.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_2",
       "task": "Spell word",
       "word": [
@@ -673,7 +673,7 @@
       "sound": "mbu.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_2",
       "task": "Spell word",
       "word": [
@@ -684,7 +684,7 @@
       "sound": "mbwa.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_2",
       "task": "Spell word",
       "word": [
@@ -695,7 +695,7 @@
       "sound": "mende.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_2",
       "task": "Spell word",
       "word": [
@@ -706,7 +706,7 @@
       "sound": "meno.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_2",
       "task": "Spell word",
       "word": [
@@ -717,7 +717,7 @@
       "sound": "meza.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_2",
       "task": "Spell word",
       "word": [
@@ -728,7 +728,7 @@
       "sound": "mti.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_2",
       "task": "Spell word",
       "word": [
@@ -739,7 +739,7 @@
       "sound": "mwembe.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_2",
       "task": "Spell word",
       "word": [
@@ -750,7 +750,7 @@
       "sound": "nazi.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_2",
       "task": "Spell word",
       "word": [
@@ -761,7 +761,7 @@
       "sound": "njaa.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_2",
       "task": "Spell word",
       "word": [
@@ -772,7 +772,7 @@
       "sound": "njiwa.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_2",
       "task": "Spell word",
       "word": [
@@ -783,7 +783,7 @@
       "sound": "ndege.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_2",
       "task": "Spell word",
       "word": [
@@ -794,7 +794,7 @@
       "sound": "ndevu.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_2",
       "task": "Spell word",
       "word": [
@@ -805,7 +805,7 @@
       "sound": "ndizi.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_2",
       "task": "Spell word",
       "word": [
@@ -816,7 +816,7 @@
       "sound": "ngoma.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_2",
       "task": "Spell word",
       "word": [
@@ -827,7 +827,7 @@
       "sound": "ngumi.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_2",
       "task": "Spell word",
       "word": [
@@ -838,7 +838,7 @@
       "sound": "nguo.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_2",
       "task": "Spell word",
       "word": [
@@ -849,7 +849,7 @@
       "sound": "nyama.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_2",
       "task": "Spell word",
       "word": [
@@ -860,7 +860,7 @@
       "sound": "nyani.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_2",
       "task": "Spell word",
       "word": [
@@ -871,7 +871,7 @@
       "sound": "nyanya.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_2",
       "task": "Spell word",
       "word": [
@@ -882,7 +882,7 @@
       "sound": "nyati.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_2",
       "task": "Spell word",
       "word": [
@@ -893,7 +893,7 @@
       "sound": "nyayo.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_2",
       "task": "Spell word",
       "word": [
@@ -904,7 +904,7 @@
       "sound": "nyumba.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_2",
       "task": "Spell word",
       "word": [
@@ -915,7 +915,7 @@
       "sound": "nzi.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_2",
       "task": "Spell word",
       "word": [
@@ -926,7 +926,7 @@
       "sound": "oa.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_2",
       "task": "Spell word",
       "word": [
@@ -937,7 +937,7 @@
       "sound": "omba.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_2",
       "task": "Spell word",
       "word": [
@@ -948,7 +948,7 @@
       "sound": "ona.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_2",
       "task": "Spell word",
       "word": [
@@ -959,7 +959,7 @@
       "sound": "osha.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_2",
       "task": "Spell word",
       "word": [
@@ -970,7 +970,7 @@
       "sound": "paa.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_2",
       "task": "Spell word",
       "word": [
@@ -981,7 +981,7 @@
       "sound": "pacha.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_2",
       "task": "Spell word",
       "word": [
@@ -992,7 +992,7 @@
       "sound": "paka.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_2",
       "task": "Spell word",
       "word": [
@@ -1003,7 +1003,7 @@
       "sound": "panya.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_2",
       "task": "Spell word",
       "word": [
@@ -1014,7 +1014,7 @@
       "sound": "pera.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_2",
       "task": "Spell word",
       "word": [
@@ -1025,7 +1025,7 @@
       "sound": "pini.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_2",
       "task": "Spell word",
       "word": [
@@ -1036,7 +1036,7 @@
       "sound": "pua.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_2",
       "task": "Spell word",
       "word": [
@@ -1047,7 +1047,7 @@
       "sound": "punda.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_2",
       "task": "Spell word",
       "word": [
@@ -1058,7 +1058,7 @@
       "sound": "radhi.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_2",
       "task": "Spell word",
       "word": [
@@ -1069,7 +1069,7 @@
       "sound": "raha.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_2",
       "task": "Spell word",
       "word": [
@@ -1080,7 +1080,7 @@
       "sound": "rangi.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_2",
       "task": "Spell word",
       "word": [
@@ -1091,7 +1091,7 @@
       "sound": "rinda.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_2",
       "task": "Spell word",
       "word": [
@@ -1102,7 +1102,7 @@
       "sound": "ruka.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_2",
       "task": "Spell word",
       "word": [
@@ -1113,7 +1113,7 @@
       "sound": "saa.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_2",
       "task": "Spell word",
       "word": [
@@ -1124,7 +1124,7 @@
       "sound": "simba.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_2",
       "task": "Spell word",
       "word": [
@@ -1135,7 +1135,7 @@
       "sound": "swala.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_2",
       "task": "Spell word",
       "word": [
@@ -1146,7 +1146,7 @@
       "sound": "taa.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_2",
       "task": "Spell word",
       "word": [
@@ -1157,7 +1157,7 @@
       "sound": "tano.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_2",
       "task": "Spell word",
       "word": [
@@ -1168,7 +1168,7 @@
       "sound": "tembo.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_2",
       "task": "Spell word",
       "word": [
@@ -1179,7 +1179,7 @@
       "sound": "tumbo.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_2",
       "task": "Spell word",
       "word": [
@@ -1190,7 +1190,7 @@
       "sound": "twiga.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_2",
       "task": "Spell word",
       "word": [
@@ -1201,7 +1201,7 @@
       "sound": "ua.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_2",
       "task": "Spell word",
       "word": [
@@ -1212,7 +1212,7 @@
       "sound": "uzi.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_2",
       "task": "Spell word",
       "word": [
@@ -1223,7 +1223,7 @@
       "sound": "visu.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_2",
       "task": "Spell word",
       "word": [
@@ -1234,7 +1234,7 @@
       "sound": "wali.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_2",
       "task": "Spell word",
       "word": [
@@ -1245,7 +1245,7 @@
       "sound": "watu.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_2",
       "task": "Spell word",
       "word": [
@@ -1256,7 +1256,7 @@
       "sound": "wavu.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_2",
       "task": "Spell word",
       "word": [
@@ -1267,7 +1267,7 @@
       "sound": "yai.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_2",
       "task": "Spell word",
       "word": [
@@ -1278,7 +1278,7 @@
       "sound": "yangu.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_2",
       "task": "Spell word",
       "word": [
@@ -1289,7 +1289,7 @@
       "sound": "zeze.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_2",
       "task": "Spell word",
       "word": [
@@ -1300,7 +1300,7 @@
       "sound": "zipu.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_2",
       "task": "Spell word",
       "word": [
@@ -1311,7 +1311,7 @@
       "sound": "ziwa.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_2",
       "task": "Spell word",
       "word": [
@@ -1322,7 +1322,7 @@
       "sound": "zizi.mp3"
     },
     {
-      "type": "CSpelling_Data",
+      "type": "CSpellingSW_Data",
       "level": "spell_2",
       "task": "Spell word",
       "word": [
