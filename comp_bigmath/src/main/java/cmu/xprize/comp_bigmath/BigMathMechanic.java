@@ -124,6 +124,7 @@ public class BigMathMechanic {
 
     public void borrowTen() {
         _animator.borrowTen();
+        _problemState.decrementCurrentOpATen();
     }
 
     /**
