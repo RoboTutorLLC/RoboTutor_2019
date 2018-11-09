@@ -1,14 +1,10 @@
 package cmu.xprize.comp_bigmath;
 
-import android.animation.Animator;
-import android.animation.AnimatorSet;
-import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.PointF;
 import android.os.Handler;
 import android.os.Looper;
-import android.support.constraint.ConstraintLayout;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -39,7 +35,6 @@ import static cmu.xprize.comp_bigmath.BM_CONST.FEATURES.FTR_ON_DIGIT_ONE;
 import static cmu.xprize.comp_bigmath.BM_CONST.FEATURES.FTR_ON_DIGIT_TEN;
 import static cmu.xprize.comp_bigmath.BM_CONST.FEATURES.FTR_TAP_CONCRETE;
 import static cmu.xprize.comp_bigmath.BM_CONST.FEATURES.FTR_WRITE_DIGIT;
-import static cmu.xprize.comp_bigmath.BM_CONST.HUN_DIGIT;
 import static cmu.xprize.util.MathUtil.getHunsDigit;
 import static cmu.xprize.util.MathUtil.getOnesDigit;
 import static cmu.xprize.util.MathUtil.getTensDigit;
@@ -191,7 +186,7 @@ public class CBigMath_Component extends RelativeLayout implements ILoadableObjec
         // features are published inside setData() {... _sal.setData() }
         _mechanic.setData(data);
         _problemState = _mechanic.getProblemState();
-        _mechanic.doAllTheThings();
+        _mechanic.initializeAllTheThings();
     }
 
     /**

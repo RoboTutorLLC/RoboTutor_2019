@@ -60,6 +60,14 @@ public class BigMathProblemState {
     private boolean hasBorrowedHun;
     private boolean hasBorrowedTen;
 
+    private int borrowedTensLeft;
+
+    public void setBorrowedOnesLeft(int borrowedOnesLeft) {
+        this.borrowedOnesLeft = borrowedOnesLeft;
+    }
+
+    private int borrowedOnesLeft;
+
     public BigMathProblemState(CBigMath_Data data) {
         this.data = data;
 
@@ -78,6 +86,9 @@ public class BigMathProblemState {
         isCarrying = false;
         hasBorrowedHun = false;
         hasBorrowedTen = false;
+
+        borrowedOnesLeft = 0;
+        borrowedTensLeft = 0;
 
         currentDigit = ONE_DIGIT;
     }
@@ -356,5 +367,21 @@ public class BigMathProblemState {
 
     public void setHasBorrowedTen(boolean hasBorrowedTen) {
         this.hasBorrowedTen = hasBorrowedTen;
+    }
+
+    public int getBorrowedOnesLeft() {
+        return borrowedOnesLeft;
+    }
+
+    public void decrementBorrowedOnesLeft() {
+        this.borrowedOnesLeft--;
+    }
+
+    public int getBorrowedTensLeft() {
+        return borrowedTensLeft;
+    }
+
+    public void decrementBorrowedTensLeft() {
+        this.borrowedTensLeft--;
     }
 }

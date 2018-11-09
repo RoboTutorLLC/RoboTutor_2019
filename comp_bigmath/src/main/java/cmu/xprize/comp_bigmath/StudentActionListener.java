@@ -13,4 +13,8 @@ interface StudentActionListener {
     int getExpectedInt(String selection);
     // initialize a new problem
     void setData(CBigMath_Data data, int numDigits);
+
+
+    void setTutorState(String state);
+    void resetBorrowState();
 }

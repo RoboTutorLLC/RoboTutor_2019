@@ -44,12 +44,15 @@ import static cmu.xprize.util.MathUtil.getTensDigit;
 
 public class BigMathMechanic {
 
+    // MATH_BORROW todo list
+    // MATH_BORROW ( x) borrowed ten should not move with the others
+
     private final IBehaviorManager _behaviorManager;
     private final IPublisher _publisher;
     private Context _activity;
     private ViewGroup _viewGroup;
     private BigMathLayoutHelper _layout;
-    private StudentActionListener _sai;
+    private StudentActionListener _studentActionListener;
     private CBigMath_Data _data;
     private BigMathAnimationHelper _animator;
     private BigMathProblemState _problemState;
@@ -61,20 +64,17 @@ public class BigMathMechanic {
     public String _currentDigit;
 
     private int _numDigits;
-    private boolean ALL_AT_ONCE = true;
 
     private static final String BASE_TEN_TAG = "BaseTen";
 
     public static String APP_PRIVATE_FILES;
 
     // master writing box
-    CGlyphController_Simple _controller_master;
-    CGlyphInputContainer_Simple _inputContainer_master;
+    private CGlyphController_Simple _controller_master;
+    private CGlyphInputContainer_Simple _inputContainer_master;
 
-    CGlyphController_Simple _controller_left;
-    CGlyphInputContainer_Simple _inputContainer_left;
-
-    private StudentActionListener _studentActionListener;
+    private CGlyphController_Simple _controller_left;
+    private CGlyphInputContainer_Simple _inputContainer_left;
 
     public BigMathMechanic(Context activity, IBehaviorManager behaviorManager, IPublisher publisher, IHesitationManager hesitationManager, ViewGroup viewGroup, IPerformanceTracker performance) {
         _behaviorManager = behaviorManager;
@@ -129,11 +129,13 @@ public class BigMathMechanic {
     /**
      * Just a temporary placeholder to do all the things.
      */
-    void doAllTheThings() {
+    void initializeAllTheThings() {
 
         initializeLayout();
 
         initializeOnClickListeners();
+
+        initializeBorrowClicker();
 
         initializeWriteInputs();
 
@@ -152,6 +154,20 @@ public class BigMathMechanic {
         }
     }
 
+    /**
+     * MATH_BORROW this is a temporary device to cycle through borrow steps
+     */
+    private void initializeBorrowClicker() {
+        _studentActionListener.resetBorrowState();
+        View x = findViewById(R.id.CLICK_BOI);
+        x.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                _studentActionListener.setTutorState("waiting_for_borrow");
+            }
+        });
+    }
+
     private void initializeLayout() {
 
         int[] layouts = {R.layout.bigmath_1d, R.layout.bigmath_2d, R.layout.bigmath_3d};
@@ -163,6 +179,8 @@ public class BigMathMechanic {
      * TODO these could be significantly refactored
      */
     private void initializeOnClickListeners() {
+
+        boolean ALL_AT_ONCE = true;
 
         // PART 1: (ONE, TEN, HUN) for (OPA, OPB)
         String[] locations = {OPA_LOCATION, OPB_LOCATION};
@@ -181,7 +199,7 @@ public class BigMathMechanic {
                 if (_data.operation.equals("+")) {
                     oneListener = _animator.generateWaterfallClickListener(numLoc, ONE_DIGIT); // MATH_MISC (1) don't allow ghost dots to move
                 } else {
-                    oneListener = _animator.generateWaterfallSubtractClickListener(ONE_DIGIT);
+                    oneListener = _animator.generateWaterfallSubtractClickListener(ONE_DIGIT, false);
                 }
             } else if (!ALL_AT_ONCE && _numDigits >= 2) {
                 oneListener = _animator.generateSingleClickListener(ONE_DIGIT);
@@ -205,7 +223,10 @@ public class BigMathMechanic {
                 for (int i=1; i <= 10; i++) {
 
                     MovableImageView tenView = _layout.getBaseTenConcreteUnitView(numLoc, TEN_DIGIT, i);
-                    tenView.setOnClickListener(ALL_AT_ONCE ? _animator.generateWaterfallClickListener(numLoc, TEN_DIGIT, _data.operation) : _animator.generateSingleClickListener(TEN_DIGIT));
+                    // MATH_BORROW (state=-1) if (is_borrow... and first step.... set this as click listener to trigger the next steps
+                    tenView.setOnClickListener(ALL_AT_ONCE ?
+                            _animator.generateWaterfallClickListener(numLoc, TEN_DIGIT, _data.operation) :
+                            _animator.generateSingleClickListener(TEN_DIGIT));
                 }
 
             // add listeners to Hundreds
@@ -213,18 +234,26 @@ public class BigMathMechanic {
                 for (int i=1; i <= 5; i++) {
 
                     MovableImageView hunView = _layout.getBaseTenConcreteUnitView(numLoc, HUN_DIGIT, i);
-                    hunView.setOnClickListener(ALL_AT_ONCE ? _animator.generateWaterfallClickListener(numLoc, HUN_DIGIT, _data.operation) : _animator.generateSingleClickListener(HUN_DIGIT));
+                    hunView.setOnClickListener(ALL_AT_ONCE ?
+                            _animator.generateWaterfallClickListener(numLoc, HUN_DIGIT, _data.operation) :
+                            _animator.generateSingleClickListener(HUN_DIGIT));
                 }
 
             // PART 2 (BOX) for (one, ten, hun) will move sequential ones. These may or may not (but probably will) be used.
             if (_numDigits >= 2) // containing box doesn't need to be moved
-                _layout.getContainingBox(numLoc, ONE_DIGIT).setOnClickListener(ALL_AT_ONCE ? _animator.generateWaterfallClickListener(numLoc, ONE_DIGIT, _data.operation) : _animator.generateSequentialClickListener(ONE_DIGIT));
+                _layout.getContainingBox(numLoc, ONE_DIGIT).setOnClickListener(ALL_AT_ONCE ?
+                        _animator.generateWaterfallClickListener(numLoc, ONE_DIGIT, _data.operation) :
+                        _animator.generateSequentialClickListener(ONE_DIGIT));
 
             if (_numDigits >= 2)
-                _layout.getContainingBox(numLoc, TEN_DIGIT).setOnClickListener(ALL_AT_ONCE ? _animator.generateWaterfallClickListener(numLoc, TEN_DIGIT, _data.operation) :  _animator.generateSequentialClickListener(TEN_DIGIT));
+                _layout.getContainingBox(numLoc, TEN_DIGIT).setOnClickListener(ALL_AT_ONCE ?
+                        _animator.generateWaterfallClickListener(numLoc, TEN_DIGIT, _data.operation) :
+                        _animator.generateSequentialClickListener(TEN_DIGIT));
 
             if (_numDigits >= 3)
-                _layout.getContainingBox(numLoc, HUN_DIGIT).setOnClickListener(ALL_AT_ONCE ? _animator.generateWaterfallClickListener(numLoc, HUN_DIGIT, _data.operation) : _animator.generateSequentialClickListener(HUN_DIGIT));
+                _layout.getContainingBox(numLoc, HUN_DIGIT).setOnClickListener(ALL_AT_ONCE ?
+                        _animator.generateWaterfallClickListener(numLoc, HUN_DIGIT, _data.operation) :
+                        _animator.generateSequentialClickListener(HUN_DIGIT));
 
         }
 
@@ -247,6 +276,7 @@ public class BigMathMechanic {
 
 
         // PART 4... borrow
+        // MATH_BORROW why is this not working???
         for (int i = 1; i <= 10; i++) {
             if (_numDigits >= 2)
                 _layout.getBorrowConcreteUnitView(ONE_DIGIT, i).setOnClickListener(new View.OnClickListener() {

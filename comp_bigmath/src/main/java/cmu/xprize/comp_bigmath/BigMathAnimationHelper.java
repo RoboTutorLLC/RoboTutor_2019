@@ -14,6 +14,8 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import static cmu.xprize.comp_bigmath.BM_CONST.BORROW_LOCATION;
+import static cmu.xprize.comp_bigmath.BM_CONST.BORROW_ONE_DIGIT;
 import static cmu.xprize.comp_bigmath.BM_CONST.HUN_DIGIT;
 import static cmu.xprize.comp_bigmath.BM_CONST.ONE_DIGIT;
 import static cmu.xprize.comp_bigmath.BM_CONST.OPA_LOCATION;
@@ -28,6 +30,8 @@ import static cmu.xprize.util.MathUtil.getTensDigit;
 /**
  * RoboTutor
  * <p>
+ *     This contains the methods to generate animations.
+ * </p>
  * Created by kevindeland on 10/1/18.
  */
 
@@ -64,7 +68,7 @@ public class BigMathAnimationHelper {
         if (operation.equals("+")) {
             return new BaseTenOnClickAnimateWaterfall(numLoc, digit);
         } else {
-            return new BaseTenOnClickAnimateWaterfallSubtract(digit);
+            return new BaseTenOnClickAnimateWaterfallSubtract(digit, false);
         }
     }
 
@@ -136,6 +140,9 @@ public class BigMathAnimationHelper {
 
             case HUN_DIGIT:
                 return getHunsDigit(number);
+
+            case BORROW_ONE_DIGIT:
+                return -1;    // MATH_BORROW what to put here?
         }
 
         return -1;
@@ -609,6 +616,10 @@ public class BigMathAnimationHelper {
                     case OPB_LOCATION:
                         currentDigit = _problemState.getCurrentOpBTen();
                         break;
+
+                    case BORROW_LOCATION:
+                        currentDigit = _problemState.getBorrowedTensLeft();
+                        break;
                 }
 
                 break;
@@ -622,6 +633,10 @@ public class BigMathAnimationHelper {
 
                     case OPB_LOCATION:
                         currentDigit = _problemState.getCurrentOpBOne();
+                        break;
+
+                    case BORROW_LOCATION:
+                        currentDigit = _problemState.getBorrowedOnesLeft();
                         break;
                 }
                 break;
@@ -741,17 +756,20 @@ public class BigMathAnimationHelper {
         animSet.start();
     }
 
-    public View.OnClickListener generateWaterfallSubtractClickListener(String digit) {
-        return new BaseTenOnClickAnimateWaterfallSubtract(digit);
+    public View.OnClickListener generateWaterfallSubtractClickListener(String digit, boolean isBorrowed) {
+        return new BaseTenOnClickAnimateWaterfallSubtract(digit, isBorrowed);
     }
 
+    // MATH_BORROW can we use this for the Borrow Ones???
     class BaseTenOnClickAnimateWaterfallSubtract implements View.OnClickListener {
 
 
         private final String _digit;
+        private final boolean _isBorrowed;
 
-        public BaseTenOnClickAnimateWaterfallSubtract(String _digit) {
+        public BaseTenOnClickAnimateWaterfallSubtract(String _digit, boolean isBorrowed) {
             this._digit = _digit;
+            this._isBorrowed = isBorrowed;
         }
 
         @Override
@@ -761,14 +779,33 @@ public class BigMathAnimationHelper {
             if (_digit.equals(TEN_DIGIT) && !_problemState.isCanTapTens()) return;
             if (_digit.equals(HUN_DIGIT) && !_problemState.isCanTapHuns()) return;
 
+            //if (_digit.equals(BORROW_ONE_DIGIT) && (!_problemState.isHasBorrowedTen() || _problemState.getBorrowedOnesLeft() == 0)) return; // MATH_BORROW
+
             int numUnits = getDigitValue(OPB_LOCATION, _digit); // gets how many in opB...
 
-            // if we're moving to result, move whatever is left in the OPA row
-            final boolean hasDotsLeft = hasDotsLeftToSubtract(_digit);
-            if (!hasDotsLeft) {
-                if (_digit.equals(ONE_DIGIT)) numUnits = _problemState.getCurrentOpAOne();
-                else if (_digit.equals(TEN_DIGIT)) numUnits = _problemState.getCurrentOpATen();
-                else if (_digit.equals(HUN_DIGIT)) numUnits = _problemState.getCurrentOpAHun();
+            // if there are no dots left to subtract, move to the result
+            final boolean moveToResult = !hasDotsLeftToSubtract(_digit);
+
+            if (moveToResult) {
+                if (_isBorrowed) {
+                    if      (_digit.equals(ONE_DIGIT)) numUnits = _problemState.getBorrowedOnesLeft();
+                    else if (_digit.equals(TEN_DIGIT)) numUnits = _problemState.getBorrowedTensLeft();
+                } else {
+                    if      (_digit.equals(ONE_DIGIT)) numUnits = _problemState.getCurrentOpAOne();
+                    else if (_digit.equals(TEN_DIGIT)) numUnits = _problemState.getCurrentOpATen();
+                    else if (_digit.equals(HUN_DIGIT)) numUnits = _problemState.getCurrentOpAHun();
+                }
+            } else if (_isBorrowed) {
+                // what if we have borrowed ones, but not enough room for all of them
+                switch(_digit) {
+                    case ONE_DIGIT:
+                        numUnits = getOnesDigit(_problemState.getData().dataset[1]) - _problemState.getSubtrahendOne();
+                        break;
+
+                    case TEN_DIGIT:
+                        numUnits = getTensDigit(_problemState.getData().dataset[1]) - _problemState.getSubtrahendTen();
+                        break;
+                }
             }
 
             // for each digit to animate, do the waterfall thing
@@ -776,7 +813,7 @@ public class BigMathAnimationHelper {
                 (new Handler(Looper.getMainLooper())).postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        moveSequentialSubtraction(_digit, !hasDotsLeft);
+                        moveSequentialSubtraction(_digit, moveToResult, _isBorrowed);
                     }
                 }, WATERFALL_DELAY * i);
         }
@@ -788,7 +825,7 @@ public class BigMathAnimationHelper {
      * @return
      */
     private boolean hasDotsLeftToSubtract(String digit) {
-        // check that subtract has things l
+        // check that subtract has things left
         switch(digit) {
             case HUN_DIGIT:
                 if (_problemState.getSubtrahendHun() == getHunsDigit(_problemState.getData().dataset[1])) {
@@ -814,11 +851,17 @@ public class BigMathAnimationHelper {
 
     /**
      * Move the next subtraction in line. Will only move up to OPB number...
-     * @param digitPlace
+     * @param digitPlace ONE, TEN, HUN
+     * @param toResult If true, move to result. If false, move to subtrahend.
      */
-    private void moveSequentialSubtraction(final String digitPlace, final boolean toResult) {
+    private void moveSequentialSubtraction(final String digitPlace, final boolean toResult, final boolean isBorrowed) {
         // BUG_605 NEXT NEXT NEXT
-        final MovableImageView oldView = determineNextTopView(OPA_LOCATION, digitPlace);
+        final MovableImageView oldView;
+        if (!isBorrowed) {
+            oldView = determineNextTopView(OPA_LOCATION, digitPlace);
+        } else {
+            oldView = determineNextTopView(BORROW_LOCATION, digitPlace);
+        }
         // if we're at zero, this will return null
         if (oldView == null) return;
 
@@ -856,7 +899,8 @@ public class BigMathAnimationHelper {
                         oldView.setImageDrawable(getDrawable(R.drawable.empty_10_h));
                         newView.setImageDrawable(getDrawable(R.drawable.blue_10_h));
 
-                        _problemState.decrementCurrentOpATen();
+                        if (isBorrowed) _problemState.decrementBorrowedTensLeft();
+                        else _problemState.decrementCurrentOpATen();
                         // either increment subrahend or result, depending on where we're moving the dot
                         if (!toResult) _problemState.incrementSubtrahendTen();
                         else _problemState.incrementResultTen();
@@ -867,7 +911,8 @@ public class BigMathAnimationHelper {
                         oldView.setImageDrawable(getDrawable(R.drawable.empty_1));
                         newView.setImageDrawable(getDrawable(R.drawable.blue_1));
 
-                        _problemState.decrementCurrentOpAOne();
+                        if (isBorrowed) _problemState.decrementBorrowedOnesLeft();
+                        else _problemState.decrementCurrentOpAOne();
                         // either increment subrahend or result, depending on where we're moving the dot
                         if (!toResult) _problemState.incrementSubtrahendOne();
                         else _problemState.incrementResultOne();
@@ -1167,16 +1212,16 @@ public class BigMathAnimationHelper {
             Toast.makeText(_activity, "You have no tens to borrow!", Toast.LENGTH_SHORT).show();
             return;
         }
-        final MovableImageView newView = (MovableImageView) findViewById(R.id.borrow_ten_helper);
+        final MovableImageView helperView = (MovableImageView) findViewById(R.id.borrow_ten_helper);
 
-        AnimatorSet animSet = generateViewToViewAnimatorSet(oldView, newView, 1000);
+        AnimatorSet animSet = generateViewToViewAnimatorSet(oldView, helperView, 1000);
 
         animSet.addListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animation) {
-                newView.isMoving = true;
-                newView.setVisibility(View.VISIBLE);
-                newView.setImageDrawable(getDrawable(R.drawable.blue_10_h));
+                helperView.isMoving = true;
+                helperView.setVisibility(View.VISIBLE);
+                helperView.setImageDrawable(getDrawable(R.drawable.blue_10_h));
 
                 oldView.setImageDrawable(getDrawable(R.drawable.empty_10_h));
                 oldView.isMovable = false;
@@ -1185,14 +1230,16 @@ public class BigMathAnimationHelper {
             @Override
             public void onAnimationEnd(Animator animation) {
                 // hide the ten that moved and...
-                newView.setVisibility(View.INVISIBLE);
+                helperView.setVisibility(View.INVISIBLE);
                 _problemState.setBorrowing(false);
                 _problemState.setHasBorrowedTen(true);
+                _problemState.setBorrowedOnesLeft(10);
 
                 // ... replace it with ten ones
                 for(int i=1; i <= 10; i++) {
                     MovableImageView one = _layout.getBaseTenConcreteUnitView("borrow", ONE_DIGIT, i);
                     one.setVisibility(View.VISIBLE);
+                    one.setOnClickListener(generateWaterfallSubtractClickListener(ONE_DIGIT, true));
                 }
 
             }

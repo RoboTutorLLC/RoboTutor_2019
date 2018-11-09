@@ -99,7 +99,7 @@ public class StudentActionListenerImpl implements StudentActionListener{
         // if a_one + b_one > 9, we must carry to tens column
         _isCarryOne = getOnesDigit(a) + getOnesDigit(b) > 9;
         if (_isCarryOne) {
-            _publisher.publishFeature(FTR_IS_CARRY);
+            _publisher.publishFeature(FTR_IS_CARRY); // MATH_BORROW mimic
         }
 
         if (_numDigits < 3) return; // only works for hundreds...
@@ -120,7 +120,7 @@ public class StudentActionListenerImpl implements StudentActionListener{
         // if a_one < b_one, we need to borrow a ten from a_ten
         _isBorrowTen = getOnesDigit(a) < getOnesDigit(b);
         if (_isBorrowTen) {
-            _publisher.publishFeature(FTR_IS_BORROW);
+            _publisher.publishFeature(FTR_IS_BORROW); // MATH_BORROW (1) set Borrow Feature
         }
 
         if (_numDigits < 3) return; // save this for later, when we do 3 digits
@@ -430,25 +430,28 @@ public class StudentActionListenerImpl implements StudentActionListener{
     }
     //end
 
-    int _borrowState;
+    public void resetBorrowState() {
+        _borrowState = -1;
+    }
+    int _borrowState = -1;
     /**
      * for setting the tutor state...
      * ROBO_MATH here is where mystery borrow actions happens! ... now to convert it to RoboTutor
      */
-    private void _setTutorState(final String state) {
+    public void setTutorState(final String state) {
 
         if (state.equals("waiting_for_borrow")) {
             switch (_borrowState) {
-                case -1:
+                case -1: // MATH_BORROW (what triggers?)
                     _bigMath.borrowTen();
                     break;
 
-                case 0:
+                case 0: // MATH_BORROW (what triggers?)
                     _playAudio("Now we have one less TEN");
                     _bigMath.strikeThroughTenBorrow();
                     break;
 
-                case 1:
+                case 1: // MATH_BORROW (what triggers?)
                     _playAudio("HERE, write how many TENS are left");
                     _bigMath.showBorrowDigitHolder();
                     break;

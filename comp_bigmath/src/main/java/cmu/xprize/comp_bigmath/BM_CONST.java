@@ -16,6 +16,8 @@ public class BM_CONST {
     public static final String TEN_DIGIT = "ten";
     public static final String HUN_DIGIT = "hun";
 
+    static final String BORROW_ONE_DIGIT = "borrow_one";
+
     public static final String TEN_CARRY_DIGIT = "ten_c";
     public static final String HUN_CARRY_DIGIT = "hun_c";
 
@@ -25,6 +27,7 @@ public class BM_CONST {
     public static final String OPA_LOCATION = "opA";
     public static final String OPB_LOCATION = "opB";
     public static final String RESULT_LOCATION = "result";
+    public static final String BORROW_LOCATION = "borrow";
 
     // class for just features
     public static final class FEATURES {
