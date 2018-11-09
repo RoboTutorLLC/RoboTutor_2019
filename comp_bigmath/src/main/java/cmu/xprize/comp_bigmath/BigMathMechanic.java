@@ -22,6 +22,7 @@ import cmu.xprize.util.IPerformanceTracker;
 import cmu.xprize.util.IPublisher;
 
 import static cmu.xprize.comp_bigmath.BM_CONST.ALL_DIGITS;
+import static cmu.xprize.comp_bigmath.BM_CONST.BORROW_LOCATION;
 import static cmu.xprize.comp_bigmath.BM_CONST.HUN_CARRY_DIGIT;
 import static cmu.xprize.comp_bigmath.BM_CONST.HUN_DIGIT;
 import static cmu.xprize.comp_bigmath.BM_CONST.ONE_DIGIT;
@@ -286,6 +287,15 @@ public class BigMathMechanic {
                         _animator.moveOneBorrow(v);
                     }
                 });
+
+            if (_numDigits >= 2) {
+                _layout.getContainingBox(BORROW_LOCATION, ONE_DIGIT).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        _animator.moveOneBorrow(v);
+                    }
+                });
+            }
 
             if (_numDigits >= 3)
                 _layout.getBorrowConcreteUnitView(TEN_DIGIT, i).setOnClickListener(new View.OnClickListener() {
