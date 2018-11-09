@@ -30,6 +30,12 @@
         <attr name="tutor_song" format="boolean"/>
         <attr name="tutor_write" format="boolean"/>
 
+        <attr name="tutor_spelling" format="boolean"/>
+        <attr name="tutor_picmatch" format="boolean"/>
+        <attr name="tutor_numcompare" format="boolean"/>
+        <attr name="tutor_placevalue" format="boolean"/>
+        <attr name="tutor_bigmath" format="boolean"/>
+
 
     </declare-styleable>
 
