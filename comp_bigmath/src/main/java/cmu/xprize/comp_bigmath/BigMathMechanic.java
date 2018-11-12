@@ -12,6 +12,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.util.Arrays;
+
 import cmu.xprize.comp_writebox.CGlyphController_Simple;
 import cmu.xprize.comp_writebox.CGlyphInputContainer_Simple;
 import cmu.xprize.comp_writebox.IGlyphController_Simple;
@@ -46,7 +48,10 @@ import static cmu.xprize.util.MathUtil.getTensDigit;
 public class BigMathMechanic {
 
     // MATH_BORROW todo list
-    // MATH_BORROW ( x) borrowed ten should not move with the others
+    // MATH_BORROW (-1) prevent ones from tapping until we've borrowed
+    // MATH_BORROW (-1) onClick of the TENS space...
+    // MATH_BORROW (0, 1, 2) if "write_borrow_ten", then strike out TEN and write TEN-1
+    // MATH_BORROW (3, 4, 5) if "write_borrow_one", then strike out ONE and write ONE+10
 
     private final IBehaviorManager _behaviorManager;
     private final IPublisher _publisher;
@@ -178,7 +183,7 @@ public class BigMathMechanic {
     }
     /**
      * Initialize the OnClick performance of the Views
-     * TODO these could be significantly refactored
+     * TODO these could be significantly refactored... can we change the click listeners after each step?
      */
     private void initializeOnClickListeners() {
 
@@ -191,34 +196,33 @@ public class BigMathMechanic {
 
             // subtraction doesn't have click listeners in the second row, it just receives
             if (numLoc.equals(OPB_LOCATION) && _data.operation.equals("-")) {
-                return;
+                break; // MATH_BORROW changing this to "break" will break everything
             }
 
-            // BUG_605 waterfall not ready for subtraction
-            View.OnClickListener oneListener;
-            boolean useWaterfallForOnesDigit = ALL_AT_ONCE && _numDigits >= 2;
-            if (useWaterfallForOnesDigit) {
-                if (_data.operation.equals("+")) {
-                    oneListener = _animator.generateWaterfallClickListener(numLoc, ONE_DIGIT); // MATH_MISC (1) don't allow ghost dots to move
+            // this should always happen
+            if (_numDigits >= 1) {
+                View.OnClickListener oneListener;
+                boolean useWaterfallForOnesDigit = ALL_AT_ONCE && _numDigits >= 2;
+                if (useWaterfallForOnesDigit) {
+                    if (_data.operation.equals("+")) {
+                        oneListener = _animator.generateWaterfallClickListener(numLoc, ONE_DIGIT); // MATH_MISC (1) don't allow ghost dots to move
+                    } else {
+                        oneListener = _animator.generateWaterfallSubtractClickListener(ONE_DIGIT, false);
+                    }
+                } else if (!ALL_AT_ONCE && _numDigits >= 2) {
+                    oneListener = _animator.generateSingleClickListener(ONE_DIGIT);
                 } else {
-                    oneListener = _animator.generateWaterfallSubtractClickListener(ONE_DIGIT, false);
+                    oneListener = _animator.generateSingleClickListener(ONE_DIGIT);
                 }
-            } else if (!ALL_AT_ONCE && _numDigits >= 2) {
-                oneListener = _animator.generateSingleClickListener(ONE_DIGIT);
-            } else {
-                oneListener = _animator.generateSingleClickListener(ONE_DIGIT);
+
+                // add listeners to Ones
+                for (int i = 1; i <= 10; i++) {
+
+                    MovableImageView oneView = _layout.getBaseTenConcreteUnitView(numLoc, ONE_DIGIT, i);
+
+                    oneView.setOnClickListener(oneListener);
+                }
             }
-
-            // add listeners to Ones
-            for (int i=1; i <= 10; i++) {
-
-                MovableImageView oneView = _layout.getBaseTenConcreteUnitView(numLoc, ONE_DIGIT, i);
-
-                oneView.setOnClickListener(oneListener);
-            }
-
-            // BUG_605 next: can we make waterfall not ready for subtraction?
-            boolean useWaterfallForMultiDigit = ALL_AT_ONCE && _data.operation.equals("+");
 
             // add listeners to Tens
             if (_numDigits >= 2)
@@ -288,15 +292,6 @@ public class BigMathMechanic {
                     }
                 });
 
-            if (_numDigits >= 2) {
-                _layout.getContainingBox(BORROW_LOCATION, ONE_DIGIT).setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        _animator.moveOneBorrow(v);
-                    }
-                });
-            }
-
             if (_numDigits >= 3)
                 _layout.getBorrowConcreteUnitView(TEN_DIGIT, i).setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -306,11 +301,79 @@ public class BigMathMechanic {
                 });
         }
 
+        if (_numDigits >= 2) {
+            _layout.getContainingBox(BORROW_LOCATION, ONE_DIGIT).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    _animator.moveOneBorrow(v);
+                }
+            });
+        }
+
+
+        String x = "y";
+        if (_numDigits >= 2) {
+            findViewById(R.id.borrow_ten_highlight_indicator).setOnClickListener(new BorrowFromClickListener());
+        }
+
+    }
+
+
+    /**
+     * Lock a concrete representation from moving before enough has been borrowed
+     * @param digit ONE_DIGIT (where??? in borrow)...
+     */
+    public void lockDigitConcreteBeforeBorrowing(String digit) {
+
+        digit = ONE_DIGIT; // just working with 2-digits at the moment
+        // get all one-digit listeners
+        // for (int i = 0; i < 10; i++) { one = getLayout.... one.setListener(applyBehavior("NOT_ENOUGH")) };
+        // getContainingBox("one").setListener(applyBehavior("NOT_ENOUGH"));
+    }
+
+    /**
+     * Unlock a concrete representation to move after enough has been borrowed
+     *
+     * @param digit ONE_DIGIT
+     */
+    public void unlockDigitConcreteAfterBorrowing(String digit) {
+
+        digit = ONE_DIGIT; // just working w/ 2-digits at the moment
+        // get all one-digit listeners
+        // set them to special OnClick status
+
+    }
+
+    /**
+     * Borrows from the ten guy
+     */
+    class BorrowFromClickListener implements View.OnClickListener {
+
+        @Override
+        public void onClick(View view) {
+            // MATH_BORROW trigger a borrow
+            if (_problemState.isHasBorrowedTen()) return;
+            borrowTen();
+            _problemState.setHasBorrowedTen(true);
+            findViewById(R.id.borrow_ten_highlight_indicator).setVisibility(View.INVISIBLE);
+
+
+            if (Arrays.asList(new String[]{"write_borrow_ten", "write_borrow_one"}).contains("write_borrow_ten")) {
+                strikeThroughTenBorrow();
+                int newVal = getTensDigit(_data.dataset[0]) - 1;
+                writeNewTenBorrowedValue(newVal, true); // MATH_BORROW NEXT NEXT NEXT so easy a caveman could do it
+                // MATH_BORROW NEXT NEXT NEXT only show the highlight when necessary, but still accept clicks
+
+                strikeThroughOneBorrow();
+                int newOnesVal = getOnesDigit(_data.dataset[0]) + 10;
+                populateOneWithBorrowedTen(newOnesVal, true);
+            }
+        }
     }
 
     /**
      * Mark and display a digit as wrong
-     * @param digit
+     * @param digit which digit box.
      */
     public void markDigitWrong(String digit) {
         DigitView view;
@@ -690,7 +753,10 @@ public class BigMathMechanic {
             boolean highlightThisColumn = digit.equals(column) || digit.equals(ALL_DIGITS);
             // only highlight some
             int opacity =  highlightThisColumn ? 255 : (int) _activity.getResources().getInteger(R.integer.unused_concrete_alpha);
-            float floatPacity = highlightThisColumn ? 1.0f :  (float)((float) _activity.getResources().getInteger(R.integer.unused_concrete_alpha) / 255.0);
+
+            float highlightFloat = 1.0f;
+            float lowlightFloat = (float)((float) _activity.getResources().getInteger(R.integer.unused_concrete_alpha) / 255.0);
+            float floatPacity = highlightThisColumn ? highlightFloat : lowlightFloat;
 
             for (String numberLoc : numberLocations) {
 
@@ -709,8 +775,27 @@ public class BigMathMechanic {
                     }
                 }
 
-                _layout.getBaseTenDigitView(numberLoc, column).setAlpha(floatPacity);
-                _layout.getBaseTenDigitView(numberLoc, column).setTextColor(Color.BLACK); // idk why it's not already black? (see "addSubtractDigitColor" in colors.xml...)
+                DigitView digitView = _layout.getBaseTenDigitView(numberLoc, column);
+                digitView.setAlpha(digitView.isCrossedOut ? lowlightFloat : floatPacity);
+                digitView.setTextColor(Color.BLACK); // idk why it's not already black? (see "addSubtractDigitColor" in colors.xml...)
+
+            }
+
+            DigitView carryDigitView = _layout.getCarryDigitView(column);
+            if (carryDigitView != null) {
+                carryDigitView.setAlpha(floatPacity);
+                carryDigitView.setTextColor(Color.BLACK);
+            }
+
+            DigitView borrowDigit = null;
+            if (column.equals(ONE_DIGIT)) {
+                borrowDigit = (DigitView) findViewById(R.id.symbol_borrow_one);
+            } else if (column.equals(TEN_DIGIT)) {
+                borrowDigit = (DigitView) findViewById(R.id.symbol_borrow_ten);
+            }
+            if (borrowDigit != null) {
+                borrowDigit.setAlpha(floatPacity);
+                borrowDigit.setTextColor(Color.BLACK);
             }
 
         }
@@ -800,9 +885,10 @@ public class BigMathMechanic {
      */
     public void strikeThroughTenBorrow() {
         // this happens afer animation
-        TextView borrowFromMe = (TextView) findViewById(R.id.symbol_opA_ten);
+        DigitView borrowFromMe = (DigitView) findViewById(R.id.symbol_opA_ten);
         borrowFromMe.setPaintFlags(borrowFromMe.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG); // strike through
         borrowFromMe.setTextColor(_activity.getResources().getColor(R.color.borrowedColor));
+        borrowFromMe.isCrossedOut = true;
     }
 
     /**
@@ -816,28 +902,35 @@ public class BigMathMechanic {
         // BigWriteBox.onRecognized, do "writeNewTenBorrowedValue"
     }
 
-    public void writeNewTenBorrowedValue(int newValue) {
+    public void writeNewTenBorrowedValue(int newValue, boolean scaffolded) {
 
         // MATH_BEHAVIOR (1) (remove showBorrowDigitHolder)
         // then the student writes this value. this will be replaced by actual action
         final DigitView borrowTenDigit = (DigitView) findViewById(R.id.symbol_borrow_ten);
         borrowTenDigit.setVisibility(View.VISIBLE);
-        borrowTenDigit.setOnClickListener(new View.OnClickListener() {
 
-            @Override
-            public void onClick(View v) {
-                _controller_master.setWritingController(new OnCharacterRecognizedListener(_controller_master, borrowTenDigit)); // ROBO_MATH (5-WAIT)
-                _controller_master.setVisibility(View.VISIBLE);
-                borrowTenDigit.setText("");
-            }
-        });
+        if (scaffolded) {
+            borrowTenDigit.setText("" + newValue);
+        } else {
+            borrowTenDigit.setText("");
+            borrowTenDigit.setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+                    _controller_master.setWritingController(new OnCharacterRecognizedListener(_controller_master, borrowTenDigit)); // ROBO_MATH (5-WAIT)
+                    _controller_master.setVisibility(View.VISIBLE);
+                    borrowTenDigit.setText("");
+                }
+            });
+        }
     }
 
     public void strikeThroughOneBorrow() {
         // replace one value
-        TextView addTenToMe = (TextView) findViewById(R.id.symbol_opA_one);
+        DigitView addTenToMe = (DigitView) findViewById(R.id.symbol_opA_one);
         addTenToMe.setPaintFlags(addTenToMe.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG); // strike through
         addTenToMe.setTextColor(_activity.getResources().getColor(R.color.borrowedColor));
+        addTenToMe.isCrossedOut = true;
     }
 
     private boolean _borrowTenIsWritten = false;
@@ -845,83 +938,89 @@ public class BigMathMechanic {
     /**
      * show that we're borrowing
      */
-    public void populateOneWithBorrowedTen(int newOneValue) {
+    public void populateOneWithBorrowedTen(int newOneValue, boolean scaffolded) {
         // show left digit box and right digit box
         final DigitView borrowOne = (DigitView) findViewById(R.id.symbol_borrow_one);
         borrowOne.setVisibility(View.VISIBLE);
-        borrowOne.setText("");
 
-        // when the box is touched, open up two new boxes
-        borrowOne.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
 
-                // different type of box
-                _controller_master.setVisibility(View.VISIBLE);
+        if (scaffolded) {
+            borrowOne.setText("" + newOneValue);
+        } else {
+            borrowOne.setText("");
 
-                _controller_master.setWritingController(new IWritingComponent_Simple() {
-                    @Override
-                    public boolean updateStatus(IGlyphController_Simple child, CRecResult[] _ltkPlusCandidates) {
-                        return false;
-                    }
+            // when the box is touched, open up two new boxes
+            borrowOne.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
 
-                    @Override
-                    public boolean updateStatus(String _ltkPlusResult) {
+                    // different type of box
+                    _controller_master.setVisibility(View.VISIBLE);
 
-                        findViewById(R.id.write_box_right).setVisibility(View.GONE);
-                        findViewById(R.id.write_box_digit_right).setVisibility(View.VISIBLE);
-                        ((TextView) findViewById(R.id.write_box_digit_right)).setText(_ltkPlusResult);
-
-                        _controller_master.eraseGlyph();
-                        _borrowOneIsWritten = true;
-
-                        if (_borrowTenIsWritten) {
-                            findViewById(R.id.write_box_right).setVisibility(View.GONE);
-                            findViewById(R.id.write_box_digit_right).setVisibility(View.GONE);
-                            findViewById(R.id.write_box_left).setVisibility(View.GONE);
-                            findViewById(R.id.write_box_digit_left).setVisibility(View.GONE);
-
-                            // nasty
-                            String answer = ((TextView) findViewById(R.id.write_box_digit_left)).getText() + _ltkPlusResult ;
-                            ((DigitView) findViewById(R.id.symbol_borrow_one)).setText(answer);
+                    _controller_master.setWritingController(new IWritingComponent_Simple() {
+                        @Override
+                        public boolean updateStatus(IGlyphController_Simple child, CRecResult[] _ltkPlusCandidates) {
+                            return false;
                         }
-                        return false;
-                    }
-                });
 
-                _controller_left.setVisibility(View.VISIBLE);
+                        @Override
+                        public boolean updateStatus(String _ltkPlusResult) {
 
-                _controller_left.setWritingController(new IWritingComponent_Simple() {
-                    @Override
-                    public boolean updateStatus(IGlyphController_Simple child, CRecResult[] _ltkPlusCandidates) {
-                        return false;
-                    }
-
-                    @Override
-                    public boolean updateStatus(String _ltkPlusResult) {
-
-                        findViewById(R.id.write_box_left).setVisibility(View.GONE);
-                        findViewById(R.id.write_box_digit_left).setVisibility(View.VISIBLE);
-                        ((DigitView) findViewById(R.id.write_box_digit_left)).setText(_ltkPlusResult);
-
-                        _controller_left.eraseGlyph();
-                        _borrowTenIsWritten = true;
-
-                        if (_borrowOneIsWritten) {
                             findViewById(R.id.write_box_right).setVisibility(View.GONE);
-                            findViewById(R.id.write_box_digit_right).setVisibility(View.GONE);
-                            findViewById(R.id.write_box_left).setVisibility(View.GONE);
-                            findViewById(R.id.write_box_digit_left).setVisibility(View.GONE);
+                            findViewById(R.id.write_box_digit_right).setVisibility(View.VISIBLE);
+                            ((TextView) findViewById(R.id.write_box_digit_right)).setText(_ltkPlusResult);
 
-                            // nasty
-                            String answer = _ltkPlusResult + ((TextView) findViewById(R.id.write_box_digit_right)).getText();
-                            ((DigitView) findViewById(R.id.symbol_borrow_one)).setText(answer);
+                            _controller_master.eraseGlyph();
+                            _borrowOneIsWritten = true;
+
+                            if (_borrowTenIsWritten) {
+                                findViewById(R.id.write_box_right).setVisibility(View.GONE);
+                                findViewById(R.id.write_box_digit_right).setVisibility(View.GONE);
+                                findViewById(R.id.write_box_left).setVisibility(View.GONE);
+                                findViewById(R.id.write_box_digit_left).setVisibility(View.GONE);
+
+                                // nasty
+                                String answer = ((TextView) findViewById(R.id.write_box_digit_left)).getText() + _ltkPlusResult;
+                                ((DigitView) findViewById(R.id.symbol_borrow_one)).setText(answer);
+                            }
+                            return false;
                         }
-                        return false;
-                    }
-                });
-            }
-        });
+                    });
+
+                    _controller_left.setVisibility(View.VISIBLE);
+
+                    _controller_left.setWritingController(new IWritingComponent_Simple() {
+                        @Override
+                        public boolean updateStatus(IGlyphController_Simple child, CRecResult[] _ltkPlusCandidates) {
+                            return false;
+                        }
+
+                        @Override
+                        public boolean updateStatus(String _ltkPlusResult) {
+
+                            findViewById(R.id.write_box_left).setVisibility(View.GONE);
+                            findViewById(R.id.write_box_digit_left).setVisibility(View.VISIBLE);
+                            ((DigitView) findViewById(R.id.write_box_digit_left)).setText(_ltkPlusResult);
+
+                            _controller_left.eraseGlyph();
+                            _borrowTenIsWritten = true;
+
+                            if (_borrowOneIsWritten) {
+                                findViewById(R.id.write_box_right).setVisibility(View.GONE);
+                                findViewById(R.id.write_box_digit_right).setVisibility(View.GONE);
+                                findViewById(R.id.write_box_left).setVisibility(View.GONE);
+                                findViewById(R.id.write_box_digit_left).setVisibility(View.GONE);
+
+                                // nasty
+                                String answer = _ltkPlusResult + ((TextView) findViewById(R.id.write_box_digit_right)).getText();
+                                ((DigitView) findViewById(R.id.symbol_borrow_one)).setText(answer);
+                            }
+                            return false;
+                        }
+                    });
+                }
+            });
+        }
     }
 
     /**

@@ -178,7 +178,7 @@
 
 
         <!-- this is just a spacer -->
-        <TextView
+        <cmu.xprize.comp_bigmath.DigitView
             android:id="@+id/symbol_carry_one"
             android:layout_width="@dimen/add_subtract_digit_width"
             android:layout_height="fill_parent"
@@ -270,7 +270,7 @@
         </com.example.android.constraintlayoutexamples.write.CGlyphController_Simple> -->
 
         <!-- this is just a spacer -->
-        <TextView
+        <cmu.xprize.comp_bigmath.DigitView
             android:layout_width="@dimen/add_subtract_digit_width"
             android:layout_height="100sp"
             android:background="@null"
@@ -291,7 +291,7 @@
         />
 
     <View
-        android:id="@+id/borrow_one_box"
+        android:id="@+id/one_borrow_box"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_margin="8dp"
@@ -332,7 +332,21 @@
             android:layout_height="wrap_content"
             android:clipChildren="false"
             android:clipToPadding="false" />
+
     </RelativeLayout>
+
+    <!-- I made a separate View to handle borrow clicks, to avoid setting and resetting click listeners for TEN_OPA_BOX -->
+    <View
+        android:id="@+id/borrow_ten_highlight_indicator"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@android:color/holo_orange_light"
+        app:layout_constraintLeft_toLeftOf="@+id/ten_opA_box"
+        app:layout_constraintRight_toRightOf="@+id/ten_opA_box"
+        app:layout_constraintTop_toTopOf="@+id/ten_opA_box"
+        app:layout_constraintBottom_toBottomOf="@+id/ten_opA_box"
+        android:alpha="0.2"
+        android:visibility="visible"/>
 
     <RelativeLayout
         android:id="@+id/one_opA_box"
@@ -369,7 +383,7 @@
         app:layout_constraintBottom_toTopOf="@+id/guideline_bottom_of_top"
         app:layout_constraintTop_toTopOf="@+id/guideline_top_of_top">
 
-        <TextView
+        <cmu.xprize.comp_bigmath.DigitView
             android:id="@+id/symbol_opA_ten"
             android:layout_width="@dimen/add_subtract_digit_width"
             android:layout_height="fill_parent"
@@ -379,7 +393,7 @@
             android:gravity="center"
             />
 
-        <TextView
+        <cmu.xprize.comp_bigmath.DigitView
             android:id="@+id/symbol_opA_one"
             android:layout_width="@dimen/add_subtract_digit_width"
             android:layout_height="fill_parent"
@@ -483,7 +497,7 @@
             android:gravity="center"
             />
 
-        <TextView
+        <cmu.xprize.comp_bigmath.DigitView
             android:id="@+id/symbol_opB_ten"
             android:layout_width="@dimen/add_subtract_digit_width"
             android:layout_height="fill_parent"
@@ -493,7 +507,7 @@
             android:gravity="center"
             />
 
-        <TextView
+        <cmu.xprize.comp_bigmath.DigitView
             android:id="@+id/symbol_opB_one"
             android:layout_width="@dimen/add_subtract_digit_width"
             android:layout_height="fill_parent"
@@ -725,14 +739,14 @@
         android:layout_height="@dimen/add_subtract_10_width_2d"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        app:layout_constraintLeft_toLeftOf="@+id/borrow_one_box"
+        app:layout_constraintLeft_toLeftOf="@+id/one_borrow_box"
         app:layout_constraintBottom_toTopOf="@+id/guideline_top_of_top"/>
 
 
     <include android:id="@+id/borrow_ones" layout="@layout/concrete_one_horizontal_2d"
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
-        app:layout_constraintLeft_toLeftOf="@+id/borrow_one_box"
+        app:layout_constraintLeft_toLeftOf="@+id/one_borrow_box"
         app:layout_constraintBottom_toTopOf="@+id/guideline_top_of_top"
         android:clipChildren="false"
         android:clipToPadding="false"

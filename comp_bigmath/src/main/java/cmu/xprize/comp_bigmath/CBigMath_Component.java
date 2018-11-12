@@ -69,6 +69,7 @@ public class CBigMath_Component extends RelativeLayout implements ILoadableObjec
     public String bootFeatures;
     public int rows;
     public int cols;
+    public String[] borrowScaffolds;
     public CBigMath_Data[] dataSource;
     protected CBigMath_Data currentData;
 
@@ -251,6 +252,13 @@ public class CBigMath_Component extends RelativeLayout implements ILoadableObjec
             publishFeature(FTR_WRITE_DIGIT);
         }
 
+    }
+
+    /**
+     * MATH_BORROW (next) put this into the animator_graph
+     */
+    public void lockOneDigitConcrete() {
+        _mechanic.lockDigitConcreteBeforeBorrowing(ONE_DIGIT);
     }
 
     private boolean checkIfHasUnitsToTap() {

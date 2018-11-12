@@ -1,6 +1,8 @@
 {
  "bootFeatures": "FTR_DEMO_SUB",
 
+  "borrowScaffolds": ["write_borrow_ten", "write_borrow_one"],
+
 "dataSource": [
 
 {"type":"CBigMath_Data", "level":"demo", "task":" Double Digit Borrow","dataset": [86,37,49],"operation": "-"},

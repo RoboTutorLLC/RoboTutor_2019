@@ -256,7 +256,7 @@
           "COMMENT":"This node moves to the next digit in the problem.",
           "type":"node",
           "maptype":"moduleMap",
-          "mapname": "NEXTDIGIT",
+          "mapname": "NEXTDIGIT_B",
           "preenter":[],
           "preexit" :[],
           "edges":
@@ -387,6 +387,30 @@
 
           ]
         },
+
+
+// MATH_BORROW (next) check to make sure we've borrowed... "lockOneDigitCorrect"
+        "NEXTDIGIT_B": {
+          "type": "MODULE",
+          "reuse": true,
+          "COMMENT": "???",
+          "tracks": [
+            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SBigMath", "method": "logState", "parms": "type#node,value#NEXTDIGITs:String", "features":""},
+            {"type": "COMMAND", "id": "SBigMath", "method": "nextDigit", "features": ""},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "Touch each one to add them up.mp3", "soundpackage":"bigmath", "volume": 1.0, "mode":"flow", "features": "FTR_ON_DIGIT_ONE"},
+            {"type": "COMMAND", "id": "SBigMath", "method": "pointAtDotContainer", "parms": "opA:String|one:String", "features": "FTR_ON_DIGIT_ONE"},
+            //{"type": "COMMAND", "id": "SBigMath", "method": "pointAtDigitInput", "parms": "result:String|one:String", "features": "FTR_ON_DIGIT_ONE"},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "Touch each ten to add them up.mp3", "soundpackage":"bigmath", "volume": 1.0, "mode":"flow", "features": "FTR_ON_DIGIT_TEN"},
+            {"type": "COMMAND", "id": "SBigMath", "method": "pointAtDotContainer", "parms": "opA:String|ten:String", "features": "FTR_ON_DIGIT_TEN"},
+            //{"type": "COMMAND", "id": "SBigMath", "method": "pointAtDigitInput", "parms": "result:String|ten:String", "features": "FTR_ON_DIGIT_TEN"}
+
+            {"type": "COMMAND", "id": "SBigMath", "method": "triggerHesitationTimer", "features": ""}
+
+            // tap the numbers
+
+          ]
+        },
+
 
         "USERINPUT": {
           "type": "MODULE",

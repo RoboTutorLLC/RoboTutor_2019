@@ -175,7 +175,7 @@
         app:layout_constraintRight_toRightOf="@+id/guideline_vertical_1"
         app:layout_constraintBottom_toTopOf="@+id/guideline_bottom_of_top">
 
-        <TextView
+        <cmu.xprize.comp_bigmath.DigitView
             android:id="@+id/symbol_opA_one"
             android:layout_width="@dimen/add_subtract_digit_width"
             android:layout_height="fill_parent"
@@ -241,7 +241,7 @@
             android:gravity="center"
             />
 
-        <TextView
+        <cmu.xprize.comp_bigmath.DigitView
             android:id="@+id/symbol_opB_one"
             android:layout_width="@dimen/add_subtract_digit_width"
             android:layout_height="fill_parent"

@@ -178,7 +178,7 @@
 
 
         <!-- this is just a spacer -->
-        <TextView
+        <cmu.xprize.comp_bigmath.DigitView
             android:id="@+id/symbol_carry_one"
             android:layout_width="@dimen/add_subtract_digit_width"
             android:layout_height="fill_parent"
@@ -223,7 +223,7 @@
             android:gravity="center"
             />
 
-        <TextView
+        <cmu.xprize.comp_bigmath.DigitView
             android:id="@+id/symbol_borrow_one"
             android:layout_width="@dimen/add_subtract_digit_width"
             android:layout_height="fill_parent"
@@ -259,7 +259,7 @@
 
 
         <!-- this is just a spacer -->
-        <TextView
+        <cmu.xprize.comp_bigmath.DigitView
             android:id="@+id/symbol_borrow_one_row2"
             android:layout_width="@dimen/add_subtract_digit_width"
             android:layout_height="fill_parent"
@@ -343,7 +343,7 @@
         </com.example.android.constraintlayoutexamples.write.CGlyphController_Simple> -->
 
         <!-- this is just a spacer -->
-        <TextView
+        <cmu.xprize.comp_bigmath.DigitView
             android:layout_width="@dimen/add_subtract_digit_width"
             android:layout_height="100sp"
             android:background="@null"
@@ -374,7 +374,7 @@
         />
 
     <View
-        android:id="@+id/borrow_one_box"
+        android:id="@+id/one_borrow_box"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_margin="8dp"
@@ -444,7 +444,7 @@
         app:layout_constraintRight_toRightOf="@+id/guideline_vertical_1"
         app:layout_constraintBottom_toTopOf="@+id/guideline_bottom_of_top">
 
-        <TextView
+        <cmu.xprize.comp_bigmath.DigitView
             android:id="@+id/symbol_opA_hun"
             android:layout_width="@dimen/add_subtract_digit_width"
             android:layout_height="fill_parent"
@@ -454,7 +454,7 @@
             android:gravity="center"
             />
 
-        <TextView
+        <cmu.xprize.comp_bigmath.DigitView
             android:id="@+id/symbol_opA_ten"
             android:layout_width="@dimen/add_subtract_digit_width"
             android:layout_height="fill_parent"
@@ -464,7 +464,7 @@
             android:gravity="center"
             />
 
-        <TextView
+        <cmu.xprize.comp_bigmath.DigitView
             android:id="@+id/symbol_opA_one"
             android:layout_width="@dimen/add_subtract_digit_width"
             android:layout_height="fill_parent"
@@ -538,7 +538,7 @@
         app:layout_constraintRight_toRightOf="@+id/guideline_vertical_1"
         app:layout_constraintBottom_toTopOf="@+id/guideline_bottom_of_mid">
 
-        <TextView
+        <cmu.xprize.comp_bigmath.DigitView
             android:id="@+id/symbol_opB_op"
             android:layout_width="@dimen/add_subtract_digit_width"
             android:layout_height="fill_parent"
@@ -548,7 +548,7 @@
             android:gravity="center"
             />
 
-        <TextView
+        <cmu.xprize.comp_bigmath.DigitView
             android:id="@+id/symbol_opB_hun"
             android:layout_width="@dimen/add_subtract_digit_width"
             android:layout_height="fill_parent"
@@ -558,7 +558,7 @@
             android:gravity="center"
             />
 
-        <TextView
+        <cmu.xprize.comp_bigmath.DigitView
             android:id="@+id/symbol_opB_ten"
             android:layout_width="@dimen/add_subtract_digit_width"
             android:layout_height="fill_parent"
@@ -568,7 +568,7 @@
             android:gravity="center"
             />
 
-        <TextView
+        <cmu.xprize.comp_bigmath.DigitView
             android:id="@+id/symbol_opB_one"
             android:layout_width="@dimen/add_subtract_digit_width"
             android:layout_height="fill_parent"
@@ -835,14 +835,14 @@
         android:layout_height="@dimen/add_subtract_10_height"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        app:layout_constraintLeft_toLeftOf="@+id/borrow_one_box"
-        app:layout_constraintTop_toTopOf="@+id/borrow_one_box"/>
+        app:layout_constraintLeft_toLeftOf="@+id/one_borrow_box"
+        app:layout_constraintTop_toTopOf="@+id/one_borrow_box"/>
 
     <include android:id="@+id/borrow_ones" layout="@layout/concrete_one_horizontal"
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
-        app:layout_constraintLeft_toLeftOf="@+id/borrow_one_box"
-        app:layout_constraintTop_toTopOf="@+id/borrow_one_box"
+        app:layout_constraintLeft_toLeftOf="@+id/one_borrow_box"
+        app:layout_constraintTop_toTopOf="@+id/one_borrow_box"
         android:clipChildren="false"
         android:clipToPadding="false"
         />

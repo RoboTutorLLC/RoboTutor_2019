@@ -16,6 +16,7 @@ public class DigitView extends TextView {
 
     public boolean isCorrect = false;
     public boolean isIncorrect = false;
+    public boolean isCrossedOut = false;
 
     public DigitView(Context context) {
         super(context);

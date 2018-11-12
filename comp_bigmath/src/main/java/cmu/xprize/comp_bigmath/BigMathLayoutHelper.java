@@ -103,12 +103,12 @@ class BigMathLayoutHelper {
      * @param digit one, ten, hun
      * @return The TextView of the digit
      */
-    TextView getBaseTenDigitView(String numberLoc, String digit) {
+    DigitView getBaseTenDigitView(String numberLoc, String digit) {
 
         String viewId = "symbol_" + numberLoc + "_" + digit;
         int resID = _activity.getResources().getIdentifier(viewId, "id", _activity.getPackageName());
 
-        return (TextView) _viewGroup.findViewById(resID);
+        return (DigitView) _viewGroup.findViewById(resID);
     }
 
     /**
@@ -116,11 +116,11 @@ class BigMathLayoutHelper {
      * @param digit
      * @return
      */
-    TextView getCarryDigitView(String digit) {
+    DigitView getCarryDigitView(String digit) {
         String viewId = "symbol_carry_" + digit;
         int resID = _activity.getResources().getIdentifier(viewId, "id", _activity.getPackageName());
 
-        return (TextView) _viewGroup.findViewById(resID);
+        return (DigitView) _viewGroup.findViewById(resID);
     }
 
     /**

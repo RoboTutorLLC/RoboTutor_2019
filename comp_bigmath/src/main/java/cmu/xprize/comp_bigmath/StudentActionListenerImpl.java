@@ -458,7 +458,7 @@ public class StudentActionListenerImpl implements StudentActionListener{
 
                 case 2:
                     _playAudio("Good!");
-                    _bigMath.writeNewTenBorrowedValue(getTensDigit(operandA) - 1);
+                    _bigMath.writeNewTenBorrowedValue(getTensDigit(operandA) - 1, false);
                     break;
 
                 case 3:
@@ -469,7 +469,7 @@ public class StudentActionListenerImpl implements StudentActionListener{
 
                 case 4:
                     _playAudio("Good!");
-                    _bigMath.populateOneWithBorrowedTen(getOnesDigit(operandA) + 10);
+                    _bigMath.populateOneWithBorrowedTen(getOnesDigit(operandA) + 10, false);
                     break;
 
                 case 5:
