@@ -131,12 +131,14 @@ public class CTutorData_Metadata {
                 return TCONST.Thumb.PICMATCH;
 
             case "placevalue":
+            case "place": // TODO yikes this parsing ain't good
                 return TCONST.Thumb.PLACEVALUE;
 
             case "numcompare":
                 return TCONST.Thumb.NUMCOMPARE;
 
             case "spelling":
+            case "phoneme":
                 return TCONST.Thumb.SPELLING;
 
             case "bigmath":
@@ -209,6 +211,7 @@ public class CTutorData_Metadata {
                 return "thumb_place_value.png";
 
             case "spelling":
+            case "phoneme":
                 return "thumb_spelling_tutor.png";
 
             case "write.sen.corr.ltr":
@@ -297,6 +300,28 @@ public class CTutorData_Metadata {
             case "write":
                 result.add("<b>Write</b>");
                 result = processWriteTutorId(tutor, result);
+                break;
+
+            case "picmatch":
+                result.add("<b>Picture Matching</b>");
+                break;
+
+            case "phoneme":
+            case "spelling":
+                result.add("<b>Spelling and Phonemes</b>");
+                break;
+
+            case "bigmath":
+                result.add("<b>Addition and Subtraction</b>");
+                break;
+
+            case "placevalue":
+            case "place":
+                result.add("<b>Place Value</b>");
+                break;
+
+            case "numcompare":
+                result.add("<b>Number Comparison</b>");
                 break;
 
 

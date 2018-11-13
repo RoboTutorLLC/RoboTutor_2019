@@ -98,24 +98,24 @@
 
     <item
         app:tutor_spelling="true"
-        android:drawable="@drawable/thumb_spelling_qa" />
+        android:drawable="@drawable/thumb_spelling" />
     <!-- ZAMBIA please add better icons -->
 
     <item
         app:tutor_picmatch="true"
-        android:drawable="@drawable/thumb_picmatch_qa" />
+        android:drawable="@drawable/thumb_picmatch" />
 
     <item
         app:tutor_numcompare="true"
-        android:drawable="@drawable/thumb_numcompare_qa" />
+        android:drawable="@drawable/thumb_numcompare" />
 
     <item
         app:tutor_placevalue="true"
-        android:drawable="@drawable/thumb_placevalue_qa" />
+        android:drawable="@drawable/thumb_placevalue" />
 
     <item
         app:tutor_bigmath="true"
-        android:drawable="@drawable/thumb_bigmath_qa" />
+        android:drawable="@drawable/thumb_bigmath" />
 
     <item
         android:drawable="@drawable/debugnormal"/>
