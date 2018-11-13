@@ -756,7 +756,7 @@ public class BigMathAnimationHelper {
         animSet.start();
     }
 
-    public View.OnClickListener generateWaterfallSubtractClickListener(String digit, boolean isBorrowed) {
+    public View.OnClickListener generateWaterfallSubtractClickListener(String digit, boolean isBorrowed) { // BORROW_ANIMATE trace me... make a new listener
         return new BaseTenOnClickAnimateWaterfallSubtract(digit, isBorrowed);
     }
 
@@ -816,6 +816,66 @@ public class BigMathAnimationHelper {
                         moveSequentialSubtraction(_digit, moveToResult, _isBorrowed);
                     }
                 }, WATERFALL_DELAY * i);
+        }
+    }
+
+    public View.OnClickListener generateWaterfallSubtractBorrowClickListener(String digit) {
+        return new BaseTenOnClickAnimateWaterfallBorrowedSubtract(digit);
+    }
+    /**
+     * An alternative to the above method. This Listener treats the borrowed and opA units as one.
+     */
+    class BaseTenOnClickAnimateWaterfallBorrowedSubtract implements View.OnClickListener {
+
+        private final String _digit;
+
+        public BaseTenOnClickAnimateWaterfallBorrowedSubtract(String _digit) {
+            this._digit = _digit;
+        }
+
+        @Override
+        public void onClick(View view) {
+
+            if (_digit.equals(ONE_DIGIT) && !_problemState.isCanTapOnes()) return;
+            if (_digit.equals(TEN_DIGIT) && !_problemState.isCanTapTens()) return;
+            if (_digit.equals(HUN_DIGIT) && !_problemState.isCanTapHuns()) return;
+
+            int opbUnits = getDigitValue(OPB_LOCATION, _digit); // gets how many in opB
+            int opaUnits = getDigitValue(OPA_LOCATION, _digit); // gets how many in opA
+
+            // if there are no dots left to subtract, move to the result
+            final boolean moveToResult = !hasDotsLeftToSubtract(_digit);
+
+            // first move the operandB
+
+            // then move the borrowed
+
+            if (!moveToResult) {
+                for (int i = 0; i < opbUnits; i++) {
+                    final boolean borrowed = i >= opaUnits; // first move from opA, then from borrowed
+                    (new Handler(Looper.getMainLooper())).postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            moveSequentialSubtraction(_digit, false, borrowed);
+                        }
+                    }, WATERFALL_DELAY * i);
+                }
+            } else {
+                // move however many borrowed are left
+                int numUnits = 0;
+                if      (_digit.equals(ONE_DIGIT)) numUnits = _problemState.getBorrowedOnesLeft();
+                else if (_digit.equals(TEN_DIGIT)) numUnits = _problemState.getBorrowedTensLeft();
+
+                for (int i = 0; i < numUnits; i++) {
+                    (new Handler(Looper.getMainLooper())).postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            moveSequentialSubtraction(_digit, true, true);
+                        }
+                    }, WATERFALL_DELAY * i);
+                }
+            }
+
         }
     }
 
@@ -1239,7 +1299,8 @@ public class BigMathAnimationHelper {
                 for(int i=1; i <= 10; i++) {
                     MovableImageView one = _layout.getBaseTenConcreteUnitView("borrow", ONE_DIGIT, i);
                     one.setVisibility(View.VISIBLE);
-                    one.setOnClickListener(generateWaterfallSubtractClickListener(ONE_DIGIT, true));
+                    //one.setOnClickListener(generateWaterfallSubtractClickListener(ONE_DIGIT, true)); // BORROW_ANIMATE
+                    one.setOnClickListener(generateWaterfallSubtractBorrowClickListener(ONE_DIGIT));
                 }
 
             }

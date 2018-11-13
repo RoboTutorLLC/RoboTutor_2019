@@ -372,17 +372,14 @@ public class BigMathMechanic {
         // set them to special OnClick status
 
         // add listeners to Ones
-        View.OnClickListener oneListener = _animator.generateWaterfallSubtractClickListener(digit, false);
+        View.OnClickListener sharedOneListener = _animator.generateWaterfallSubtractBorrowClickListener(digit); // BORROW_ANIMATE these should use the same animator
         for (int i = 1; i <= 10; i++) {
             MovableImageView oneView = _layout.getBaseTenConcreteUnitView(OPA_LOCATION, ONE_DIGIT, i);
-            oneView.setOnClickListener(oneListener);
+            oneView.setOnClickListener(sharedOneListener);
         }
 
-        boolean ALL_AT_ONCE = true;
         // getContainingBox("one").setListener(applyBehavior("NOT_ENOUGH"));
-        _layout.getContainingBox(OPA_LOCATION, ONE_DIGIT).setOnClickListener(ALL_AT_ONCE ?
-                _animator.generateWaterfallClickListener(OPA_LOCATION, ONE_DIGIT, _data.operation) :
-                _animator.generateSequentialClickListener(ONE_DIGIT));
+        _layout.getContainingBox(OPA_LOCATION, ONE_DIGIT).setOnClickListener(sharedOneListener);
     }
 
     /**
@@ -400,6 +397,8 @@ public class BigMathMechanic {
             //_behaviorManager.applyBehaviorNode("BORROW_TEN");
             _problemState.setHasBorrowedTen(true);
             findViewById(R.id.borrow_ten_highlight_indicator).setVisibility(View.INVISIBLE);
+
+            unlockDigitConcreteAfterBorrowing(ONE_DIGIT);
 
         }
     }
@@ -428,7 +427,6 @@ public class BigMathMechanic {
             strikeThroughOneBorrow();
             int newOnesVal = getOnesDigit(_data.dataset[0]) + 10;
             populateOneWithBorrowedTen(newOnesVal, true);
-            unlockDigitConcreteAfterBorrowing(ONE_DIGIT);
             //_behaviorManager.applyBehaviorNode("TEN_MORE_ONES_B");  // BORROW_AG (node_ref) these should all be different nodes
         }
     }
