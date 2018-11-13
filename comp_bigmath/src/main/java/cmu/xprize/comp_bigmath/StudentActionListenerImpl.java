@@ -1,9 +1,6 @@
 package cmu.xprize.comp_bigmath;
 
 import android.util.Log;
-import android.view.View;
-import android.widget.Button;
-import android.widget.Toast;
 
 import java.util.Locale;
 
@@ -15,7 +12,7 @@ import static cmu.xprize.comp_bigmath.BM_CONST.ALL_DIGITS;
 import static cmu.xprize.comp_bigmath.BM_CONST.FEATURES.FTR_CORRECT;
 import static cmu.xprize.comp_bigmath.BM_CONST.FEATURES.FTR_IS_BORROW;
 import static cmu.xprize.comp_bigmath.BM_CONST.FEATURES.FTR_IS_CARRY;
-import static cmu.xprize.comp_bigmath.BM_CONST.FEATURES.FTR_ONE_DIGIT_CORRECT;
+import static cmu.xprize.comp_bigmath.BM_CONST.FEATURES.FTR_ONE_DIGIT_WRITTEN;
 import static cmu.xprize.comp_bigmath.BM_CONST.FEATURES.FTR_PROBLEM_DONE;
 import static cmu.xprize.comp_bigmath.BM_CONST.FEATURES.FTR_PROBLEM_HAS_MORE;
 import static cmu.xprize.comp_bigmath.BM_CONST.FEATURES.FTR_WRONG;
@@ -82,9 +79,18 @@ public class StudentActionListenerImpl implements StudentActionListener{
         // retract carry and borrow features...
         _publisher.retractFeature(FTR_IS_CARRY);
         _publisher.retractFeature(FTR_IS_BORROW);
+        _publisher.retractFeature(FTR_ONE_DIGIT_WRITTEN);
         if (operator.equals("+")) setCarryLogic(operandA, operandB);
         else setBorrowLogic(operandA, operandB);
 
+    }
+
+    public boolean isCarry() {
+        return _isCarryOne; // TODO this is bad (only works for two digits)... should be for each digit
+    }
+
+    public boolean isBorrow() {
+        return _isBorrowTen; // TODO this is bad (only workds for two digits)... should be for each digit. Should also be refactored.
     }
 
     /**
@@ -168,6 +174,7 @@ public class StudentActionListenerImpl implements StudentActionListener{
                     } else {
                         _performance.trackAndLogPerformance(false, String.valueOf(expectedInput), input);
                         _bigMath.markDigitWrong(HUN_DIGIT);
+                        _publisher.publishValue(BM_CONST.VALUES.DIGIT_TO_ERASE, HUN_DIGIT);
                         // _publisher.publishFeature(FTR_WRONG);
                     }
 
@@ -186,6 +193,7 @@ public class StudentActionListenerImpl implements StudentActionListener{
 
                     } else {
                         _bigMath.markDigitWrong(TEN_DIGIT);
+                        _publisher.publishValue(BM_CONST.VALUES.DIGIT_TO_ERASE, TEN_DIGIT);
                         _publisher.retractFeature(FTR_CORRECT);
                         _publisher.publishFeature(FTR_WRONG);
                     }
@@ -225,6 +233,9 @@ public class StudentActionListenerImpl implements StudentActionListener{
                     break;
 
                 case "symbol_result_one":
+
+                    _publisher.publishFeature(FTR_ONE_DIGIT_WRITTEN); // BORROW_AG (advance) this can be used to skip the scaffolding nodes
+
                     expectedInput = getOnesDigit(_expectedResult);
                     isCorrect = input.equals(String.valueOf(expectedInput));
 
@@ -237,6 +248,7 @@ public class StudentActionListenerImpl implements StudentActionListener{
                         Log.wtf("SEPTEMBER", "publishing correct");
                     } else {
                         _bigMath.markDigitWrong(ONE_DIGIT);
+                        _publisher.publishValue(BM_CONST.VALUES.DIGIT_TO_ERASE, ONE_DIGIT);
                         _publisher.retractFeature(FTR_CORRECT);
                         _publisher.publishFeature(FTR_WRONG);
                         Log.wtf("SEPTEMBER", "publishing wrong");
@@ -244,7 +256,6 @@ public class StudentActionListenerImpl implements StudentActionListener{
 
                     // If correct, decide what to do for the next step
                     if (isCorrect) {
-                        _publisher.publishFeature(FTR_ONE_DIGIT_CORRECT); // BORROW_AG (advance) this can be used to skip the scaffolding nodes
 
                         // These following steps decide the next steps
                         if (_numDigits == 1) {
@@ -333,6 +344,7 @@ public class StudentActionListenerImpl implements StudentActionListener{
                     } else {
                         _performance.trackAndLogPerformance(false, String.valueOf(expectedInput), input);
                         _bigMath.markDigitWrong(TEN_CARRY_DIGIT);
+                        _publisher.publishValue(BM_CONST.VALUES.DIGIT_TO_ERASE, TEN_CARRY_DIGIT);
                     }
 
                     break;
@@ -360,6 +372,7 @@ public class StudentActionListenerImpl implements StudentActionListener{
                     } else {
                         _performance.trackAndLogPerformance(false, String.valueOf(expectedInput), input);
                         _bigMath.markDigitWrong(HUN_CARRY_DIGIT);
+                        _publisher.publishValue(BM_CONST.VALUES.DIGIT_TO_ERASE, HUN_CARRY_DIGIT);
                     }
                     break;
 

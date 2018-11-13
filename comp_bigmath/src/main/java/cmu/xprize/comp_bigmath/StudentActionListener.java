@@ -14,6 +14,8 @@ interface StudentActionListener {
     // initialize a new problem
     void setData(CBigMath_Data data, int numDigits);
 
+    boolean isCarry();
+    boolean isBorrow();
 
     void setTutorState(String state);
     void resetBorrowState();

@@ -66,6 +66,11 @@ public class BigMathMechanic {
     private BigMathProblemState _problemState;
     private final IPerformanceTracker _performance;
 
+    // scaffolding
+    private boolean _hasTriedClickingUnsubtractableOnes = false;
+    public boolean hasDoneScaffoldingOneLessTen = false;
+    public boolean hasDoneScaffoldingTenMoreOnes = false;
+
     private IHesitationManager _hManager;
 
     // MATH_BEHAVIOR (1) add case for each digit into SAI receiver
@@ -101,6 +106,14 @@ public class BigMathMechanic {
         return _problemState;
     }
 
+    public boolean isBorrowProblem() {
+        return _studentActionListener.isBorrow();
+    }
+
+    public boolean isCarryProblem() {
+        return _studentActionListener.isCarry();
+    }
+
 
     public void setData(CBigMath_Data data) {
         _data = data;
@@ -133,6 +146,7 @@ public class BigMathMechanic {
     public void borrowTen() {
         _animator.borrowTen();
         _problemState.decrementCurrentOpATen();
+        _problemState.setHasBorrowedTen(true);
     }
 
     /**
@@ -329,6 +343,7 @@ public class BigMathMechanic {
         View.OnClickListener notEnoughOnes = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                _hasTriedClickingUnsubtractableOnes = true;
                 _behaviorManager.applyBehaviorNode("NOT_ENOUGH_ONES_B");
             }
         };
@@ -382,6 +397,11 @@ public class BigMathMechanic {
         _layout.getContainingBox(OPA_LOCATION, ONE_DIGIT).setOnClickListener(sharedOneListener);
     }
 
+    public boolean hasTriedClickingUnsubtractableOnes() {
+
+        return _hasTriedClickingUnsubtractableOnes;
+    }
+
     /**
      * Borrows from the ten guy
      */
@@ -395,7 +415,6 @@ public class BigMathMechanic {
             //_behaviorManager.applyBehaviorNode("BORROW_TEN_AUDIO_B"); // BORROW_AG (node_ref) these should all be different nodes
             _behaviorManager.applyBehaviorNode(NEXTNODE); // BORROW_AG (advance) progress graph
             //_behaviorManager.applyBehaviorNode("BORROW_TEN");
-            _problemState.setHasBorrowedTen(true);
             findViewById(R.id.borrow_ten_highlight_indicator).setVisibility(View.INVISIBLE);
 
             unlockDigitConcreteAfterBorrowing(ONE_DIGIT);
@@ -416,6 +435,8 @@ public class BigMathMechanic {
             //_behaviorManager.applyBehaviorNode("ONE_LESS_TEN_B");  // BORROW_AG (node_ref) these should all be different nodes
 
         }
+
+        hasDoneScaffoldingOneLessTen = true;
     }
 
     /**
@@ -429,6 +450,8 @@ public class BigMathMechanic {
             populateOneWithBorrowedTen(newOnesVal, true);
             //_behaviorManager.applyBehaviorNode("TEN_MORE_ONES_B");  // BORROW_AG (node_ref) these should all be different nodes
         }
+
+        hasDoneScaffoldingTenMoreOnes = true;
     }
 
     /**
@@ -458,7 +481,35 @@ public class BigMathMechanic {
     }
 
     /**
+     * Erase a written digit
+     * @param digit
+     */
+    public void eraseDigit(String digit) {
+
+        DigitView view = null;
+
+        switch(digit) {
+            case TEN_CARRY_DIGIT:
+                view = (DigitView) _layout.getCarryDigitView(TEN_DIGIT);
+                break;
+
+            case HUN_CARRY_DIGIT:
+                view = (DigitView) _layout.getCarryDigitView(HUN_DIGIT);
+                break;
+
+            default:
+                view = (DigitView) _layout.getBaseTenDigitView(RESULT_LOCATION, digit);
+                break;
+        }
+
+        view.isIncorrect = false;
+        view.isCorrect = false;
+        view.setText("");
+    }
+
+    /**
      * Mark and display a digit as correct
+     * BORROW_BUG it should lock here...
      */
     public void markDigitCorrect(String digit) {
         DigitView view;

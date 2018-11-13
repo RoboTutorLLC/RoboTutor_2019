@@ -9,7 +9,7 @@ package cmu.xprize.comp_bigmath;
 public class BM_CONST {
 
     // action map?
-    static final String NEXTNODE = "NEXTNODE";
+    static final String NEXTNODE = "NEXTNODE"; // BORROW_BUG this is triggering an advancement somewhere
 
     // name of digit variables
     public static final String ONE_DIGIT = "one";
@@ -29,12 +29,22 @@ public class BM_CONST {
     public static final String RESULT_LOCATION = "result";
     public static final String BORROW_LOCATION = "borrow";
 
+    // class for just values
+    public static final class VALUES {
+        public static final String DIGIT_TO_ERASE = ".digitToErase";
+    }
+
     // class for just features
     public static final class FEATURES {
 
         // for choosing which type of problem
         public static final String FTR_IS_CARRY = "FTR_IS_CARRY";
         public static final String FTR_IS_BORROW = "FTR_IS_BORROW";
+
+        public static final String FTR_ADDITION = "FTR_ADDITION";
+        public static final String FTR_SUBTRACTION = "FTR_SUBTRACTION";
+
+        public static final String FTR_BLOCK_HESITATION = "FTR_BLOCK_HESITATION";
 
         // for which digit we're on
         static final String FTR_ON_DIGIT_ONE = "FTR_ON_DIGIT_ONE";
@@ -43,13 +53,14 @@ public class BM_CONST {
         // for which step to perform for the digit
         static final String FTR_TAP_CONCRETE = "FTR_TAP_CONCRETE"; // MATH_HESITATE (1) first tap concrete, then write digit
         static final String FTR_WRITE_DIGIT = "FTR_WRITE_DIGIT";
+        static final String FTR_TAP_TO_BORROW = "FTR_TAP_TO_BORROW";
 
         // for correct vs wrong answers
         public static final String FTR_CORRECT = "FTR_CORRECT";
         public static final String FTR_WRONG = "FTR_WRONG";
 
         // for cutting thru scaffolding steps via a "shortcut"
-        public static final String FTR_ONE_DIGIT_CORRECT = "FTR_ONE_DIGIT_CORRECT";
+        public static final String FTR_ONE_DIGIT_WRITTEN = "FTR_ONE_DIGIT_WRITTEN";
 
         // for when the problem is finished, or has more to do
         public static final String FTR_PROBLEM_DONE = "FTR_PROBLEM_DONE";

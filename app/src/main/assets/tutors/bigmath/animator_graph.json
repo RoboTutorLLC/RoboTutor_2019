@@ -24,17 +24,34 @@
           "COMMENT": "provide feedback for what to do",
           "preenter": [],
           "tracks": [
-            {"type": "QUEUEDCOMMAND", "id": "SBigMath", "method": "pointAtDotContainer", "parms": "opA:String|one:String", "features": "FTR_ON_DIGIT_ONE&FTR_TAP_CONCRETE"},
-            {"type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Touch each one to add them up.mp3", "soundpackage":"bigmath", "volume": 1.0, "mode":"flow", "features": "FTR_ON_DIGIT_ONE&FTR_TAP_CONCRETE"},
+            // each of these is a PointAndSpeak combination
 
+            // PointAndSpeak
+            {"type": "QUEUEDCOMMAND", "id": "SBigMath", "method": "pointAtDotContainer", "parms": "opA:String|one:String", "features": "FTR_ON_DIGIT_ONE&FTR_TAP_CONCRETE"},
+            {"type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Touch each one to add them up.mp3", "soundpackage":"bigmath", "volume": 1.0, "mode":"flow", "features": "FTR_ON_DIGIT_ONE&FTR_ADDITION&FTR_TAP_CONCRETE"},
+            {"type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Touch each one to take them away.mp3", "soundpackage":"bigmath", "volume": 1.0, "mode":"flow", "features": "FTR_ON_DIGIT_ONE&FTR_SUBTRACTION&FTR_TAP_CONCRETE"},
+
+            // PointAndSpeak
+            {"type": "QUEUEDCOMMAND", "id": "SBigMath", "method": "pointAtDotContainer", "parms": "opA:String|ten:String", "features": "FTR_ON_DIGIT_ONE&FTR_TAP_TO_BORROW"},
+            {"type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Tap here to borrow a ten.mp3", "soundpackage":"bigmath", "volume": 1.0, "mode":"flow", "features": "FTR_ON_DIGIT_ONE&FTR_TAP_TO_BORROW"},
+
+            // PointAndSpeak
             {"type": "QUEUEDCOMMAND", "id": "SBigMath", "method": "pointAtDigitInput", "parms": "result:String|one:String", "features": "FTR_ON_DIGIT_ONE&FTR_WRITE_DIGIT"},
             {"type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Please tap on the box and write your answer.mp3",  "soundpackage":"bigmath", "volume": 1.0, "mode":"flow", "features": "FTR_ON_DIGIT_ONE&FTR_WRITE_DIGIT"},
 
+            // PointAndSpeak
             {"type": "QUEUEDCOMMAND", "id": "SBigMath", "method": "pointAtDotContainer", "parms": "opA:String|ten:String", "features": "FTR_ON_DIGIT_TEN&FTR_TAP_CONCRETE"},
-            {"type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Touch each ten to add them up.mp3", "soundpackage":"bigmath", "volume": 1.0, "mode":"flow", "features": "FTR_ON_DIGIT_TEN&FTR_TAP_CONCRETE"},
+            {"type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Touch each ten to add them up.mp3", "soundpackage":"bigmath", "volume": 1.0, "mode":"flow", "features": "FTR_ON_DIGIT_TEN&FTR_ADDITION&FTR_TAP_CONCRETE"},
+            {"type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Touch each ten to take them away.mp3", "soundpackage":"bigmath", "volume": 1.0, "mode":"flow", "features": "FTR_ON_DIGIT_TEN&FTR_SUBTRACTION&FTR_TAP_CONCRETE"},
 
+            // PointAndSpeak
             {"type": "QUEUEDCOMMAND", "id": "SBigMath", "method": "pointAtDigitInput", "parms": "result:String|ten:String", "features": "FTR_ON_DIGIT_TEN&FTR_WRITE_DIGIT"},
             {"type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Please tap on the box and write your answer.mp3",  "soundpackage":"bigmath", "volume": 1.0, "mode":"flow", "features": "FTR_ON_DIGIT_TEN&FTR_WRITE_DIGIT"},
+
+            // PointAndSpeak
+            {"type": "QUEUEDCOMMAND", "id": "SBigMath", "method": "pointAtDigitInput", "parms": "result:String|ten:String", "features": "FTR_ON_DIGIT_TONE&FTR_BORROW_ONES"},
+            {"type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Tap here to borrow a ten.mp3",  "soundpackage":"bigmath", "volume": 1.0, "mode":"flow", "features": "FTR_ON_DIGIT_TEN&FTR_BORROW_ONES"},
+
 
             {"type": "QUEUEDCOMMAND", "id": "SBigMath", "method": "triggerHesitationTimer", "parms": ""}
           ]
@@ -273,11 +290,12 @@
           "COMMENT":"This node moves to the next digit in the problem.",
           "type":"node",
           "maptype":"moduleMap",
-          "mapname": "NEXTDIGIT_B",
+          "mapname": "NEXTDIGITONE_B",
           "preenter":[],
           "preexit" :[],
           "edges":
           [
+            {"constraint": "FTR_ONE_DIGIT_WRITTEN","edge":"SCAFFOLDING_SHORTCUT_B"},
             {"constraint":"","edge":"TAP_TO_BORROW_B"}
           ]
         },
@@ -294,6 +312,7 @@
           "preexit" :[],
           "edges":
           [
+            {"constraint": "FTR_ONE_DIGIT_WRITTEN","edge":"SCAFFOLDING_SHORTCUT_B"},
             {"constraint":"","edge":"ONE_LESS_TEN_NODE_B"}
           ]
         },
@@ -307,6 +326,7 @@
           "preexit" :[],
           "edges":
           [
+            {"constraint": "FTR_ONE_DIGIT_WRITTEN","edge":"SCAFFOLDING_SHORTCUT_B"},
             {"constraint":"","edge":"TEN_MORE_ONES_NODE_B"}
           ]
         },
@@ -320,6 +340,7 @@
           "preexit" :[],
           "edges":
           [
+            {"constraint": "FTR_ONE_DIGIT_WRITTEN","edge":"SCAFFOLDING_SHORTCUT_B"},
             {"constraint":"","edge":"USER_INPUT_ONE_B"}
           ]
         },
@@ -329,6 +350,19 @@
           "type": "node",
           "maptype":"moduleMap",
           "mapname": "USERINPUT",
+          "preenter": [],
+          "preexit": [],
+          "edges": [
+            {"constraint": "FTR_CORRECT", "edge": "CORRECT_FEEDBACK_ONE_B"},
+            {"constraint": "", "edge": "WRONG_FEEDBACK_ONE_B"}
+          ]
+        },
+
+        "SCAFFOLDING_SHORTCUT_B": {
+          "COMMENT": "If the student guesses before scaffolding is complete, this quickly completes all scaffolding steps.",
+          "type": "node",
+          "maptype":"moduleMap",
+          "mapname": "SCAFFOLDINGSHORTCUT_B",
           "preenter": [],
           "preexit": [],
           "edges": [
@@ -365,7 +399,7 @@
           "COMMENT":"This node moves to the next digit in the problem.",
           "type":"node",
           "maptype":"moduleMap",
-          "mapname": "NEXTDIGIT_B",
+          "mapname": "NEXTDIGITTEN_B",
           "preenter":[],
           "preexit" :[],
           "edges":
@@ -500,7 +534,38 @@
 
 // MATH_BORROW (next) check to make sure we've borrowed... "lockOneDigitCorrect"
         // BORROW_AG (2) This is the first step of the nodes. make sure this is correct
-        "NEXTDIGIT_B": {
+        "NEXTDIGITONE_B": {
+          "type": "MODULE",
+          "reuse": true,
+          "COMMENT": "???",
+          "tracks": [
+            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SBigMath", "method": "logState", "parms": "type#node,value#NEXTDIGITs:String", "features":""},
+            {"type": "COMMAND", "id": "SBigMath", "method": "nextDigit", "features": ""},
+
+            {"type": "COMMAND", "id": "SBigMath", "method": "lockOneDigitConcrete", "parms": "", "features": "FTR_ON_DIGIT_ONE"}, // lock digit
+            {"type": "COMMAND", "id": "SBigMath", "method": "pointAtDotContainer", "parms": "opA:String|one:String", "features": "FTR_ON_DIGIT_ONE"},
+
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "Touch each one to take them away.mp3", "soundpackage":"bigmath", "volume": 1.0, "mode":"flow", "features": "FTR_ON_DIGIT_ONE"},
+
+            //{"type": "COMMAND", "id": "SBigMath", "method": "pointAtDotContainer", "parms": "opA:String|ten:String", "features": "FTR_ON_DIGIT_ONE"},
+            {"type": "COMMAND", "id": "SBigMath", "method": "triggerHesitationTimer", "features": ""},
+            {"type": "COMMAND", "cmd": "WAIT"} // BORROW_AG (advance) this is the key thing here... // BORROW_BUG something not happening...
+
+            //{"type": "AUDIO", "command": "PLAY", "soundsource": "Touch each one to add them up.mp3", "soundpackage":"bigmath", "volume": 1.0, "mode":"flow", "features": "FTR_ON_DIGIT_ONE"},
+            //{"type": "COMMAND", "id": "SBigMath", "method": "pointAtDotContainer", "parms": "opA:String|one:String", "features": "FTR_ON_DIGIT_ONE"},
+            //{"type": "COMMAND", "id": "SBigMath", "method": "pointAtDigitInput", "parms": "result:String|one:String", "features": "FTR_ON_DIGIT_ONE"},
+            //{"type": "AUDIO", "command": "PLAY", "soundsource": "Touch each ten to add them up.mp3", "soundpackage":"bigmath", "volume": 1.0, "mode":"flow", "features": "FTR_ON_DIGIT_TEN"},
+            //{"type": "COMMAND", "id": "SBigMath", "method": "pointAtDotContainer", "parms": "opA:String|ten:String", "features": "FTR_ON_DIGIT_TEN"},
+            //{"type": "COMMAND", "id": "SBigMath", "method": "pointAtDigitInput", "parms": "result:String|ten:String", "features": "FTR_ON_DIGIT_TEN"}
+
+
+
+            // tap the numbers
+
+          ]
+        },
+
+        "NEXTDIGITTEN_B": {
           "type": "MODULE",
           "reuse": true,
           "COMMENT": "???",
@@ -510,16 +575,17 @@
 
             {"type": "COMMAND", "id": "SBigMath", "method": "lockOneDigitConcrete", "parms": "", "features": "FTR_ON_DIGIT_ONE"}, // lock digit
             {"type": "COMMAND", "id": "SBigMath", "method": "pointAtDotContainer", "parms": "opA:String|ten:String", "features": "FTR_ON_DIGIT_ONE"},
-            {"type": "COMMAND", "cmd": "WAIT"} // BORROW_AG (advance) this is the key thing here...
+            // BORROW_AG (advance) this is the key thing here... // BORROW_BUG something not happening...
 
             //{"type": "AUDIO", "command": "PLAY", "soundsource": "Touch each one to add them up.mp3", "soundpackage":"bigmath", "volume": 1.0, "mode":"flow", "features": "FTR_ON_DIGIT_ONE"},
             //{"type": "COMMAND", "id": "SBigMath", "method": "pointAtDotContainer", "parms": "opA:String|one:String", "features": "FTR_ON_DIGIT_ONE"},
             //{"type": "COMMAND", "id": "SBigMath", "method": "pointAtDigitInput", "parms": "result:String|one:String", "features": "FTR_ON_DIGIT_ONE"},
             //{"type": "AUDIO", "command": "PLAY", "soundsource": "Touch each ten to add them up.mp3", "soundpackage":"bigmath", "volume": 1.0, "mode":"flow", "features": "FTR_ON_DIGIT_TEN"},
-            //{"type": "COMMAND", "id": "SBigMath", "method": "pointAtDotContainer", "parms": "opA:String|ten:String", "features": "FTR_ON_DIGIT_TEN"},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "Touch each ten to take them away.mp3", "soundpackage":"bigmath", "volume": 1.0, "mode":"flow", "features": "FTR_ON_DIGIT_TEN"},
+            {"type": "COMMAND", "id": "SBigMath", "method": "pointAtDotContainer", "parms": "opA:String|ten:String", "features": "FTR_ON_DIGIT_TEN"},
             //{"type": "COMMAND", "id": "SBigMath", "method": "pointAtDigitInput", "parms": "result:String|ten:String", "features": "FTR_ON_DIGIT_TEN"}
 
-            //{"type": "COMMAND", "id": "SBigMath", "method": "triggerHesitationTimer", "features": ""}
+            {"type": "COMMAND", "id": "SBigMath", "method": "triggerHesitationTimer", "features": ""}
 
             // tap the numbers
 
@@ -533,7 +599,8 @@
           "COMMENT": "???",
           "tracks": [
             {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SBigMath", "method": "logState", "parms": "type#node,value#USERINPUT:String", "features":""},
-            {"type": "COMMAND", "cmd": "WAIT"} // BORROW_AG (advance) this is the key thing here...
+            {"type": "COMMAND", "id": "SBigMath", "method": "triggerHesitationTimer", "features": ""},
+            {"type": "COMMAND", "cmd": "WAIT"} // BORROW_AG (advance) this is the key thing here... // BORROW_BUG something not happening...
           ]
         },
 
@@ -555,7 +622,8 @@
           "tracks": [
             {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SBigMath", "method": "logState", "parms": "type#node,value#WRONGFEEDBACK:String", "features":""},
 
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "Not quite try again.mp3",       "soundpackage":"temp", "volume": 1.0, "mode":"flow", "features": ""}
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "Not quite try again.mp3",       "soundpackage":"temp", "volume": 1.0, "mode":"flow", "features": ""},
+            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SBigMath", "method": "eraseDigit", "parms":"{{SBigMath.digitToErase}}:String", "features":""}
           ]
         },
 
@@ -571,6 +639,18 @@
           ]
         },
 
+        "SCAFFOLDINGSHORTCUT_B": {
+          "type": "MODULE",
+          "reuse": true,
+          "COMMENT": "Wraps up all the scaffolding that hasn't been performed.",
+          "preenter": [],
+          "tracks": [
+            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SBigMath", "method": "logState", "parms": "type#node,value#SCAFFOLDINGSHORTCUT_B:String", "features":""},
+            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SBigMath", "method": "cancelHesitationTimer", "features":""},
+            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SBigMath", "method": "wrapUpScaffolding", "features":""}
+          ]
+        },
+
         // BORROW_AG (node_ref) this should be in nodeMap
         "BORROW_TEN_AUDIO_B": {
           "type": "MODULE",
@@ -578,6 +658,8 @@
           "COMMENT": "audio feedback for when you don't have enough ones",
           "preenter": [],
           "tracks": [
+            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SBigMath", "method": "logState", "parms": "type#node,value#BORROW_TEN_AUDIO_B:String", "features":""},
+            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SBigMath", "method": "cancelHesitationTimer", "features":""},
             {"type": "AUDIO", "command": "PLAY", "soundsource": "Here is a ten which we can trade for ten ones.mp3",  "soundpackage":"bigmath", "volume": 1.0, "mode":"flow", "features": "FTR_ON_DIGIT_ONE"}
           ]
         },
@@ -589,6 +671,8 @@
           "COMMENT": "instructions for when you have one less ten",
           "preenter": [],
           "tracks": [
+            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SBigMath", "method": "logState", "parms": "type#node,value#ONE_LESS_TEN_B:String", "features":""},
+            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SBigMath", "method": "cancelHesitationTimer", "features":""},
             {"type": "COMMAND", "id": "SBigMath", "method": "oneLessTen", "parms": "", "features": "FTR_ON_DIGIT_ONE"},
             {"type": "COMMAND", "id": "SBigMath", "method": "pointAtDigitInput", "parms": "borrow:String|ten:String", "features": "FTR_ON_DIGIT_ONE"},
             {"type": "AUDIO", "command": "PLAY", "soundsource": "Now we have one less ten.mp3",  "soundpackage":"bigmath", "volume": 1.0, "mode":"flow", "features": "FTR_ON_DIGIT_ONE"}
@@ -603,6 +687,8 @@
           "COMMENT": "instructions for when you have one less ten",
           "preenter": [],
           "tracks": [
+            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SBigMath", "method": "logState", "parms": "type#node,value#TEN_MORE_ONES_B:String", "features":""},
+            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SBigMath", "method": "cancelHesitationTimer", "features":""},
             {"type": "COMMAND", "id": "SBigMath", "method": "tenMoreOnes", "parms": "", "features": "FTR_ON_DIGIT_ONE"},
             {"type": "COMMAND", "id": "SBigMath", "method": "pointAtDigitInput", "parms": "borrow:String|one:String", "features": "FTR_ON_DIGIT_ONE"},
             {"type": "AUDIO", "command": "PLAY", "soundsource": "Now we have ten more ones.mp3",  "soundpackage":"bigmath", "volume": 1.0, "mode":"flow", "features": "FTR_ON_DIGIT_ONE"}
@@ -648,9 +734,9 @@
           "test": "FTR_WRONG"
         },
 
-        "FTR_ONE_DIGIT_CORRECT": {
+        "FTR_ONE_DIGIT_WRITTEN": {
           "type": "CONDITION",
-          "test": "FTR_ONE_DIGIT_CORRECT"
+          "test": "FTR_ONE_DIGIT_WRITTEN"
         },
 
         "FTR_PROBLEM_DONE": {

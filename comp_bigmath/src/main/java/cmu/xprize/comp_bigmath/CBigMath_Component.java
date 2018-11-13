@@ -30,10 +30,13 @@ import cmu.xprize.util.JSON_Helper;
 import cmu.xprize.util.TCONST;
 
 import static cmu.xprize.comp_bigmath.BM_CONST.ALL_DIGITS;
+import static cmu.xprize.comp_bigmath.BM_CONST.FEATURES.FTR_ADDITION;
 import static cmu.xprize.comp_bigmath.BM_CONST.FEATURES.FTR_ON_DIGIT_HUN;
 import static cmu.xprize.comp_bigmath.BM_CONST.FEATURES.FTR_ON_DIGIT_ONE;
 import static cmu.xprize.comp_bigmath.BM_CONST.FEATURES.FTR_ON_DIGIT_TEN;
+import static cmu.xprize.comp_bigmath.BM_CONST.FEATURES.FTR_SUBTRACTION;
 import static cmu.xprize.comp_bigmath.BM_CONST.FEATURES.FTR_TAP_CONCRETE;
+import static cmu.xprize.comp_bigmath.BM_CONST.FEATURES.FTR_TAP_TO_BORROW;
 import static cmu.xprize.comp_bigmath.BM_CONST.FEATURES.FTR_WRITE_DIGIT;
 import static cmu.xprize.util.MathUtil.getHunsDigit;
 import static cmu.xprize.util.MathUtil.getOnesDigit;
@@ -254,6 +257,11 @@ public class CBigMath_Component extends RelativeLayout implements ILoadableObjec
 
     }
 
+    public void eraseDigit(String digitToErase) {
+        _mechanic.eraseDigit(digitToErase);
+
+    }
+
     /**
      * MATH_BORROW (next) put this into the animator_graph
      */
@@ -267,6 +275,17 @@ public class CBigMath_Component extends RelativeLayout implements ILoadableObjec
 
     public void tenMoreOnes() {
         _mechanic.tenMoreOnes();
+    }
+
+    /**
+     * After the student writes the answer out of turn, perform scaffolding events that have not been performed
+     */
+    public void wrapUpScaffolding() {
+
+        if (!_problemState.isHasBorrowedTen()) _mechanic.borrowTen();
+        if (!_mechanic.hasDoneScaffoldingOneLessTen) _mechanic.oneLessTen();
+        if (!_mechanic.hasDoneScaffoldingTenMoreOnes) _mechanic.tenMoreOnes();
+
     }
 
     private boolean checkIfHasUnitsToTap() {
@@ -386,6 +405,8 @@ public class CBigMath_Component extends RelativeLayout implements ILoadableObjec
      */
     public void triggerHesitationTimer() {
 
+        cancelHesitationTimer();
+
         // MATH_HESITATE
         // MATH_HESITATE (1) how do we know when the step can move forward?
         // COL = which column are we on?
@@ -404,15 +425,32 @@ public class CBigMath_Component extends RelativeLayout implements ILoadableObjec
 
         // ON (write TEN) ==> (cancel hesitation)
 
-
-        // MATH_HESITATE if there are concrete units to tap, indicate that we should be tapping
-        if (checkIfHasUnitsToTap()) {
-            publishFeature(FTR_TAP_CONCRETE);
+        if (_mechanic.isBorrowProblem() && !_problemState.isHasBorrowedTen() && _mechanic.hasTriedClickingUnsubtractableOnes()) {
+            publishFeature(FTR_TAP_TO_BORROW);
+            retractFeature(FTR_TAP_CONCRETE);
             retractFeature(FTR_WRITE_DIGIT);
         } else {
-            retractFeature(FTR_TAP_CONCRETE);
-            publishFeature(FTR_WRITE_DIGIT);
+
+            // MATH_HESITATE if there are concrete units to tap, indicate that we should be tapping
+            if (checkIfHasUnitsToTap()) {
+                retractFeature(FTR_TAP_TO_BORROW);
+                publishFeature(FTR_TAP_CONCRETE);
+                retractFeature(FTR_WRITE_DIGIT);
+            } else {
+                retractFeature(FTR_TAP_TO_BORROW);
+                retractFeature(FTR_TAP_CONCRETE);
+                publishFeature(FTR_WRITE_DIGIT);
+            }
+
+            if (operation.equals("+")) {
+                publishFeature(FTR_ADDITION);
+                retractFeature(FTR_SUBTRACTION);
+            } else if (operation.equals("-")) {
+                publishFeature(FTR_SUBTRACTION);
+                retractFeature(FTR_ADDITION);
+            }
         }
+
         postNamed("HESITATION_PROMPT", "APPLY_BEHAVIOR", "INPUT_HESITATION_FEEDBACK", (long)5000);
     }
 
