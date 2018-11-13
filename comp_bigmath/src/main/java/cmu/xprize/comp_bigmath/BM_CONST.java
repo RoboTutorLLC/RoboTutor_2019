@@ -48,6 +48,9 @@ public class BM_CONST {
         public static final String FTR_CORRECT = "FTR_CORRECT";
         public static final String FTR_WRONG = "FTR_WRONG";
 
+        // for cutting thru scaffolding steps via a "shortcut"
+        public static final String FTR_ONE_DIGIT_CORRECT = "FTR_ONE_DIGIT_CORRECT";
+
         // for when the problem is finished, or has more to do
         public static final String FTR_PROBLEM_DONE = "FTR_PROBLEM_DONE";
         public static final String FTR_PROBLEM_HAS_MORE = "FTR_PROBLEM_HAS_MORE";

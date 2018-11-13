@@ -2,6 +2,10 @@
   "animatorMap": {
     "COMMENT": "BigMath",
 
+    // BORROW_AG (meta)
+    // (node_ref) is a reference to the content of the nodes
+    // (advance) has instructions on how to advance
+    // (meta) is about design decisions
     "bigmath": {
 
       "type": "ANIMATOR",
@@ -34,6 +38,18 @@
 
             {"type": "QUEUEDCOMMAND", "id": "SBigMath", "method": "triggerHesitationTimer", "parms": ""}
           ]
+        },
+
+        "NOT_ENOUGH_ONES_B": {
+          "type": "QUEUE",
+          "reuse": true,
+          "COMMENT": "audio feedback for when you don't have enough ones",
+          "preenter": [],
+          "tracks": [
+            {"type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "We dont have enough ones.mp3",  "soundpackage":"bigmath", "volume": 1.0, "mode":"flow", "features": "FTR_ON_DIGIT_ONE"},
+            {"type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Where can we find more ones.mp3",  "soundpackage":"bigmath", "volume": 1.0, "mode":"flow", "features": "FTR_ON_DIGIT_ONE"}
+
+          ]
         }
       },
 
@@ -64,9 +80,9 @@
           "preenter": [],
           "preexit": [],
           "edges": [
-            {"constraint": "", "edge": "BEGIN_PROBLEM_REGULAR"},
             {"constraint": "FTR_IS_CARRY", "edge": "BEGIN_PROBLEM_CARRY"},
-            {"constraint": "FTR_IS_BORROW", "edge": "BEGIN_PROBLEM_BORROW"}
+            {"constraint": "FTR_IS_BORROW", "edge": "BEGIN_PROBLEM_BORROW"},
+            {"constraint": "", "edge": "BEGIN_PROBLEM_REGULAR"}
           ]
         },
 
@@ -248,11 +264,12 @@
           "preenter": [],
           "preexit": [],
           "edges": [
-            {"constraint": "", "edge": "NEXT_DIGIT_B"}
+            {"constraint": "", "edge": "NEXT_DIGIT_ONE_B"}
           ]
         },
 
-        "NEXT_DIGIT_B":{
+        // BORROW_AG (meta) These are the nodes in question
+        "NEXT_DIGIT_ONE_B":{
           "COMMENT":"This node moves to the next digit in the problem.",
           "type":"node",
           "maptype":"moduleMap",
@@ -261,11 +278,53 @@
           "preexit" :[],
           "edges":
           [
-            {"constraint":"","edge":"USER_INPUT_B"}
+            {"constraint":"","edge":"TAP_TO_BORROW_B"}
           ]
         },
 
-        "USER_INPUT_B": {
+        // BORROW_AG (fix) "BORROW_TEN_AUDIO_B" plays too early... should wait to advance
+        // BORROW_AG (meta) should these be here? Or could they be performed as one queue after another (triggered thru last method)
+        // BORROW_AG (meta) then if the correct answer is written, it can CANCEL the queue and skip ahead to the CORRECT or WRONG...
+        "TAP_TO_BORROW_B": {
+          "COMMENT":"Wait for the user to tap to borrow.",
+          "type":"node",
+          "maptype":"moduleMap",
+          "mapname": "BORROW_TEN_AUDIO_B", // BORROW_AG (node_ref) todo move good stuff here (what goes here???)
+          "preenter":[],
+          "preexit" :[],
+          "edges":
+          [
+            {"constraint":"","edge":"ONE_LESS_TEN_NODE_B"}
+          ]
+        },
+
+        "ONE_LESS_TEN_NODE_B": {
+          "COMMENT":"Cross out tens place and write one less.",
+          "type":"node",
+          "maptype":"moduleMap",
+          "mapname": "ONE_LESS_TEN_B", // BORROW_AG (node_ref) todo move good stuff here
+          "preenter":[],
+          "preexit" :[],
+          "edges":
+          [
+            {"constraint":"","edge":"TEN_MORE_ONES_NODE_B"}
+          ]
+        },
+
+        "TEN_MORE_ONES_NODE_B": {
+          "COMMENT":"Cross out ones place and write ten more.",
+          "type":"node",
+          "maptype":"moduleMap",
+          "mapname": "TEN_MORE_ONES_B", // BORROW_AG (node_ref) todo move good stuff here
+          "preenter":[],
+          "preexit" :[],
+          "edges":
+          [
+            {"constraint":"","edge":"USER_INPUT_ONE_B"}
+          ]
+        },
+
+        "USER_INPUT_ONE_B": {
           "COMMENT":"Preps the tutor for user input, then waits for user input.",
           "type": "node",
           "maptype":"moduleMap",
@@ -273,12 +332,62 @@
           "preenter": [],
           "preexit": [],
           "edges": [
-            {"constraint": "FTR_CORRECT", "edge": "CORRECT_FEEDBACK_B"},
-            {"constraint": "", "edge": "WRONG_FEEDBACK_B"}
+            {"constraint": "FTR_CORRECT", "edge": "CORRECT_FEEDBACK_ONE_B"},
+            {"constraint": "", "edge": "WRONG_FEEDBACK_ONE_B"}
           ]
         },
 
-        "CORRECT_FEEDBACK_B": {
+        "CORRECT_FEEDBACK_ONE_B": {
+          "COMMENT": "Provides feedback for correct response.",
+          "type": "node",
+          "maptype": "moduleMap",
+          "mapname": "CORRECTFEEDBACK",
+          "preenter": [],
+          "preexit": [],
+          "edges": [
+            {"constraint": "", "edge": "NEXT_DIGIT_TEN_B"}   // if not done, progress to next digit
+          ]
+        },
+
+        "WRONG_FEEDBACK_ONE_B": {
+          "COMMENT": "Provides feedback for wrong response.",
+          "type": "node",
+          "maptype": "moduleMap",
+          "mapname": "WRONGFEEDBACK",
+          "preenter": [],
+          "preexit": [],
+          "edges": [
+            {"constraint": "", "edge": "USER_INPUT_ONE_B"} // go back to wait for user input
+          ]
+        },
+
+        "NEXT_DIGIT_TEN_B":{
+          "COMMENT":"This node moves to the next digit in the problem.",
+          "type":"node",
+          "maptype":"moduleMap",
+          "mapname": "NEXTDIGIT_B",
+          "preenter":[],
+          "preexit" :[],
+          "edges":
+          [
+            {"constraint":"","edge":"USER_INPUT_TEN_B"}
+          ]
+        },
+
+        "USER_INPUT_TEN_B": {
+          "COMMENT":"Preps the tutor for user input, then waits for user input.",
+          "type": "node",
+          "maptype":"moduleMap",
+          "mapname": "USERINPUT",
+          "preenter": [],
+          "preexit": [],
+          "edges": [
+            {"constraint": "FTR_CORRECT", "edge": "CORRECT_FEEDBACK_TEN_B"},
+            {"constraint": "", "edge": "WRONG_FEEDBACK_TEN_B"}
+          ]
+        },
+
+        "CORRECT_FEEDBACK_TEN_B": {
           "COMMENT": "Provides feedback for correct response.",
           "type": "node",
           "maptype": "moduleMap",
@@ -287,11 +396,11 @@
           "preexit": [],
           "edges": [
             {"constraint": "FTR_PROBLEM_DONE", "edge": "PROBLEM_CORRECT_B"}, // if done with problem, continue to next problem
-            {"constraint": "FTR_PROBLEM_HAS_MORE", "edge": "NEXT_DIGIT_B"}   // if not done, progress to next digit
+            {"constraint": "FTR_PROBLEM_HAS_MORE", "edge": "NEXT_DIGIT_ONE_B"}   // if not done, progress to next digit
           ]
         },
 
-        "WRONG_FEEDBACK_B": {
+        "WRONG_FEEDBACK_TEN_B": {
           "COMMENT": "Provides feedback for wrong response.",
           "type": "node",
           "maptype": "moduleMap",
@@ -299,7 +408,7 @@
           "preenter": [],
           "preexit": [],
           "edges": [
-            {"constraint": "", "edge": "USER_INPUT_B"} // go back to wait for user input
+            {"constraint": "", "edge": "USER_INPUT_TEN_B"} // go back to wait for user input
           ]
         },
 
@@ -390,6 +499,7 @@
 
 
 // MATH_BORROW (next) check to make sure we've borrowed... "lockOneDigitCorrect"
+        // BORROW_AG (2) This is the first step of the nodes. make sure this is correct
         "NEXTDIGIT_B": {
           "type": "MODULE",
           "reuse": true,
@@ -397,14 +507,19 @@
           "tracks": [
             {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SBigMath", "method": "logState", "parms": "type#node,value#NEXTDIGITs:String", "features":""},
             {"type": "COMMAND", "id": "SBigMath", "method": "nextDigit", "features": ""},
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "Touch each one to add them up.mp3", "soundpackage":"bigmath", "volume": 1.0, "mode":"flow", "features": "FTR_ON_DIGIT_ONE"},
-            {"type": "COMMAND", "id": "SBigMath", "method": "pointAtDotContainer", "parms": "opA:String|one:String", "features": "FTR_ON_DIGIT_ONE"},
+
+            {"type": "COMMAND", "id": "SBigMath", "method": "lockOneDigitConcrete", "parms": "", "features": "FTR_ON_DIGIT_ONE"}, // lock digit
+            {"type": "COMMAND", "id": "SBigMath", "method": "pointAtDotContainer", "parms": "opA:String|ten:String", "features": "FTR_ON_DIGIT_ONE"},
+            {"type": "COMMAND", "cmd": "WAIT"} // BORROW_AG (advance) this is the key thing here...
+
+            //{"type": "AUDIO", "command": "PLAY", "soundsource": "Touch each one to add them up.mp3", "soundpackage":"bigmath", "volume": 1.0, "mode":"flow", "features": "FTR_ON_DIGIT_ONE"},
+            //{"type": "COMMAND", "id": "SBigMath", "method": "pointAtDotContainer", "parms": "opA:String|one:String", "features": "FTR_ON_DIGIT_ONE"},
             //{"type": "COMMAND", "id": "SBigMath", "method": "pointAtDigitInput", "parms": "result:String|one:String", "features": "FTR_ON_DIGIT_ONE"},
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "Touch each ten to add them up.mp3", "soundpackage":"bigmath", "volume": 1.0, "mode":"flow", "features": "FTR_ON_DIGIT_TEN"},
-            {"type": "COMMAND", "id": "SBigMath", "method": "pointAtDotContainer", "parms": "opA:String|ten:String", "features": "FTR_ON_DIGIT_TEN"},
+            //{"type": "AUDIO", "command": "PLAY", "soundsource": "Touch each ten to add them up.mp3", "soundpackage":"bigmath", "volume": 1.0, "mode":"flow", "features": "FTR_ON_DIGIT_TEN"},
+            //{"type": "COMMAND", "id": "SBigMath", "method": "pointAtDotContainer", "parms": "opA:String|ten:String", "features": "FTR_ON_DIGIT_TEN"},
             //{"type": "COMMAND", "id": "SBigMath", "method": "pointAtDigitInput", "parms": "result:String|ten:String", "features": "FTR_ON_DIGIT_TEN"}
 
-            {"type": "COMMAND", "id": "SBigMath", "method": "triggerHesitationTimer", "features": ""}
+            //{"type": "COMMAND", "id": "SBigMath", "method": "triggerHesitationTimer", "features": ""}
 
             // tap the numbers
 
@@ -418,7 +533,7 @@
           "COMMENT": "???",
           "tracks": [
             {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SBigMath", "method": "logState", "parms": "type#node,value#USERINPUT:String", "features":""},
-            {"type": "COMMAND", "cmd": "WAIT"}
+            {"type": "COMMAND", "cmd": "WAIT"} // BORROW_AG (advance) this is the key thing here...
           ]
         },
 
@@ -454,6 +569,45 @@
 
             {"type": "AUDIO", "command": "PLAY", "soundsource": "Good.mp3", "soundpackage":"temp", "volume": 1.0, "mode":"flow", "features": ""}
           ]
+        },
+
+        // BORROW_AG (node_ref) this should be in nodeMap
+        "BORROW_TEN_AUDIO_B": {
+          "type": "MODULE",
+          "reuse": true,
+          "COMMENT": "audio feedback for when you don't have enough ones",
+          "preenter": [],
+          "tracks": [
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "Here is a ten which we can trade for ten ones.mp3",  "soundpackage":"bigmath", "volume": 1.0, "mode":"flow", "features": "FTR_ON_DIGIT_ONE"}
+          ]
+        },
+
+        // BORROW_AG (node_ref) this should be in nodeMap
+        "ONE_LESS_TEN_B": {
+          "type": "MODULE",
+          "reuse": true,
+          "COMMENT": "instructions for when you have one less ten",
+          "preenter": [],
+          "tracks": [
+            {"type": "COMMAND", "id": "SBigMath", "method": "oneLessTen", "parms": "", "features": "FTR_ON_DIGIT_ONE"},
+            {"type": "COMMAND", "id": "SBigMath", "method": "pointAtDigitInput", "parms": "borrow:String|ten:String", "features": "FTR_ON_DIGIT_ONE"},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "Now we have one less ten.mp3",  "soundpackage":"bigmath", "volume": 1.0, "mode":"flow", "features": "FTR_ON_DIGIT_ONE"}
+
+          ]
+        },
+
+        // BORROW_AG (node_ref) this should be in nodeMap
+        "TEN_MORE_ONES_B": {
+          "type": "MODULE",
+          "reuse": true,
+          "COMMENT": "instructions for when you have one less ten",
+          "preenter": [],
+          "tracks": [
+            {"type": "COMMAND", "id": "SBigMath", "method": "tenMoreOnes", "parms": "", "features": "FTR_ON_DIGIT_ONE"},
+            {"type": "COMMAND", "id": "SBigMath", "method": "pointAtDigitInput", "parms": "borrow:String|one:String", "features": "FTR_ON_DIGIT_ONE"},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "Now we have ten more ones.mp3",  "soundpackage":"bigmath", "volume": 1.0, "mode":"flow", "features": "FTR_ON_DIGIT_ONE"}
+
+          ]
         }
 
       },
@@ -474,6 +628,16 @@
 
         "COMMENT": "@@@@@  CConstraints @@@@@ ",
 
+        "FTR_IS_CARRY": {
+          "type": "CONDITION",
+          "test": "FTR_IS_CARRY"
+        },
+
+        "FTR_IS_BORROW": {
+          "type": "CONDITION",
+          "test": "FTR_IS_BORROW"
+        },
+
         "FTR_CORRECT": {
           "type": "CONDITION",
           "test": "FTR_CORRECT"
@@ -482,6 +646,11 @@
         "FTR_WRONG": {
           "type": "CONDITION",
           "test": "FTR_WRONG"
+        },
+
+        "FTR_ONE_DIGIT_CORRECT": {
+          "type": "CONDITION",
+          "test": "FTR_ONE_DIGIT_CORRECT"
         },
 
         "FTR_PROBLEM_DONE": {

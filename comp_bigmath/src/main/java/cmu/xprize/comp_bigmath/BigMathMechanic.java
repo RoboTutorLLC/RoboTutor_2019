@@ -13,6 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.Arrays;
+import java.util.List;
 
 import cmu.xprize.comp_writebox.CGlyphController_Simple;
 import cmu.xprize.comp_writebox.CGlyphInputContainer_Simple;
@@ -27,6 +28,7 @@ import static cmu.xprize.comp_bigmath.BM_CONST.ALL_DIGITS;
 import static cmu.xprize.comp_bigmath.BM_CONST.BORROW_LOCATION;
 import static cmu.xprize.comp_bigmath.BM_CONST.HUN_CARRY_DIGIT;
 import static cmu.xprize.comp_bigmath.BM_CONST.HUN_DIGIT;
+import static cmu.xprize.comp_bigmath.BM_CONST.NEXTNODE;
 import static cmu.xprize.comp_bigmath.BM_CONST.ONE_DIGIT;
 import static cmu.xprize.comp_bigmath.BM_CONST.OPA_LOCATION;
 import static cmu.xprize.comp_bigmath.BM_CONST.OPB_LOCATION;
@@ -310,12 +312,6 @@ public class BigMathMechanic {
             });
         }
 
-
-        String x = "y";
-        if (_numDigits >= 2) {
-            findViewById(R.id.borrow_ten_highlight_indicator).setOnClickListener(new BorrowFromClickListener());
-        }
-
     }
 
 
@@ -328,7 +324,40 @@ public class BigMathMechanic {
         digit = ONE_DIGIT; // just working with 2-digits at the moment
         // get all one-digit listeners
         // for (int i = 0; i < 10; i++) { one = getLayout.... one.setListener(applyBehavior("NOT_ENOUGH")) };
+
+        // tell the user they don't have enough ones?
+        View.OnClickListener notEnoughOnes = new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                _behaviorManager.applyBehaviorNode("NOT_ENOUGH_ONES_B");
+            }
+        };
+
+        // add listeners to Ones
+        for (int i = 1; i <= 10; i++) {
+            MovableImageView oneView = _layout.getBaseTenConcreteUnitView(OPA_LOCATION, ONE_DIGIT, i);
+            oneView.setOnClickListener(notEnoughOnes);
+        }
+
+        boolean ALL_AT_ONCE = true;
         // getContainingBox("one").setListener(applyBehavior("NOT_ENOUGH"));
+        _layout.getContainingBox(OPA_LOCATION, ONE_DIGIT).setOnClickListener(notEnoughOnes);
+
+        String x = "y";
+        if (_numDigits >= 2) {
+            View highlightBorrow = findViewById(R.id.borrow_ten_highlight_indicator);
+            highlightBorrow.setOnClickListener(new BorrowFromClickListener());
+            //highlightBorrow.setBackgroundColor(Color.YELLOW);
+        }
+    }
+
+    /**
+     * Put this inside a hesitation timer.
+     * @param digit
+     */
+    public void hintAtWhereToFindMoreOnes(String digit) {
+        View highlightBorrow = findViewById(R.id.borrow_ten_highlight_indicator);
+        highlightBorrow.setBackgroundColor(Color.YELLOW);
     }
 
     /**
@@ -342,6 +371,18 @@ public class BigMathMechanic {
         // get all one-digit listeners
         // set them to special OnClick status
 
+        // add listeners to Ones
+        View.OnClickListener oneListener = _animator.generateWaterfallSubtractClickListener(digit, false);
+        for (int i = 1; i <= 10; i++) {
+            MovableImageView oneView = _layout.getBaseTenConcreteUnitView(OPA_LOCATION, ONE_DIGIT, i);
+            oneView.setOnClickListener(oneListener);
+        }
+
+        boolean ALL_AT_ONCE = true;
+        // getContainingBox("one").setListener(applyBehavior("NOT_ENOUGH"));
+        _layout.getContainingBox(OPA_LOCATION, ONE_DIGIT).setOnClickListener(ALL_AT_ONCE ?
+                _animator.generateWaterfallClickListener(OPA_LOCATION, ONE_DIGIT, _data.operation) :
+                _animator.generateSequentialClickListener(ONE_DIGIT));
     }
 
     /**
@@ -354,20 +395,41 @@ public class BigMathMechanic {
             // MATH_BORROW trigger a borrow
             if (_problemState.isHasBorrowedTen()) return;
             borrowTen();
+            //_behaviorManager.applyBehaviorNode("BORROW_TEN_AUDIO_B"); // BORROW_AG (node_ref) these should all be different nodes
+            _behaviorManager.applyBehaviorNode(NEXTNODE); // BORROW_AG (advance) progress graph
+            //_behaviorManager.applyBehaviorNode("BORROW_TEN");
             _problemState.setHasBorrowedTen(true);
             findViewById(R.id.borrow_ten_highlight_indicator).setVisibility(View.INVISIBLE);
 
+        }
+    }
 
-            if (Arrays.asList(new String[]{"write_borrow_ten", "write_borrow_one"}).contains("write_borrow_ten")) {
-                strikeThroughTenBorrow();
-                int newVal = getTensDigit(_data.dataset[0]) - 1;
-                writeNewTenBorrowedValue(newVal, true); // MATH_BORROW NEXT NEXT NEXT so easy a caveman could do it
-                // MATH_BORROW NEXT NEXT NEXT only show the highlight when necessary, but still accept clicks
+    /**
+     * Strikethrough Ten and write new value.
+     */
+    public void oneLessTen() {
+        List<String> borrowScaffold = Arrays.asList(new String[]{"write_borrow_ten", "write_borrow_one"});
+        if (borrowScaffold.contains("write_borrow_ten")) {
+            strikeThroughTenBorrow();
+            int newVal = getTensDigit(_data.dataset[0]) - 1;
+            writeNewTenBorrowedValue(newVal, true); // MATH_BORROW NEXT NEXT NEXT so easy a caveman could do it
+            // MATH_BORROW NEXT NEXT NEXT only show the highlight when necessary, but still accept clicks
+            //_behaviorManager.applyBehaviorNode("ONE_LESS_TEN_B");  // BORROW_AG (node_ref) these should all be different nodes
 
-                strikeThroughOneBorrow();
-                int newOnesVal = getOnesDigit(_data.dataset[0]) + 10;
-                populateOneWithBorrowedTen(newOnesVal, true);
-            }
+        }
+    }
+
+    /**
+     * Strikethrough One and write new value.
+     */
+    public void tenMoreOnes() {
+        List<String> borrowScaffold = Arrays.asList(new String[]{"write_borrow_ten", "write_borrow_one"});
+        if (borrowScaffold.contains("write_borrow_one")) {
+            strikeThroughOneBorrow();
+            int newOnesVal = getOnesDigit(_data.dataset[0]) + 10;
+            populateOneWithBorrowedTen(newOnesVal, true);
+            unlockDigitConcreteAfterBorrowing(ONE_DIGIT);
+            //_behaviorManager.applyBehaviorNode("TEN_MORE_ONES_B");  // BORROW_AG (node_ref) these should all be different nodes
         }
     }
 

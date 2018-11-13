@@ -261,6 +261,14 @@ public class CBigMath_Component extends RelativeLayout implements ILoadableObjec
         _mechanic.lockDigitConcreteBeforeBorrowing(ONE_DIGIT);
     }
 
+    public void oneLessTen() {
+        _mechanic.oneLessTen();
+    }
+
+    public void tenMoreOnes() {
+        _mechanic.tenMoreOnes();
+    }
+
     private boolean checkIfHasUnitsToTap() {
 
         Log.d(TAG, "checkIfHasUnitsToTap: Checking has units");
