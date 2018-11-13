@@ -86,7 +86,7 @@ public class TLangToggle extends ToggleButton implements ITutorObject, View.OnCl
 
             Log.v(QGRAPH_MSG, "event.click: " + " TLangToggle: " + mLangState);
 
-            CTutorEngine.setDefaultLanguage(mLangState? TCONST.LANG_EN: TCONST.LANG_SW);
+            CTutorEngine.setDefaultLanguage(mLangState? TCONST.LANG_ZM: TCONST.LANG_SW);
         } else {
             Log.v(QGRAPH_MSG, "event.click: " + " TLangToggle: IGNORING");
         }
@@ -145,7 +145,7 @@ public class TLangToggle extends ToggleButton implements ITutorObject, View.OnCl
     @Override
     public void onCreate() {
 
-        mLangState = (mMediaManager.getLanguageFeature(mTutor).equals(TCONST.LANG_EN));  // ZAMBIA something here...
+        mLangState = (mMediaManager.getLanguageFeature(mTutor).equals(TCONST.LANG_ZM));  // ZAMBIA something here...
         setChecked(mLangState);
     }
 
