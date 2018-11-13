@@ -158,7 +158,7 @@ public class BigMathMechanic {
 
         initializeOnClickListeners();
 
-        initializeBorrowClicker();
+        //initializeBorrowClicker();
 
         initializeWriteInputs();
 
