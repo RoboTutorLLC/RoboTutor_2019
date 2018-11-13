@@ -15,6 +15,7 @@ import static cmu.xprize.comp_bigmath.BM_CONST.ALL_DIGITS;
 import static cmu.xprize.comp_bigmath.BM_CONST.FEATURES.FTR_CORRECT;
 import static cmu.xprize.comp_bigmath.BM_CONST.FEATURES.FTR_IS_BORROW;
 import static cmu.xprize.comp_bigmath.BM_CONST.FEATURES.FTR_IS_CARRY;
+import static cmu.xprize.comp_bigmath.BM_CONST.FEATURES.FTR_ONE_DIGIT_CORRECT;
 import static cmu.xprize.comp_bigmath.BM_CONST.FEATURES.FTR_PROBLEM_DONE;
 import static cmu.xprize.comp_bigmath.BM_CONST.FEATURES.FTR_PROBLEM_HAS_MORE;
 import static cmu.xprize.comp_bigmath.BM_CONST.FEATURES.FTR_WRONG;
@@ -143,6 +144,7 @@ public class StudentActionListenerImpl implements StudentActionListener{
 
             // there must be a better way to organize these...
             int expectedInput;
+            boolean isCorrect;
             switch(selection) {
 
 
@@ -173,18 +175,26 @@ public class StudentActionListenerImpl implements StudentActionListener{
 
                 case "symbol_result_ten":
                     expectedInput = getTensDigit(_expectedResult);
+                    isCorrect = input.equals(String.valueOf(expectedInput));
 
-                    if (input.equals(String.valueOf(expectedInput))) {
-
-                        _performance.trackAndLogPerformance(true, String.valueOf(expectedInput), input);
+                    // track performance and mark correct...
+                    _performance.trackAndLogPerformance(isCorrect, String.valueOf(expectedInput), input);
+                    if (isCorrect) {
                         _bigMath.markDigitCorrect(TEN_DIGIT);
                         _publisher.retractFeature(FTR_WRONG);
                         _publisher.publishFeature(FTR_CORRECT);
 
+                    } else {
+                        _bigMath.markDigitWrong(TEN_DIGIT);
+                        _publisher.retractFeature(FTR_CORRECT);
+                        _publisher.publishFeature(FTR_WRONG);
+                    }
 
-                        if(_isCarryTen) {
+                    // If correct, decide what to do for the next step
+                    if (isCorrect) {
+                        if (_isCarryTen) {
                             _hasWrittenTensResult = true;
-                            if(!_hasCarriedToTens) {
+                            if (!_hasCarriedToTens) {
                                 break;
                             }
                         }
@@ -207,12 +217,6 @@ public class StudentActionListenerImpl implements StudentActionListener{
                         // ---end----
                         // ----------
 
-                    } else {
-
-                        _performance.trackAndLogPerformance(false, String.valueOf(expectedInput), input);
-                        _bigMath.markDigitWrong(TEN_DIGIT);
-                        _publisher.retractFeature(FTR_CORRECT);
-                        _publisher.publishFeature(FTR_WRONG);
                     }
 
                     // move to next node
@@ -222,16 +226,27 @@ public class StudentActionListenerImpl implements StudentActionListener{
 
                 case "symbol_result_one":
                     expectedInput = getOnesDigit(_expectedResult);
+                    isCorrect = input.equals(String.valueOf(expectedInput));
 
-                    if (input.equals(String.valueOf(expectedInput))) {
-
-                        _performance.trackAndLogPerformance(true, String.valueOf(expectedInput), input);
+                    // track performance and mark correct...
+                    _performance.trackAndLogPerformance(isCorrect, String.valueOf(expectedInput), input);
+                    if (isCorrect) {
                         _bigMath.markDigitCorrect(ONE_DIGIT);
                         _publisher.retractFeature(FTR_WRONG);
                         _publisher.publishFeature(FTR_CORRECT);
                         Log.wtf("SEPTEMBER", "publishing correct");
+                    } else {
+                        _bigMath.markDigitWrong(ONE_DIGIT);
+                        _publisher.retractFeature(FTR_CORRECT);
+                        _publisher.publishFeature(FTR_WRONG);
+                        Log.wtf("SEPTEMBER", "publishing wrong");
+                    }
 
+                    // If correct, decide what to do for the next step
+                    if (isCorrect) {
+                        _publisher.publishFeature(FTR_ONE_DIGIT_CORRECT); // BORROW_AG (advance) this can be used to skip the scaffolding nodes
 
+                        // These following steps decide the next steps
                         if (_numDigits == 1) {
                             _publisher.retractFeature(FTR_PROBLEM_HAS_MORE);
                             _publisher.publishFeature(FTR_PROBLEM_DONE);
@@ -246,13 +261,13 @@ public class StudentActionListenerImpl implements StudentActionListener{
                         }
 
                         // ROBO_MATH MATH_AG move to go with logic
-                        if(_isCarryOne) {
+                        if (_isCarryOne) {
 
                             _hasWrittenOnesResult = true;
                             // can't go to next digit unless we've written carry
                             // MATH_AG this should go inside "NEXT_DIGIT"
                             _bigMath.showCarryTen();
-                            if(!_hasCarriedToTens) {
+                            if (!_hasCarriedToTens) {
                                 break;
                             }
                         }
@@ -263,25 +278,19 @@ public class StudentActionListenerImpl implements StudentActionListener{
                         //_bigMath.highlightDigitColumn(TEN_DIGIT);
                         //_bigMath.disableConcreteUnitTappingForOtherRows(TEN_DIGIT);
 
-                        if(_isCarryTen) {
+                        if (_isCarryTen) {
                             // show next carry box
                             _bigMath.showCarryHun();
                         }
                         // ----------
                         // ---end----
                         // ----------
-
-                    } else {
-                        _performance.trackAndLogPerformance(false, String.valueOf(expectedInput), input);
-                        _bigMath.markDigitWrong(ONE_DIGIT);
-                        _publisher.retractFeature(FTR_CORRECT);
-                        _publisher.publishFeature(FTR_WRONG);
-                        Log.wtf("SEPTEMBER", "publishing wrong");
                     }
+
 
                     // move to next node
                     Log.wtf("SEPTEMBER", "applying behavior node");
-                    _behaviorManager.applyBehaviorNode(NEXTNODE);
+                    _behaviorManager.applyBehaviorNode(NEXTNODE); // BORROW_AG (advance) this is where the graph progresses
                     break;
 
 
