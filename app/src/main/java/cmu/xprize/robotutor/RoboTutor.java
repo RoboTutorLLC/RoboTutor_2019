@@ -85,6 +85,7 @@ import static cmu.xprize.util.TCONST.PROTOTYPE_ASSET_PATTERN;
 import static cmu.xprize.util.TCONST.QA_ASSET_PATTERN;
 import static cmu.xprize.util.TCONST.ROBOTUTOR_ASSET_PATTERN;
 import static cmu.xprize.util.TCONST.WRITING_PLACEMENT;
+import static cmu.xprize.util.TCONST.ZAMBIA_ASSET_PATTERN;
 
 
 /**
@@ -101,36 +102,14 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
 
 
     // VARIABLES FOR QUICK DEBUG LAUNCH
-//    private static final String debugTutorVariant = "placevalue";
-//    private static final String debugTutorId = "place.value:1";
-//    private static final String debugTutorFile = "[file]place.value__pv-11..99.2D.diff0.3.json";
     private static final boolean QUICK_DEBUG = false;
-    private static final String debugTutorVariant = "story.echo";
-    private static final String debugTutorId = "write.wrd:story_1_1";
-    private static final String debugTutorFile = "[encfolder]story.echo_all.A..Z.asc.lc.8.json";
+    private static final String debugTutorVariant = "bigmath";
+    private static final String debugTutorId = "DOES NOT MATTER";
+
+    //private static final String debugTutorFile = "[file]bigmath_sub.by.rand.10..98.AllCarryBorrow.lev13.json";
+    private static final String debugTutorFile = "[file]bigmath_add.by.rand.10..89.AllCarryBorrow.lev11.json";
 
 
-    //amogh missing letter
-//    private static final String debugTutorFile = "[file]write.missingLtr_0.1.2.fin.s.json";
-    //amogh dictation
-//    private static final String debugTutorFile = "[file]write.wrd.dic_lc.begin.ha.18.json";
-
-//    private static final String debugTutorVariant = "write.ltr.uc.trc";
-//    private static final String debugTutorId = "write.wrd:story_1_1";
-//    private static final String debugTutorFile = "[file]write.ltr.uc.trc_vow.asc.A..Z.1.json";
-
-//    private static final boolean QUICK_DEBUG = false;
-//    private static final String debugTutorVariant = "picmatch";
-//    private static final String debugTutorId = "picmatch::animal";
-//    private static final String debugTutorFile = "[file]picmatch_food.json";
-    //private static final String debugTutorVariant = "numdiscr";
-    //private static final String debugTutorVariant = "math";
-    //private static final String debugTutorId = "numdiscr:sample";
-    //private static final String debugTutorId = "math:0..8.ADD-1D-V-S.rand.3";
-    //private static final String debugTutorFile = "[file]numdiscr_sample.json";
-    // private static final String debugTutorFile = "[file]math_0..800.ADD-100-V-S.incr.13.json";
-
-    //private static final String debugTutorFile = "[file]math_10..80.SUB-2D-V-S.rand.12.json";
     public static final String MATRIX_FILE = "dev_data.zm_demo.json"; // "dev_data.json"; // SUPER_PLACEMENT
 
     private static final String LOG_SEQUENCE_ID = "LOG_SEQUENCE_ID";
@@ -480,6 +459,7 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
                 tutorAssetManager.updateAssetPackages(CODE_DROP_2_ASSET_PATTERN, RoboTutor.EXT_ASSET_PATH);
                 tutorAssetManager.updateAssetPackages(PROTOTYPE_ASSET_PATTERN, RoboTutor.EXT_ASSET_PATH);
                 tutorAssetManager.updateAssetPackages(QA_ASSET_PATTERN, RoboTutor.EXT_ASSET_PATH);
+                tutorAssetManager.updateAssetPackages(ZAMBIA_ASSET_PATTERN, RoboTutor.EXT_ASSET_PATH);
 
                 // Create the one system levelFolder LTKPLUS recognizer
                 //
