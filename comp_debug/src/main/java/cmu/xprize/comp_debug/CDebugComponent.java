@@ -225,7 +225,10 @@ public class CDebugComponent extends PercentRelativeLayout implements IDebugLaun
         /*
          * Custom launch!
          */
-        ScustomLaunch.setOnClickListener(new View.OnClickListener() {
+        ScustomLaunch.setVisibility(View.INVISIBLE);
+        SresetTutor.setVisibility(View.INVISIBLE);
+        ScustomLaunch.setOnClickListener(null); // hide and lock for ZAMBIA
+        /*ScustomLaunch.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View view) {
 
@@ -243,7 +246,7 @@ public class CDebugComponent extends PercentRelativeLayout implements IDebugLaun
                 gridView.setVisibility(viewGrid? VISIBLE:GONE);
                 customView.setVisibility(viewGrid? GONE:VISIBLE);
             }
-        });
+        });*/
 
         /*
          * A click listener that sends the android:tag to the ActivitySelector
