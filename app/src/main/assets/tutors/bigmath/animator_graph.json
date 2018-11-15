@@ -53,7 +53,7 @@
             {"type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Tap here to borrow a ten.mp3",  "soundpackage":"bigmath", "volume": 1.0, "mode":"flow", "features": "FTR_ON_DIGIT_TEN&FTR_BORROW_ONES"},
 
 
-            {"type": "QUEUEDCOMMAND", "id": "SBigMath", "method": "triggerHesitationTimer", "parms": ""}
+            {"type": "QUEUEDCOMMAND", "id": "SBigMath", "method": "triggerHesitationTimer", "parms": "ihf:String"}
           ]
         },
 
@@ -63,8 +63,10 @@
           "COMMENT": "audio feedback for when you don't have enough ones",
           "preenter": [],
           "tracks": [
+            {"name": "CANCEL_TIMER", "type": "QUEUEDCOMMAND", "id": "SBigMath", "method": "cancelHesitationTimer", "features":""},
             {"type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "We dont have enough ones.mp3",  "soundpackage":"bigmath", "volume": 1.0, "mode":"flow", "features": "FTR_ON_DIGIT_ONE"},
-            {"type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Where can we find more ones.mp3",  "soundpackage":"bigmath", "volume": 1.0, "mode":"flow", "features": "FTR_ON_DIGIT_ONE"}
+            {"type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Where can we find more ones.mp3",  "soundpackage":"bigmath", "volume": 1.0, "mode":"flow", "features": "FTR_ON_DIGIT_ONE"},
+            {"type": "QUEUEDCOMMAND", "id": "SBigMath", "method": "triggerHesitationTimer", "parms": "not_enough_ones:String"}
 
           ]
         }
@@ -524,7 +526,7 @@
             {"type": "COMMAND", "id": "SBigMath", "method": "pointAtDotContainer", "parms": "opA:String|ten:String", "features": "FTR_ON_DIGIT_TEN"},
             //{"type": "COMMAND", "id": "SBigMath", "method": "pointAtDigitInput", "parms": "result:String|ten:String", "features": "FTR_ON_DIGIT_TEN"}
 
-            {"type": "COMMAND", "id": "SBigMath", "method": "triggerHesitationTimer", "features": ""}
+            {"type": "COMMAND", "id": "SBigMath", "method": "triggerHesitationTimer", "parms":"nextdigit:String", "features":""}
 
             // tap the numbers
 
@@ -548,7 +550,7 @@
             {"type": "AUDIO", "command": "PLAY", "soundsource": "Touch each one to take them away.mp3", "soundpackage":"bigmath", "volume": 1.0, "mode":"flow", "features": "FTR_ON_DIGIT_ONE"},
 
             //{"type": "COMMAND", "id": "SBigMath", "method": "pointAtDotContainer", "parms": "opA:String|ten:String", "features": "FTR_ON_DIGIT_ONE"},
-            {"type": "COMMAND", "id": "SBigMath", "method": "triggerHesitationTimer", "features": ""},
+            {"type": "COMMAND", "id": "SBigMath", "method": "triggerHesitationTimer", "parms":"nextdigineone_b:String", "features":""},
             {"type": "COMMAND", "cmd": "WAIT"} // BORROW_AG (advance) this is the key thing here... // BORROW_BUG something not happening...
 
             //{"type": "AUDIO", "command": "PLAY", "soundsource": "Touch each one to add them up.mp3", "soundpackage":"bigmath", "volume": 1.0, "mode":"flow", "features": "FTR_ON_DIGIT_ONE"},
@@ -585,7 +587,7 @@
             {"type": "COMMAND", "id": "SBigMath", "method": "pointAtDotContainer", "parms": "opA:String|ten:String", "features": "FTR_ON_DIGIT_TEN"},
             //{"type": "COMMAND", "id": "SBigMath", "method": "pointAtDigitInput", "parms": "result:String|ten:String", "features": "FTR_ON_DIGIT_TEN"}
 
-            {"type": "COMMAND", "id": "SBigMath", "method": "triggerHesitationTimer", "features": ""}
+            {"type": "COMMAND", "id": "SBigMath", "method": "triggerHesitationTimer", "parms":"nextdigitten_b:String", "features":""}
 
             // tap the numbers
 
@@ -599,7 +601,7 @@
           "COMMENT": "???",
           "tracks": [
             {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SBigMath", "method": "logState", "parms": "type#node,value#USERINPUT:String", "features":""},
-            {"type": "COMMAND", "id": "SBigMath", "method": "triggerHesitationTimer", "features": ""},
+            {"type": "COMMAND", "id": "SBigMath", "method": "triggerHesitationTimer", "parms":"userinput:String", "features":""},
             {"type": "COMMAND", "cmd": "WAIT"} // BORROW_AG (advance) this is the key thing here... // BORROW_BUG something not happening...
           ]
         },
@@ -633,6 +635,7 @@
           "COMMENT": "???",
           "tracks": [
             {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SBigMath", "method": "logState", "parms": "type#node,value#PROBLEMCORRECT:String", "features":""},
+            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SBigMath", "method": "cancelHesitationTimer", "features":""},
             {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SBigMath", "method": "highlightAll", "features":""},
 
             {"type": "AUDIO", "command": "PLAY", "soundsource": "Very good.mp3", "soundpackage":"temp", "volume": 1.0, "mode":"flow", "features": ""}
@@ -691,7 +694,8 @@
             {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SBigMath", "method": "cancelHesitationTimer", "features":""},
             {"type": "COMMAND", "id": "SBigMath", "method": "tenMoreOnes", "parms": "", "features": "FTR_ON_DIGIT_ONE"},
             {"type": "COMMAND", "id": "SBigMath", "method": "pointAtDigitInput", "parms": "borrow:String|one:String", "features": "FTR_ON_DIGIT_ONE"},
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "Now we have ten more ones.mp3",  "soundpackage":"bigmath", "volume": 1.0, "mode":"flow", "features": "FTR_ON_DIGIT_ONE"}
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "Now we have ten more ones.mp3",  "soundpackage":"bigmath", "volume": 1.0, "mode":"flow", "features": "FTR_ON_DIGIT_ONE"},
+            {"type": "COMMAND", "id": "SBigMath", "method": "triggerHesitationTimer", "parms": "ten_more_ones_b:String"}
 
           ]
         }

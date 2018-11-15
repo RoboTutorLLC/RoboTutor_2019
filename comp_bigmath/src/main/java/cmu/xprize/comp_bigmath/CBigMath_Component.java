@@ -54,6 +54,7 @@ public class CBigMath_Component extends RelativeLayout implements ILoadableObjec
     protected boolean           _qDisabled   = false;
 
     protected BigMathMechanic _mechanic;
+    private IHesitationManager _hesitationManager;
     private BigMathLayoutHelper _layout;
     private BigMathProblemState _problemState;
 
@@ -125,6 +126,7 @@ public class CBigMath_Component extends RelativeLayout implements ILoadableObjec
         // initialize mechanic
         _mechanic = new BigMathMechanic(getContext(), this, this, this, this, this);
         _layout = new BigMathLayoutHelper(getContext(), this);
+        _hesitationManager = this;
     }
 
     public void onDestroy() {
@@ -285,6 +287,7 @@ public class CBigMath_Component extends RelativeLayout implements ILoadableObjec
         if (!_problemState.isHasBorrowedTen()) _mechanic.borrowTen();
         if (!_mechanic.hasDoneScaffoldingOneLessTen) _mechanic.oneLessTen();
         if (!_mechanic.hasDoneScaffoldingTenMoreOnes) _mechanic.tenMoreOnes();
+        _mechanic.hideBorrowTenHighlightIndicator();
 
     }
 
@@ -403,9 +406,10 @@ public class CBigMath_Component extends RelativeLayout implements ILoadableObjec
     /**
      * Trigger the hesitation prompt. This will play the map "INPUT_HESITATION_FEEDBACK" after 5 seconds.
      */
-    public void triggerHesitationTimer() {
+    public void triggerHesitationTimer(String source) {
 
-        cancelHesitationTimer();
+        Log.wtf(BM_CONST.DEBUG_HESITATION_TAG, "triggering hesitation timer from " + source);
+        _hesitationManager.cancelHesitation(); // is actually "this"
 
         // MATH_HESITATE
         // MATH_HESITATE (1) how do we know when the step can move forward?
@@ -451,7 +455,7 @@ public class CBigMath_Component extends RelativeLayout implements ILoadableObjec
             }
         }
 
-        postNamed("HESITATION_PROMPT", "APPLY_BEHAVIOR", "INPUT_HESITATION_FEEDBACK", (long)5000);
+        _hesitationManager.triggerHesitation(); // is actually "this"
     }
 
     public void postNamed(String name, String command, String target, Long delay) {
@@ -473,7 +477,7 @@ public class CBigMath_Component extends RelativeLayout implements ILoadableObjec
     }
 
     public void cancelHesitationTimer() {
-        cancelPost("HESITATION_PROMPT");
+        _hesitationManager.cancelHesitation(); // is actually "this"
     }
 
     public void cancelPost(String name) {
@@ -497,7 +501,8 @@ public class CBigMath_Component extends RelativeLayout implements ILoadableObjec
     @Override
     public void cancelHesitation() {
 
-        cancelHesitationTimer();
+        cancelPost("HESITATION_PROMPT");
+
     }
 
     // override in TClass

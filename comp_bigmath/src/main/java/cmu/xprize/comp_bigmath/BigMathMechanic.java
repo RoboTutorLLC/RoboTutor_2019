@@ -154,6 +154,10 @@ public class BigMathMechanic {
      */
     void initializeAllTheThings() {
 
+
+        _hasTriedClickingUnsubtractableOnes = false;
+        //findViewById(R.id.borrow_ten_highlight_indicator).setVisibility(View.VISIBLE);
+
         initializeLayout();
 
         initializeOnClickListeners();
@@ -422,6 +426,10 @@ public class BigMathMechanic {
         }
     }
 
+    public void hideBorrowTenHighlightIndicator() {
+        findViewById(R.id.borrow_ten_highlight_indicator).setVisibility(View.INVISIBLE);
+    }
+
     /**
      * Strikethrough Ten and write new value.
      */
@@ -531,6 +539,8 @@ public class BigMathMechanic {
         view.isCorrect = true;
         view.isIncorrect = false;
         view.setTextColor(_activity.getResources().getColor(R.color.correctDigit));
+
+        view.setOnClickListener(null); // don't forget to lock after correct!!!
     }
 
 
@@ -641,7 +651,7 @@ public class BigMathMechanic {
                 public void onClick(View v) {
                     _controller_master.setWritingController(new OnCharacterRecognizedListener(_controller_master, carryHun)); // ROBO_MATH (5-WAIT)
                     _controller_master.setVisibility(View.VISIBLE);
-                    _hManager.cancelHesitation();
+                    _hManager.cancelHesitation(); // BORROW_HESITATE what's going on here?
                     carryHun.setText(""); // erase text
                 }
             });

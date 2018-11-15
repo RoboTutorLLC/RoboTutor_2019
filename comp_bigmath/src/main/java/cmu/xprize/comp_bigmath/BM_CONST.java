@@ -89,4 +89,8 @@ public class BM_CONST {
 
     // various variables
     static final int WATERFALL_DELAY = 100;
+
+
+    // debug tags
+    public static final String DEBUG_HESITATION_TAG = "DEBUG_HESITATION_TAG";
 }
