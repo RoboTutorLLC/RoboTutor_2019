@@ -122,8 +122,25 @@ public class CTutorData_Metadata {
 
 
             case "write":
-                // only one... for now
-                return TCONST.Thumb.WRITE;
+
+                switch(tutor.tutor_desc) {
+                    case "write.ltr.uc":
+                    case "write.ltr.uc.dic":
+                    case "write.ltr.uc.trc":
+                    case "write.ltr.lc":
+                    case "write.ltr.lc.dic":
+                    case "write.ltr.lc.trc":
+                        return TCONST.Thumb.WRITE_LTR;
+
+                    case "write.num":
+                    case "write.num.dic":
+                    case "write.num.trc":
+                        return TCONST.Thumb.WRITE_NUM;
+
+                    default:
+                        return TCONST.Thumb.WRITE_LTR;
+
+                }
 
 
             // Added Tutors Code Drop 2

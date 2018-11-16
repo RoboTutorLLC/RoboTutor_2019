@@ -93,8 +93,12 @@
         android:drawable="@drawable/thumb_song" />
 
     <item
-        app:tutor_write="true"
-        android:drawable="@drawable/thumb_write" />
+        app:tutor_write_num="true"
+        android:drawable="@drawable/thumb_write_num" />
+
+    <item
+        app:tutor_write_ltr="true"
+        android:drawable="@drawable/thumb_write_ltr" />
 
     <item
         app:tutor_spelling="true"

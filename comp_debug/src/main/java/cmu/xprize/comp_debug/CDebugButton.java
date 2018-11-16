@@ -176,8 +176,12 @@ public class CDebugButton extends ImageButton {
                         tutor_CONST = CD_CONST.TUTOR_SONG;
                         break;
 
-                    case WRITE:
-                        tutor_CONST = CD_CONST.TUTOR_WRITE;
+                    case WRITE_LTR:
+                        tutor_CONST = CD_CONST.TUTOR_WRITE_LTR;
+                        break;
+
+                    case WRITE_NUM:
+                        tutor_CONST = CD_CONST.TUTOR_WRITE_NUM;
                         break;
 
                     case SPELLING:

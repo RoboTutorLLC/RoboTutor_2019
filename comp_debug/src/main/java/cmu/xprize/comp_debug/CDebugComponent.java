@@ -690,8 +690,12 @@ public class CDebugComponent extends PercentRelativeLayout implements IDebugLaun
                 thumbId = R.drawable.thumb_song;
                 break;
 
-            case WRITE:
-                thumbId = R.drawable.thumb_write;
+            case WRITE_LTR:
+                thumbId = R.drawable.thumb_write_ltr;
+                break;
+
+            case WRITE_NUM:
+                thumbId = R.drawable.thumb_write_num;
                 break;
 
             case PICMATCH:
