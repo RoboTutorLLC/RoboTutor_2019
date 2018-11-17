@@ -81,11 +81,11 @@ public class StudentDataModel {
         _editor.putString(StudentDataModel.HAS_PLAYED_KEY, String.valueOf(true));
 
         // writing: Placement = true. Placement Index starts at 0
-        _editor.putBoolean(StudentDataModel.WRITING_PLACEMENT_KEY, CTutorEngine.language.equals(LANG_SW) && Configuration.usePlacement(RoboTutor.ACTIVITY));
+        _editor.putBoolean(StudentDataModel.WRITING_PLACEMENT_KEY, Configuration.usePlacement(RoboTutor.ACTIVITY));
         _editor.putInt(StudentDataModel.WRITING_PLACEMENT_INDEX_KEY, 0);
 
         // math: Placement = true. Placement Index starts at 0
-        _editor.putBoolean(StudentDataModel.MATH_PLACEMENT_KEY, CTutorEngine.language.equals(LANG_SW) &&  Configuration.usePlacement(RoboTutor.ACTIVITY));
+        _editor.putBoolean(StudentDataModel.MATH_PLACEMENT_KEY, Configuration.usePlacement(RoboTutor.ACTIVITY));
         _editor.putInt(StudentDataModel.MATH_PLACEMENT_INDEX_KEY, 0);
 
         if(CYCLE_MATRIX) {
@@ -102,7 +102,7 @@ public class StudentDataModel {
     public void initializeTutorPositions(TransitionMatrixModel matrix) {
 
         // initialize math placement
-        boolean useMathPlacement = getMathPlacement() && CTutorEngine.language.equals(LANG_SW) &&  Configuration.usePlacement(RoboTutor.ACTIVITY);
+        boolean useMathPlacement = getMathPlacement() && Configuration.usePlacement(RoboTutor.ACTIVITY);
 
         RoboTutor.logManager.postEvent_V(PLACEMENT_TAG, String.format("useMathPlacement = %s", useMathPlacement));
         if(useMathPlacement) {
@@ -117,7 +117,7 @@ public class StudentDataModel {
         }
 
         // initialize writing placement
-        boolean useWritingPlacement = getWritingPlacement() && CTutorEngine.language.equals(LANG_SW) &&  Configuration.usePlacement(RoboTutor.ACTIVITY);
+        boolean useWritingPlacement = getWritingPlacement() && Configuration.usePlacement(RoboTutor.ACTIVITY);
         RoboTutor.logManager.postEvent_V(PLACEMENT_TAG, String.format("useWritingPlacement = %s", useWritingPlacement));
         if (useWritingPlacement) {
             int writingPlacementIndex = getWritingPlacementIndex();

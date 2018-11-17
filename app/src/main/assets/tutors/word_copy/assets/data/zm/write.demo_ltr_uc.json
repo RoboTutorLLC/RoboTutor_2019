@@ -1,0 +1,11 @@
+{
+  "bootFeatures":"FTR_DEMO_LTR_UC",
+
+  "dataSource": [
+    {
+      "stimulus": "G",
+      "audioStimulus": ["G"],
+      "answer": "G"
+    }
+  ]
+}
