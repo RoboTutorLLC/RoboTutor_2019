@@ -28,8 +28,8 @@
 
             // PointAndSpeak
             {"type": "QUEUEDCOMMAND", "id": "SBigMath", "method": "pointAtDotContainer", "parms": "opA:String|one:String", "features": "FTR_ON_DIGIT_ONE&FTR_TAP_CONCRETE"},
-            {"type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Touch each one to add them up.mp3", "soundpackage":"bigmath", "volume": 1.0, "mode":"flow", "features": "FTR_ON_DIGIT_ONE&FTR_ADDITION&FTR_TAP_CONCRETE"},
-            {"type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Touch each one to take them away.mp3", "soundpackage":"bigmath", "volume": 1.0, "mode":"flow", "features": "FTR_ON_DIGIT_ONE&FTR_SUBTRACTION&FTR_TAP_CONCRETE"},
+            {"type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Touch the ones to add them up.mp3", "soundpackage":"bigmath", "volume": 1.0, "mode":"flow", "features": "FTR_ON_DIGIT_ONE&FTR_ADDITION&FTR_TAP_CONCRETE"}, // FIXME
+            {"type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Touch the ones to take them away.mp3", "soundpackage":"bigmath", "volume": 1.0, "mode":"flow", "features": "FTR_ON_DIGIT_ONE&FTR_SUBTRACTION&FTR_TAP_CONCRETE"}, // FIXME
 
             // PointAndSpeak
             {"type": "QUEUEDCOMMAND", "id": "SBigMath", "method": "pointAtDotContainer", "parms": "opA:String|ten:String", "features": "FTR_ON_DIGIT_ONE&FTR_TAP_TO_BORROW"},
@@ -41,8 +41,8 @@
 
             // PointAndSpeak
             {"type": "QUEUEDCOMMAND", "id": "SBigMath", "method": "pointAtDotContainer", "parms": "opA:String|ten:String", "features": "FTR_ON_DIGIT_TEN&FTR_TAP_CONCRETE"},
-            {"type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Touch each ten to add them up.mp3", "soundpackage":"bigmath", "volume": 1.0, "mode":"flow", "features": "FTR_ON_DIGIT_TEN&FTR_ADDITION&FTR_TAP_CONCRETE"},
-            {"type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Touch each ten to take them away.mp3", "soundpackage":"bigmath", "volume": 1.0, "mode":"flow", "features": "FTR_ON_DIGIT_TEN&FTR_SUBTRACTION&FTR_TAP_CONCRETE"},
+            {"type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Touch the tens to add them up.mp3", "soundpackage":"bigmath", "volume": 1.0, "mode":"flow", "features": "FTR_ON_DIGIT_TEN&FTR_ADDITION&FTR_TAP_CONCRETE"},
+            {"type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Touch the tens to take them away.mp3", "soundpackage":"bigmath", "volume": 1.0, "mode":"flow", "features": "FTR_ON_DIGIT_TEN&FTR_SUBTRACTION&FTR_TAP_CONCRETE"},
 
             // PointAndSpeak
             {"type": "QUEUEDCOMMAND", "id": "SBigMath", "method": "pointAtDigitInput", "parms": "result:String|ten:String", "features": "FTR_ON_DIGIT_TEN&FTR_WRITE_DIGIT"},
@@ -519,10 +519,10 @@
           "tracks": [
             {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SBigMath", "method": "logState", "parms": "type#node,value#NEXTDIGITs:String", "features":""},
             {"type": "COMMAND", "id": "SBigMath", "method": "nextDigit", "features": ""},
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "Touch each one to add them up.mp3", "soundpackage":"bigmath", "volume": 1.0, "mode":"flow", "features": "FTR_ON_DIGIT_ONE"},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "Touch the ones to add them up.mp3", "soundpackage":"bigmath", "volume": 1.0, "mode":"flow", "features": "FTR_ON_DIGIT_ONE"},
             {"type": "COMMAND", "id": "SBigMath", "method": "pointAtDotContainer", "parms": "opA:String|one:String", "features": "FTR_ON_DIGIT_ONE"},
             //{"type": "COMMAND", "id": "SBigMath", "method": "pointAtDigitInput", "parms": "result:String|one:String", "features": "FTR_ON_DIGIT_ONE"},
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "Touch each ten to add them up.mp3", "soundpackage":"bigmath", "volume": 1.0, "mode":"flow", "features": "FTR_ON_DIGIT_TEN"},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "Touch the tens to add them up.mp3", "soundpackage":"bigmath", "volume": 1.0, "mode":"flow", "features": "FTR_ON_DIGIT_TEN"},
             {"type": "COMMAND", "id": "SBigMath", "method": "pointAtDotContainer", "parms": "opA:String|ten:String", "features": "FTR_ON_DIGIT_TEN"},
             //{"type": "COMMAND", "id": "SBigMath", "method": "pointAtDigitInput", "parms": "result:String|ten:String", "features": "FTR_ON_DIGIT_TEN"}
 
@@ -547,20 +547,11 @@
             {"type": "COMMAND", "id": "SBigMath", "method": "lockOneDigitConcrete", "parms": "", "features": "FTR_ON_DIGIT_ONE"}, // lock digit
             {"type": "COMMAND", "id": "SBigMath", "method": "pointAtDotContainer", "parms": "opA:String|one:String", "features": "FTR_ON_DIGIT_ONE"},
 
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "Touch each one to take them away.mp3", "soundpackage":"bigmath", "volume": 1.0, "mode":"flow", "features": "FTR_ON_DIGIT_ONE"},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "Touch the ones to take them away.mp3", "soundpackage":"bigmath", "volume": 1.0, "mode":"flow", "features": "FTR_ON_DIGIT_ONE"},
 
             //{"type": "COMMAND", "id": "SBigMath", "method": "pointAtDotContainer", "parms": "opA:String|ten:String", "features": "FTR_ON_DIGIT_ONE"},
             {"type": "COMMAND", "id": "SBigMath", "method": "triggerHesitationTimer", "parms":"nextdigineone_b:String", "features":""},
             {"type": "COMMAND", "cmd": "WAIT"} // BORROW_AG (advance) this is the key thing here... // BORROW_BUG something not happening...
-
-            //{"type": "AUDIO", "command": "PLAY", "soundsource": "Touch each one to add them up.mp3", "soundpackage":"bigmath", "volume": 1.0, "mode":"flow", "features": "FTR_ON_DIGIT_ONE"},
-            //{"type": "COMMAND", "id": "SBigMath", "method": "pointAtDotContainer", "parms": "opA:String|one:String", "features": "FTR_ON_DIGIT_ONE"},
-            //{"type": "COMMAND", "id": "SBigMath", "method": "pointAtDigitInput", "parms": "result:String|one:String", "features": "FTR_ON_DIGIT_ONE"},
-            //{"type": "AUDIO", "command": "PLAY", "soundsource": "Touch each ten to add them up.mp3", "soundpackage":"bigmath", "volume": 1.0, "mode":"flow", "features": "FTR_ON_DIGIT_TEN"},
-            //{"type": "COMMAND", "id": "SBigMath", "method": "pointAtDotContainer", "parms": "opA:String|ten:String", "features": "FTR_ON_DIGIT_TEN"},
-            //{"type": "COMMAND", "id": "SBigMath", "method": "pointAtDigitInput", "parms": "result:String|ten:String", "features": "FTR_ON_DIGIT_TEN"}
-
-
 
             // tap the numbers
 
@@ -579,11 +570,7 @@
             {"type": "COMMAND", "id": "SBigMath", "method": "pointAtDotContainer", "parms": "opA:String|ten:String", "features": "FTR_ON_DIGIT_ONE"},
             // BORROW_AG (advance) this is the key thing here... // BORROW_BUG something not happening...
 
-            //{"type": "AUDIO", "command": "PLAY", "soundsource": "Touch each one to add them up.mp3", "soundpackage":"bigmath", "volume": 1.0, "mode":"flow", "features": "FTR_ON_DIGIT_ONE"},
-            //{"type": "COMMAND", "id": "SBigMath", "method": "pointAtDotContainer", "parms": "opA:String|one:String", "features": "FTR_ON_DIGIT_ONE"},
-            //{"type": "COMMAND", "id": "SBigMath", "method": "pointAtDigitInput", "parms": "result:String|one:String", "features": "FTR_ON_DIGIT_ONE"},
-            //{"type": "AUDIO", "command": "PLAY", "soundsource": "Touch each ten to add them up.mp3", "soundpackage":"bigmath", "volume": 1.0, "mode":"flow", "features": "FTR_ON_DIGIT_TEN"},
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "Touch each ten to take them away.mp3", "soundpackage":"bigmath", "volume": 1.0, "mode":"flow", "features": "FTR_ON_DIGIT_TEN"},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "Touch the tens to take them away.mp3", "soundpackage":"bigmath", "volume": 1.0, "mode":"flow", "features": "FTR_ON_DIGIT_TEN"},
             {"type": "COMMAND", "id": "SBigMath", "method": "pointAtDotContainer", "parms": "opA:String|ten:String", "features": "FTR_ON_DIGIT_TEN"},
             //{"type": "COMMAND", "id": "SBigMath", "method": "pointAtDigitInput", "parms": "result:String|ten:String", "features": "FTR_ON_DIGIT_TEN"}
 

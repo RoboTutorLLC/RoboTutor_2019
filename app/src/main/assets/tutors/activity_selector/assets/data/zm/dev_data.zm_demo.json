@@ -408,7 +408,7 @@
       "next_next": "story.echo::story_1",
       "prev": "story.hear::story_1",
       "harder": "story.read::story_2",
-      "easier": "story.pic.hear::story_1"
+      "easier": "story.echo::story_1"
     },
     "story.read::story_1": {
       "type": "TRANSITION",
@@ -420,7 +420,7 @@
       "cell_column": "2",
       "same": "story.read::story_1",
       "next": "story.echo::story_1",
-      "next_next": "story.pic.hear::story_1",
+      "next_next": "story.hear::story_2",
       "prev": "story.hear::story_1",
       "harder": "story.echo::story_2",
       "easier": "story.hear::story_1"
@@ -434,26 +434,11 @@
       "cell_row": "1",
       "cell_column": "3",
       "same": "story.echo::story_1",
-      "next": "story.pic.hear::story_1",
-      "next_next": "story.hear::story_2",
-      "prev": "story.read::story_1",
-      "harder": "story.pic.hear::story_2",
-      "easier": "story.read::story_1"
-    },
-    "story.pic.hear::story_1": {
-      "type": "TRANSITION",
-      "skill": "stories",
-      "tutor_id": "story.pic.hear::story_1",
-      "tutor_desc": "story.pic.hear",
-      "tutor_data": "[encfolder]story_1",
-      "cell_row": "1",
-      "cell_column": "4",
-      "same": "story.pic.hear::story_1",
       "next": "story.hear::story_2",
       "next_next": "story.read::story_2",
-      "prev": "story.echo::story_1",
-      "harder": "story.pic.hear::story_2",
-      "easier": "story.echo::story_1"
+      "prev": "story.read::story_1",
+      "harder": "story.echo::story_2",
+      "easier": "story.read::story_1"
     },
     "story.hear::story_2": {
       "type": "TRANSITION",
@@ -466,9 +451,9 @@
       "same": "story.hear::story_2",
       "next": "story.read::story_2",
       "next_next": "story.echo::story_2",
-      "prev": "story.pic.hear::story_1",
+      "prev": "story.echo::story_1",
       "harder": "story.read::story_2",
-      "easier": "story.pic.hear::story_1"
+      "easier": "story.echo::story_1"
     },
     "story.read::story_2": {
       "type": "TRANSITION",
@@ -480,7 +465,7 @@
       "cell_column": "2",
       "same": "story.read::story_2",
       "next": "story.echo::story_2",
-      "next_next": "story.pic.hear::story_2",
+      "next_next": "story.read::story_2",
       "prev": "story.hear::story_2",
       "harder": "story.echo::story_2",
       "easier": "story.hear::story_1"
@@ -494,26 +479,11 @@
       "cell_row": "2",
       "cell_column": "3",
       "same": "story.echo::story_2",
-      "next": "story.pic.hear::story_2",
+      "next": "story.echo::story_2",
       "next_next": "story.echo::story_2",
       "prev": "story.read::story_2",
-      "harder": "story.pic.hear::story_2",
-      "easier": "story.read::story_1"
-    },
-    "story.pic.hear::story_2": {
-      "type": "TRANSITION",
-      "skill": "stories",
-      "tutor_id": "story.pic.hear::story_2",
-      "tutor_desc": "story.pic.hear",
-      "tutor_data": "[encfolder]story_2",
-      "cell_row": "2",
-      "cell_column": "4",
-      "same": "story.pic.hear::story_2",
-      "next": "story.pic.hear::story_2",
-      "next_next": "story.pic.hear::story_2",
-      "prev": "story.echo::story_2",
       "harder": "story.hear::story_2",
-      "easier": "story.echo::story_1"
+      "easier": "story.read::story_1"
     }
   },
   "mathTransitions": {
