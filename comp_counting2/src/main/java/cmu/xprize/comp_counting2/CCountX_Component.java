@@ -547,6 +547,18 @@ public class CCountX_Component extends PercentRelativeLayout implements ILoadabl
 
     }
 
+    public void pointAtBox() {
+        int[] screenCoord = new int[2];
+        surfaceView.getLocationOnScreen(screenCoord);
+
+        PointF targetPoint = new PointF(screenCoord[0] + surfaceView.getWidth()/2,
+                screenCoord[1] + surfaceView.getHeight()/2);
+        Intent msg = new Intent(TCONST.POINTAT);
+        msg.putExtra(TCONST.SCREENPOINT, new float[]{targetPoint.x, targetPoint.y});
+
+        bManager.sendBroadcast(msg);
+    }
+
     /**
      * Overridden by child class.
      */
