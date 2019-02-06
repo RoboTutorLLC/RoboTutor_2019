@@ -21,27 +21,27 @@ android {
 
     // Create a variable called keystorePropertiesFile, and initialize it to your
     // keystore.properties file, in the rootProject folder.
-    def keystorePropertiesFile = rootProject.file("keystore.properties")
+    //def keystorePropertiesFile = rootProject.file("keystore.properties")
 
     // Initialize a new Properties() object called keystoreProperties
-    def keystoreProperties = new Properties()
+    //def keystoreProperties = new Properties()
 
     // Load your keystore.properties file into the keystoreProperties object.
-    keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+    //keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 
-    signingConfigs {
-        android {
-            keyAlias keystoreProperties['keyAlias']
-            keyPassword keystoreProperties['keyPassword']
-            storeFile file(keystoreProperties['storeFile'])
-            storePassword keystoreProperties['storePassword']
-        }
-    }
+    //signingConfigs {
+    //    android {
+    //        keyAlias keystoreProperties['keyAlias']
+    //        keyPassword keystoreProperties['keyPassword']
+    //        storeFile file(keystoreProperties['storeFile'])
+    //        storePassword keystoreProperties['storePassword']
+    //    }
+    //}
 
     buildTypes {
 
         release {
-            signingConfig signingConfigs.android
+            //signingConfig signingConfigs.android
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
@@ -53,24 +53,24 @@ android {
         //
         release_dbg {
             debuggable true
-            signingConfig signingConfigs.android
+            //signingConfig signingConfigs.android
         }
 
     }
 
     // define apk naming behavior
     // define apk naming behavior
-    applicationVariants.all { variant ->
-        variant.outputs.each { output ->
-            def project = "robotutor"
-            def SEP = "."
-            def buildType = variant.variantData.variantConfiguration.buildType.name
-            def version = variant.versionName
+    //applicationVariants.all { variant ->
+    //    variant.outputs.each { output ->
+    //        def project = "robotutor"
+     //       def SEP = "."
+     //       def buildType = variant.variantData.variantConfiguration.buildType.name
+     //       def version = variant.versionName
 
-            def newApkName = project + SEP + buildType + SEP + version + ".apk"
-            output.outputFile = new File(output.outputFile.parent, newApkName)
-        }
-    }
+     //       def newApkName = project + SEP + buildType + SEP + version + ".apk"
+     //       output.outputFile = new File(output.outputFile.parent, newApkName)
+     //   }
+    //}
 
     lintOptions {
         // set to true to turn off analysis progress reporting by lint
@@ -113,6 +113,7 @@ dependencies {
     compile project(path: ':comp_picmatch')
     compile project(path: ':comp_bigmath')
     compile project(path: ':comp_spelling')
+    compile project(path: ':comp_inventedspelling')
 
 }
 

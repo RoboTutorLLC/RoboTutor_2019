@@ -1,4 +1,4 @@
-package cmu.xprize.comp_spelling;
+package cmu.xprize.comp_inventedspelling;
 
 import android.content.Context;
 import android.content.Intent;
@@ -37,7 +37,7 @@ import static cmu.xprize.util.TCONST.TYPE_AUDIO;
  * Generated automatically w/ code written by Kevin DeLand
  */
 
-public class CSpelling_Component extends ConstraintLayout implements ILoadableObject, IPublisher, IEventListener {
+public class CInventedSpellingComponent extends ConstraintLayout implements ILoadableObject, IPublisher, IEventListener {
 
     //region Class Variables
 
@@ -156,25 +156,26 @@ public class CSpelling_Component extends ConstraintLayout implements ILoadableOb
 
     //region Constructors
 
-    public CSpelling_Component(Context context) {
+    public CInventedSpellingComponent(Context context) {
 
         super(context);
         init(context, null);
     }
 
-    public CSpelling_Component(Context context, AttributeSet attrs) {
+    public CInventedSpellingComponent(Context context, AttributeSet attrs) {
 
         super(context, attrs);
         init(context, attrs);
     }
-    public CSpelling_Component(Context context, AttributeSet attrs, int defStyleAttr) {
+    public CInventedSpellingComponent(Context context, AttributeSet attrs, int defStyleAttr) {
 
         super(context, attrs, defStyleAttr);
         init(context, attrs);
     }
 
     protected void init(Context context, AttributeSet attrs) {
-        Log.d("SPELLING_DEBUG", "wrong one");
+
+        Log.d("SPELLING_DEBUG", "correct one");
 
         mContext = context;
 

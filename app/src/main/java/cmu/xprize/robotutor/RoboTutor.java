@@ -102,12 +102,12 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
 
 
     // VARIABLES FOR QUICK DEBUG LAUNCH
-    private static final boolean QUICK_DEBUG = false;
-    private static final String debugTutorVariant = "bigmath";
+    private static final boolean QUICK_DEBUG = true;
+    private static final String debugTutorVariant = "inventedspelling";
     private static final String debugTutorId = "DOES NOT MATTER";
 
     //private static final String debugTutorFile = "[file]bigmath_sub.by.rand.10..98.AllCarryBorrow.lev13.json";
-    private static final String debugTutorFile = "[file]bigmath_add.by.rand.10..89.AllCarryBorrow.lev11.json";
+    private static final String debugTutorFile = "[file]inventedspelling_ae.1syl.json";
 
 
     public static final String MATRIX_FILE = "dev_data.zm_demo.json"; // "dev_data.json"; // SUPER_PLACEMENT

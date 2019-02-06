@@ -1,0 +1,224 @@
+{
+  "animatorMap": {
+
+    "COMMENT": "Spelling",
+
+    "inventedspelling": {
+
+      "type": "ANIMATOR",
+      "title": "Spelling",
+      "COMMENT": "Spelling",
+      "version": "1.0.0",
+      "rootnode": "INTRO_STATE",
+
+      "queueMap": {
+
+        "SAY_SYLLABLE": {
+          "type": "QUEUE",
+          "COMMENT": "Run when student taps correct syllable",
+          "reuse": true,
+          "tracks": [
+            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SInventedSpelling", "method": "logState", "parms": "type#feedback,value#SAY_SYLLABLE:String", "features":""},
+            {"name":"Play Syllable:", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource":  "{{SInventedSpelling.syllableStim}}.mp3", "soundpackage": "words","mode":"event", "listeners": "SInventedSpelling", "oncomplete":"SYL_DONE", "features": ""}
+
+          ]
+        }
+      },
+
+      "nodeMap": {
+
+        "COMMENT": "@@@@@  CNodes  @@@@@",
+
+        "INTRO_STATE": {
+          "type": "NODE",
+          "COMMENT": "Intro Clip - we only ever visit this node once",
+          "maptype":"moduleMap",
+          "mapname": "PLAYINTRO",
+          "preenter": ["SET_VERSION", "SET_DATASOURCE"],
+          "preexit": [],
+          "edges": [
+            {
+              "constraint": "",
+              "edge": "UPDATE_STIMULUS"
+            }
+          ]
+        },
+
+        "UPDATE_STIMULUS": {
+          "type": "NODE",
+          "COMMENT": "We may say or show the stimulus at this point",
+          "maptype":"moduleMap",
+          "mapname": "UPDATESTIMULUS",
+          "preenter": ["NEXT_DATASET"],
+          "preexit": [],
+          "edges": [
+            {
+              "constraint": "",
+              "edge": "USER_INPUT"
+            }
+          ]
+        },
+
+
+        "USER_INPUT": {
+          "COMMENT":"Wait for the user to touch",
+          "type": "node",
+          "maptype":"moduleMap",
+          "mapname": "USERINPUT",
+          "preenter": [],
+          "preexit": [],
+          "edges": [
+            {"constraint": "FTR_EOP", "edge":"SAY_AGAIN"},
+            {"constraint": "FTR_INCORRECT", "edge":"INCORRECT"}
+          ]
+        },
+
+        "INCORRECT": {
+          "COMMENT": "When user selects an incorrect syllable",
+          "type": "node",
+          "maptype": "moduleMap",
+          "mapname": "PLAYINCORRECT",
+          "preenter": [],
+          "preexit": [],
+          "edges": [
+            {"constraint": "", "edge": "USER_INPUT"}
+          ]
+        },
+
+        "SAY_AGAIN": {
+          "COMMENT": "",
+          "type": "node",
+          "maptype": "moduleMap",
+          "mapname": "SAYAGAIN",
+          "preenter": [],
+          "preexit": [],
+          "edges": [
+            {"constraint": "FTR_EOD", "edge": "NEXT_SCENE"},
+            {"constraint": "", "edge": "UPDATE_STIMULUS"}
+          ]
+        },
+
+        "NEXT_SCENE": {
+          "type": "NODE",
+          "COMMENT": "When module is complete - move to next scene",
+          "maptype": "actionMap",
+          "mapname": "NEXTSCENE",
+          "preenter": ["PLAYEXITCLIP"],
+          "preexit": [],
+          "edges": [
+          ]
+        }
+
+      },
+
+      "moduleMap": {
+
+        "COMMENT": "@@@@@  CModules  @@@@@",
+
+        "PLAYINTRO": {
+          "type": "MODULE",
+          "reuse":true,
+          "COMMENT": "????",
+          "tracks": [
+            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SInventedSpelling", "method": "logState", "parms": "type#node,value#PLAYINTRO:String", "features":""},
+            {"name":"Play intro", "type": "AUDIO", "command": "PLAY", "soundsource": "Please tap to make each word.mp3","soundpackage": "spelling","mode":"flow", "features": ""}
+          ]
+        },
+
+        "UPDATESTIMULUS": {
+          "type": "MODULE",
+          "reuse": true,
+          "tracks": [
+            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SInventedSpelling", "method": "logState", "parms": "type#node,value#UPDATESTIMULUS:String", "features":""},
+            {"name":"Play word", "type": "AUDIO", "command": "PLAY", "soundsource": "{{SInventedSpelling.wordStim}}","soundpackage": "words","mode":"flow", "features": ""}
+          ]
+        },
+
+        "PLAYINCORRECT": {
+          "type": "MODULE",
+          "reuse": true,
+          "COMMENT": "TBD",
+          "tracks": [
+            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SInventedSpelling", "method": "logState", "parms": "type#node,value#PLAYINCORRECT:String", "features":""},
+            {"name":"Play syllable", "type": "AUDIO", "command": "PLAY", "soundsource": "{{SInventedSpelling.syllableStim}}.mp3","soundpackage": "words","mode":"flow", "features": ""},
+            {"name": "After incorrect clip", "type": "AUDIO", "command": "PLAY", "soundsource": "Not quite try again.mp3", "soundpackage":"spelling", "volume": 1.0, "mode":"flow", "features": ""},
+            {"name":"Play word", "type": "AUDIO", "command": "PLAY", "soundsource": "{{SInventedSpelling.wordStim}}","soundpackage": "words","mode":"flow", "features": ""},
+            {"name": "Revert color", "type": "COMMAND", "id": "SInventedSpelling", "method": "revertColor", "features": ""}
+          ]
+        },
+
+        "PLAYEXITCLIP": {
+          "type": "MODULE",
+          "reuse": true,
+          "COMMENT": "TBD",
+          "tracks": [
+            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SInventedSpelling", "method": "logState", "parms": "type#node,value#PLAYEXITCLIP:String", "features":""},
+            {"name":"Play word", "type": "AUDIO", "command": "PLAY", "soundsource": "{{SInventedSpelling.wordStim}}","soundpackage": "words","mode":"flow", "features": ""}
+          ]
+        },
+
+        "SAYAGAIN": {
+          "type": "MODULE",
+          "reuse": true,
+          "COMMENT": "SAY THE WORD AGAIN",
+          "tracks": [
+            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SInventedSpelling", "method": "logState", "parms": "type#node,value#SAYAGAIN:String", "features":""},
+            {"name": "Problem correct clip", "type": "AUDIO", "command": "PLAY", "soundsource": "{{SInventedSpelling.wordStim}}", "soundpackage":"words", "volume": 1.0, "mode":"flow", "features": ""}
+          ]
+        },
+
+        "USERINPUT": {
+          "type": "MODULE",
+          "reuse": true,
+          "COMMENT": "TBD",
+          "tracks": [
+            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SInventedSpelling", "method": "logState", "parms": "type#node,value#WAIT_FOR_INPUT:String", "features":""},
+
+            {"type": "COMMAND", "id": "SInventedSpelling", "method": "setVolatileBehavior", "parms": "NEXT_NODE:String|NEXTNODE:String", "features": ""},
+            {"name": "Unlock", "type": "COMMAND", "id": "SInventedSpelling", "method": "unlockLetters", "features": ""},
+            {"type": "COMMAND", "cmd": "WAIT"}
+          ]
+        }
+      },
+
+      "actionMap": {
+
+        "COMMENT": "@@@@@  CActions @@@@@ ",
+
+        "SET_VERSION":{"type": "COMMAND", "id": "Sbanner", "method": "setVersionID", "parms": "v.0.0.1:String","features":""},
+        "SET_DATASOURCE":{"type": "COMMAND", "id": "SInventedSpelling", "method": "setDataSource", "parms": "LOCAL_FILE:String","features":""},
+
+        "NEXT_DATASET": {"type": "COMMAND", "id": "SInventedSpelling", "method": "next", "features": ""},
+        "NEXTNODE": {"type": "COMMAND", "cmd": "NEXT"},
+
+        "NEXTSCENE": {"type":"COMMAND", "cmd": "NEXTSCENE"}
+      },
+
+      "constraintMap": {
+        "COMMENT": "@@@@@  CConstraints @@@@@ ",
+
+        "FTR_EOD": {
+          "type": "CONDITION",
+          "test": "FTR_EOD"
+        },
+
+        // End of Problem
+        "FTR_EOP": {
+          "type": "CONDITION",
+          "test": "FTR_EOP"
+        },
+
+        "FTR_CORRECT":{
+          "type": "CONDITION",
+          "test":"FTR_CORRECT"
+        },
+
+        "FTR_INCORRECT":{
+          "type": "CONDITION",
+          "test":"FTR_INCORRECT"
+        }
+      }
+    }
+  }
+}
+

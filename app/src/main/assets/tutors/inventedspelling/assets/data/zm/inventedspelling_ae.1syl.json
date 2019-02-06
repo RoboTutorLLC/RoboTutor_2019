@@ -1,0 +1,223 @@
+{
+  "bootFeatures": "",
+  "pDataSource": [
+    {
+      "type": "CSpellingEN_Data",
+      "level": "phoneme_ae_1",
+      "task": "Pronounce word",
+      "word": [
+        {
+          "letters": "b",
+          "phoneme": "b"
+        },
+        {
+          "letters": "a",
+          "phoneme": "ae"
+        },
+        {
+          "letters": "g",
+          "phoneme": "g"
+        }
+      ],
+      "image": "bag.jpg",
+      "sound": "bag.mp3"
+    },
+    {
+      "type": "CSpellingEN_Data",
+      "level": "phoneme_ae_1",
+      "task": "Pronounce word",
+      "word": [
+        {
+          "letters": "c",
+          "phoneme": "k"
+        },
+        {
+          "letters": "a",
+          "phoneme": "ae"
+        },
+        {
+          "letters": "p",
+          "phoneme": "p"
+        }
+      ],
+      "image": "cap.jpg",
+      "sound": "cap.mp3"
+    },
+    {
+      "type": "CSpellingEN_Data",
+      "level": "phoneme_ae_1",
+      "task": "Pronounce word",
+      "word": [
+        {
+          "letters": "c",
+          "phoneme": "k"
+        },
+        {
+          "letters": "a",
+          "phoneme": "ae"
+        },
+        {
+          "letters": "t",
+          "phoneme": "t"
+        }
+      ],
+      "image": "cat.jpg",
+      "sound": "cat.mp3"
+    },
+    {
+      "type": "CSpellingEN_Data",
+      "level": "phoneme_ae_1",
+      "task": "Pronounce word",
+      "word": [
+        {
+          "letters": "c",
+          "phoneme": "k"
+        },
+        {
+          "letters": "l",
+          "phoneme": "l"
+        },
+        {
+          "letters": "a",
+          "phoneme": "ae"
+        },
+        {
+          "letters": "p",
+          "phoneme": "p"
+        }
+      ],
+      "image": "clap.jpg",
+      "sound": "clap.mp3"
+    },
+    {
+      "type": "CSpellingEN_Data",
+      "level": "phoneme_ae_1",
+      "task": "Pronounce word",
+      "word": [
+        {
+          "letters": "d",
+          "phoneme": "d"
+        },
+        {
+          "letters": "a",
+          "phoneme": "ae"
+        },
+        {
+          "letters": "d",
+          "phoneme": "d"
+        }
+      ],
+      "image": "dad.jpg",
+      "sound": "dad.mp3"
+    },
+    {
+      "type": "CSpellingEN_Data",
+      "level": "phoneme_ae_1",
+      "task": "Pronounce word",
+      "word": [
+        {
+          "letters": "f",
+          "phoneme": "f"
+        },
+        {
+          "letters": "l",
+          "phoneme": "l"
+        },
+        {
+          "letters": "a",
+          "phoneme": "ae"
+        },
+        {
+          "letters": "g",
+          "phoneme": "g"
+        }
+      ],
+      "image": "flag.png",
+      "sound": "flag.mp3"
+    },
+    {
+      "type": "CSpellingEN_Data",
+      "level": "phoneme_ae_1",
+      "task": "Pronounce word",
+      "word": [
+        {
+          "letters": "m",
+          "phoneme": "m"
+        },
+        {
+          "letters": "a",
+          "phoneme": "ae"
+        },
+        {
+          "letters": "d",
+          "phoneme": "d"
+        }
+      ],
+      "image": "mad.jpg",
+      "sound": "mad.mp3"
+    },
+    {
+      "type": "CSpellingEN_Data",
+      "level": "phoneme_ae_1",
+      "task": "Pronounce word",
+      "word": [
+        {
+          "letters": "n",
+          "phoneme": "n"
+        },
+        {
+          "letters": "a",
+          "phoneme": "ae"
+        },
+        {
+          "letters": "p",
+          "phoneme": "p"
+        }
+      ],
+      "image": "nap.jpg",
+      "sound": "nap.mp3"
+    },
+    {
+      "type": "CSpellingEN_Data",
+      "level": "phoneme_ae_1",
+      "task": "Pronounce word",
+      "word": [
+        {
+          "letters": "r",
+          "phoneme": "r"
+        },
+        {
+          "letters": "a",
+          "phoneme": "ae"
+        },
+        {
+          "letters": "t",
+          "phoneme": "t"
+        }
+      ],
+      "image": "rat.jpg",
+      "sound": "rat.mp3"
+    },
+    {
+      "type": "CSpellingEN_Data",
+      "level": "phoneme_ae_1",
+      "task": "Pronounce word",
+      "word": [
+        {
+          "letters": "s",
+          "phoneme": "s"
+        },
+        {
+          "letters": "a",
+          "phoneme": "ae"
+        },
+        {
+          "letters": "d",
+          "phoneme": "d"
+        }
+      ],
+      "image": "sad.jpg",
+      "sound": "sad.mp3"
+    }
+  ]
+}

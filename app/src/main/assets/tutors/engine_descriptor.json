@@ -34,6 +34,11 @@
       "tutorName": "spelling",
       "features": ""
     },
+    "inventedspelling": {
+      "type": "TUTORVAR_MAP",
+      "tutorName": "inventedspelling",
+      "features": ""
+    },
     "numberscale": {
       "type": "TUTORVAR_MAP",
       "tutorName": "numberscale",
@@ -348,6 +353,20 @@
         }
       }
     },
+    "inventedspelling": {
+    "type": "TUTORDATA_MAP",
+    "scene_bindings": {
+      "inventedspelling": {
+        "type": "SCENEDATA_MAP",
+        "databindings": [
+          {
+            "name": "SInventedSpelling",
+            "datasource": ""
+          }
+        ]
+      }
+    }
+  },
     "numberscale": {
       "type": "TUTORDATA_MAP",
       "scene_bindings": {
