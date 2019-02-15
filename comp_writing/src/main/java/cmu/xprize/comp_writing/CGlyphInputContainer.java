@@ -1562,16 +1562,26 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
     }
 
 
+    // MR_TACTILE when does this get called???
     public void saveGlyphAsPrototype() {
 
         // Note that here we are assuming that the sample and the recognized value are the same -
         //
         if(_showProtoGlyph && _protoGlyph != null) {
 
-            _protoGlyph.saveGlyphPrototype("SHAPEREC_ALPHANUM", "", _sampleExpected, _sampleExpected);
+            _protoGlyph.saveGlyphPrototype("SHAPEREC_ALPHANUM", "", _sampleExpected, _sampleExpected); // MR_TACTILE this tag "SHAPEREC_ALPHANUM" should be a constant
             _protoGlyph.setDirty(false);
 
             mGlyphController.setProtoTypeDirty(false);
+        }
+    }
+
+    public void saveDrawnGlyphAsPrototype() {
+
+        if (_userGlyph != null) {
+
+            _userGlyph.saveGlyphPrototype("SHAPEREC_DEVNAGARI", "", _sampleExpected, _sampleExpected);
+
         }
     }
 

@@ -351,6 +351,7 @@ public class TCONST {
     public static final String LANG_EFFECT = "LANG_EFFECT";
     public static final String LANG_EN     = "LANG_EN";
     public static final String LANG_SW     = "LANG_SW";
+    public static final String LANG_HI     = "LANG_HI";
     public static final String MEDIA_STORY = "story";
 
     // This maps features to 2 letter codes used to build filepaths.
@@ -358,6 +359,7 @@ public class TCONST {
         langMap.put(LANG_EFFECT, "effect");
         langMap.put(LANG_EN,     "en");
         langMap.put(LANG_SW,     "sw");
+        langMap.put(LANG_HI,     "hi");
     }
 
     // JSON parameter constants

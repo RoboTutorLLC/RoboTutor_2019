@@ -117,8 +117,9 @@ public class CFingerWriter extends View implements OnTouchListener, IEventDispat
     static public HashMap<String, String> recogMap = new HashMap<String, String>();
 
     static {
-        recogMap.put("EN_STD_ALPHA", "SHAPEREC_ALPHANUM");
-        recogMap.put("EN_STD_NUM", "SHAPEREC_NUMERALS");
+        //recogMap.put("EN_STD_ALPHA", "SHAPEREC_ALPHANUM");
+        //recogMap.put("EN_STD_NUM", "SHAPEREC_NUMERALS");
+        //recogMap.put("DEV_ALPHA", "SHAPEREC_DEVNAGARI"); // MR_TACTILE dead-end. these never get used...
     }
 
     // This is used to map "recognizer types" to LTK project folders
@@ -126,8 +127,9 @@ public class CFingerWriter extends View implements OnTouchListener, IEventDispat
     static public HashMap<String, String> folderMap = new HashMap<String, String>();
 
     static {
-        folderMap.put("EN_STD_ALPHA", "/projects/alphanumeric/config/");
-        folderMap.put("EN_STD_NUM", "/projects/demonumerals/config/");
+        //folderMap.put("EN_STD_ALPHA", "/projects/alphanumeric/config/");
+        //folderMap.put("EN_STD_NUM", "/projects/demonumerals/config/");
+        //folderMap.put("DEV_ALPHA", "/projects/devnagari/config/"); // MR_TACTILE dead-end. these never get used...
     }
 
 

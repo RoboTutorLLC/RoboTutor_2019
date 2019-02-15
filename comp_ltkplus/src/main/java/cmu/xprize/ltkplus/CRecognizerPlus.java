@@ -101,7 +101,7 @@ public class CRecognizerPlus implements IGlyphSink {
         Log.d("JNI", "Path: " + path);
 
         try {
-            _recognizer = new CLipiTKJNIInterface(path, "SHAPEREC_ALPHANUM");
+            _recognizer = new CLipiTKJNIInterface(path, true ? "SHAPEREC_DEVNAGARI" : "SHAPEREC_ALPHANUM"); // MR_TACTILE this should be a better conditional
             _recognizer.initialize();
         }
         catch(Exception e)
@@ -231,7 +231,7 @@ public class CRecognizerPlus implements IGlyphSink {
 
             // generate the LTK project folder that contains the symbol to unicode mapping
             //
-            String configFileDirectory = _recognizer.getLipiDirectory() + "/projects/alphanumeric/config/";
+            String configFileDirectory = _recognizer.getLipiDirectory() + (true ? "/projects/devnagari/config/": "/projects/alphanumeric/config/"); // MR_TACTILE this should be a conditional
 //            String configFileDirectory = _recognizer.getLipiDirectory() + "/projects/demonumerals/config/";
 
             logMsg = "";
@@ -250,7 +250,7 @@ public class CRecognizerPlus implements IGlyphSink {
 
             //try catch added to prevent crashes.
             try {
-                _sampleIndex = ltkPlusProcessor(_nextGlyph._source);
+                _sampleIndex = ltkPlusProcessor(_nextGlyph._source); // MR_TACTILE this may be where stimulus gets added
 
 
             logMsg = "";
@@ -527,7 +527,7 @@ public class CRecognizerPlus implements IGlyphSink {
                     break;
 
             }
-            sampleIndex = addVirutalCandidate(_sampleExpected);
+            sampleIndex = addVirutalCandidate(_sampleExpected); // MR_TACTILE adds virtual candidate
         }
 
         // If boosting digits for extemporaneous input add all digits

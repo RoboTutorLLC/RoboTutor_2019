@@ -80,6 +80,7 @@ import static cmu.xprize.comp_logging.PerformanceLogItem.MATRIX_TYPE.UNKNOWN_MAT
 import static cmu.xprize.util.TCONST.CODE_DROP_1_ASSET_PATTERN;
 import static cmu.xprize.util.TCONST.CODE_DROP_2_ASSET_PATTERN;
 import static cmu.xprize.util.TCONST.GRAPH_MSG;
+import static cmu.xprize.util.TCONST.LANG_HI;
 import static cmu.xprize.util.TCONST.MATH_PLACEMENT;
 import static cmu.xprize.util.TCONST.PROTOTYPE_ASSET_PATTERN;
 import static cmu.xprize.util.TCONST.QA_ASSET_PATTERN;
@@ -104,10 +105,10 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
 //    private static final String debugTutorVariant = "placevalue";
 //    private static final String debugTutorId = "place.value:1";
 //    private static final String debugTutorFile = "[file]place.value__pv-11..99.2D.diff0.3.json";
-    private static final boolean QUICK_DEBUG = false;
-    private static final String debugTutorVariant = "story.echo";
-    private static final String debugTutorId = "write.wrd:story_1_1";
-    private static final String debugTutorFile = "[encfolder]story.echo_all.A..Z.asc.lc.8.json";
+    private static final boolean QUICK_DEBUG = true;
+    private static final String debugTutorVariant = "write.ltr.lc.trc";
+    private static final String debugTutorId = "write.ltr.lc.trc:hello.hindi";
+    private static final String debugTutorFile = "[file]write.ltr.lc.trc_hello.hindi.json";
 
 
     //amogh missing letter
@@ -131,7 +132,7 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
     // private static final String debugTutorFile = "[file]math_0..800.ADD-100-V-S.incr.13.json";
 
     //private static final String debugTutorFile = "[file]math_10..80.SUB-2D-V-S.rand.12.json";
-    public static final String MATRIX_FILE = "dev_data.cd2.json"; // "dev_data.json"; // SUPER_PLACEMENT
+    public static final String MATRIX_FILE = "dev_data.json"; // "dev_data.json"; // SUPER_PLACEMENT
 
     private static final String LOG_SEQUENCE_ID = "LOG_SEQUENCE_ID";
 
@@ -191,6 +192,8 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
 
     private final  String  TAG = "CRoboTutor";
     private final String ID_TAG = "StudentId";
+
+    public final static boolean DEBUG_HINDI_CHAR = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -450,7 +453,7 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
                     logManager.postEvent_V(TAG, "INFO:Tutor Assets installed");
                 }
 
-                if(!tutorAssetManager.fileCheck(TCONST.LTK_PROJECT_ASSETS)) {
+                if(DEBUG_HINDI_CHAR || !tutorAssetManager.fileCheck(TCONST.LTK_PROJECT_ASSETS)) { // MR_TACTILE re-import these w/ new LTK packages
                     tutorAssetManager.installAssets(TCONST.LTK_PROJEXCTS);
                     logManager.postEvent_V(TAG, "INFO:LTK Projects installed");
 
@@ -461,7 +464,7 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
                     logManager.postEvent_V(TAG, "INFO:LTK Projects extracted");
                 }
 
-                if(!tutorAssetManager.fileCheck(TCONST.LTK_GLYPH_ASSETS)) {
+                if(DEBUG_HINDI_CHAR || !tutorAssetManager.fileCheck(TCONST.LTK_GLYPH_ASSETS)) { // MR_TACTILE re-import these w/ new glyphs...
                     tutorAssetManager.installAssets(TCONST.LTK_GLYPHS);
                     logManager.postEvent_V(TAG, "INFO:LTK Glyphs installed");
 
@@ -484,7 +487,7 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
                 // Create the one system levelFolder LTKPLUS recognizer
                 //
                 LTKPlus = CRecognizerPlus.getInstance();
-                LTKPlus.initialize(getApplicationContext(), GCONST.ALPHABET);
+                LTKPlus.initialize(getApplicationContext(), DEBUG_HINDI_CHAR ? GCONST.HINDI_ALPHABET : GCONST.ALPHABET);
 
                 result = true;
 

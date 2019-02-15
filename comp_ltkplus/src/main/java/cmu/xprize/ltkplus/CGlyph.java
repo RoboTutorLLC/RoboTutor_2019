@@ -798,6 +798,7 @@ public class CGlyph implements ILoadableObject, Cloneable {
 
         String state = Environment.getExternalStorageState();
 
+        // MR_TACTILE where glyphs get loaded
         if (Environment.MEDIA_MOUNTED.equals(state)) {
 
             String inPath;
@@ -824,10 +825,12 @@ public class CGlyph implements ILoadableObject, Cloneable {
 
                         CErrorManager.logEvent(TAG, "JSON FORMAT ERROR: " + inPath + " : ", e, false);
                     }
+                } else {
+                    CErrorManager.logEvent("MR_TACTILE", "FILE NOT FOUND:" + inPath, null, false);
                 }
             }
             else {
-                Log.e(TAG, "Trying to load unmapped Glyph : " + glyph);
+                Log.e(TAG, "Trying to load unmapped Glyph : " + glyph); // MR_TACTILE this is what happens when you don't have the right glyphs!
             }
         }
 

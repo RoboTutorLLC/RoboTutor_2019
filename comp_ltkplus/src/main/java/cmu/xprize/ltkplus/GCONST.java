@@ -6,6 +6,7 @@ public class GCONST {
 
 
     public static final String ALPHABET = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-+<=>!\"#%&?@()/.,;:\'";
+    public static final String HINDI_ALPHABET = "कखग"; // MR_TACTILE full alphabet should be here
     public static final boolean NOFORCE = false;
     public static final boolean FORCE   = true;
 
@@ -48,6 +49,10 @@ public class GCONST {
     static public HashMap<String, String> glyphMap = new HashMap<String, String>();
 
     static {
+        glyphMap.put("क", "क"); // MR_TACTILE don't forget to add these to the glyph map
+        glyphMap.put("ख", "ख");
+        glyphMap.put("ग", "ग");
+
         glyphMap.put("a", "a");
         glyphMap.put("b", "b");
         glyphMap.put("c", "c");

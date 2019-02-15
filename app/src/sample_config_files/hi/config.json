@@ -1,0 +1,12 @@
+{
+  "config_version": "release_hi",
+  "language_override": true,
+  "show_tutorversion": true,
+  "show_debug_launcher": false,
+  "language_switcher": false,
+  "no_asr_apps": false,
+  "language_feature_id": "LANG_HI",
+  "show_demo_vids": false,
+  "use_placement": false,
+  "record_audio": false
+}

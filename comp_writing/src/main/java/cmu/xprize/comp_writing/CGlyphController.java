@@ -145,7 +145,7 @@ public class CGlyphController extends PercentRelativeLayout implements View.OnTo
         mGlyphReplayBut.setVisibility(INVISIBLE);
         mGlyphMorphBut.setVisibility(INVISIBLE);
         mGlyphFlashBut.setVisibility(INVISIBLE);
-        mGlyphSaveBut.setVisibility(INVISIBLE);
+        mGlyphSaveBut.setVisibility(VISIBLE); // MR_TACTILE only make visible if we're saving glyphs
 
         enableButtons(true);
 
@@ -366,7 +366,7 @@ public class CGlyphController extends PercentRelativeLayout implements View.OnTo
         public void onClick(View v) {
             Log.v(QGRAPH_MSG, "event.click: " + " CGlyphController:saveGlyphAsPrototype");
 
-            mGlyphInput.saveGlyphAsPrototype();
+            mGlyphInput.saveDrawnGlyphAsPrototype();
         }
     }
 
