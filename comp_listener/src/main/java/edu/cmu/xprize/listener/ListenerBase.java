@@ -87,6 +87,7 @@ public class ListenerBase {
     static {
         dictMap.put("LANG_EN", "CMU07A-CAPS.DIC");
         dictMap.put("LANG_SW", "SWAHILI.DIC");
+        dictMap.put("LANG_HI", "CMU07A-CAPS.DIC"); // TEMP
     }
 
     static private boolean       isReady = false;
