@@ -1,0 +1,10 @@
+{
+  "random": false,
+  "singleStimulus": true,
+  "dataSource": [
+    { "stimulus": "अ", "audioStimulus": [ "अ", "", "" ], "answer": "अ" },
+    { "stimulus": "आ", "audioStimulus": [ "आ", "", "" ], "answer": "आ" },
+    { "stimulus": "इ", "audioStimulus": [ "इ", "", "" ], "answer": "इ" },
+    { "stimulus": "ई", "audioStimulus": [ "ई", "", "" ], "answer": "ई" }
+  ]
+}

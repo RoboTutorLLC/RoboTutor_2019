@@ -6,7 +6,7 @@ public class GCONST {
 
 
     public static final String ALPHABET = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-+<=>!\"#%&?@()/.,;:\'";
-    public static final String HINDI_ALPHABET = "कखग"; // MR_TACTILE full alphabet should be here
+    public static final String HINDI_ALPHABET = "कखगघङचछजझञ"; // कखगघङचछजझञ MR_TACTILE full alphabet should be here
     public static final boolean NOFORCE = false;
     public static final boolean FORCE   = true;
 
@@ -49,9 +49,71 @@ public class GCONST {
     static public HashMap<String, String> glyphMap = new HashMap<String, String>();
 
     static {
-        glyphMap.put("क", "क"); // MR_TACTILE don't forget to add these to the glyph map
-        glyphMap.put("ख", "ख");
-        glyphMap.put("ग", "ग");
+
+        // BEGIN CONSONANTS
+        glyphMap.put("क", "क"); // ka MR_TACTILE don't forget to add these to the glyph map
+        glyphMap.put("ख", "ख"); // kha
+        glyphMap.put("ग", "ग"); // ga
+        glyphMap.put("घ", "घ"); // gha
+        glyphMap.put("ङ", "ङ"); // nga
+
+        glyphMap.put("च", "च"); // ca
+        glyphMap.put("छ", "छ"); // cha
+        glyphMap.put("ज", "ज"); // ja
+        glyphMap.put("झ", "झ्"); // jha
+        glyphMap.put("ञ्", "ञ्"); // ña
+
+        glyphMap.put("ट", "ट"); // ta
+        glyphMap.put("ठ", "ठ"); // tha
+        glyphMap.put("ड", "ड"); // da
+        glyphMap.put("ढ", "ढ"); // dha
+        glyphMap.put("ण", "ण"); // Na
+
+        glyphMap.put("त", "त"); // ta
+        glyphMap.put("थ", "थ"); // tha
+        glyphMap.put("द", "द"); // da
+        glyphMap.put("ध", "ध"); // dha
+        glyphMap.put("न", "न"); // na
+
+        glyphMap.put("प", "प"); // pa
+        glyphMap.put("फ", "फ"); // pha
+        glyphMap.put("ब", "ब"); // ba
+        glyphMap.put("भ", "भ"); // bha
+        glyphMap.put("म", "म"); // ma
+
+        glyphMap.put("य", "य"); // ya
+        glyphMap.put("र", "र"); // ra
+        glyphMap.put("ल", "ल"); // la
+        glyphMap.put("व", "व"); // va
+
+        glyphMap.put("श", "श"); // śa
+        glyphMap.put("ष", "ष"); // sá
+        glyphMap.put("स", "स"); // sa
+        glyphMap.put("ह", "ह"); // ha
+
+        // BEGIN VOWELS
+
+        glyphMap.put("अ", "अ"); // a
+        glyphMap.put("आ", "आ"); // ā
+        glyphMap.put("इ", "इ"); // i
+        glyphMap.put("ई", "ई"); // ī
+
+        glyphMap.put("उ", "उ"); // u
+        glyphMap.put("ऊ", "ऊ"); // ū
+        glyphMap.put("ऋ", "ऋ"); // r
+
+        glyphMap.put("ए", "ए"); // e
+        glyphMap.put("ऐ", "ऐ"); // ai
+        glyphMap.put("ओ", "ओ"); // o
+
+
+        glyphMap.put("औ", "औ"); // au औ
+        glyphMap.put("अं", "अं"); // an अं
+        glyphMap.put("अः", "अः"); // ah अः
+        glyphMap.put("अँ", "अँ"); // ãm अँ
+
+
+
 
         glyphMap.put("a", "a");
         glyphMap.put("b", "b");
