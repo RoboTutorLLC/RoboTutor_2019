@@ -628,8 +628,14 @@ public class CTutorEngine implements ILoadableObject2 {
     }
 
     private static MenuType getMenuType() {
-        return (RoboTutor.OLD_MENU || CTutorEngine.language.equals(LANG_EN)) ?
-                MenuType.STUDENT_CHOICE : MenuType.CYCLE_CONTENT;
+        /*
+            let the menu type fully depends on the user setting.
+         */
+        if (Configuration.getMenuType(getActivity()).equals("CD1")){
+            return MenuType.STUDENT_CHOICE;
+        } else {
+            return MenuType.CYCLE_CONTENT;
+        }
     }
 
     /**

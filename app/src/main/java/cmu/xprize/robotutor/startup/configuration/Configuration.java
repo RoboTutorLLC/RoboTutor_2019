@@ -22,6 +22,7 @@ public class Configuration {
                 .putBoolean(ConfigurationItems.SHOW_DEMO_VIDS, configItems.show_demo_vids)
                 .putBoolean(ConfigurationItems.USE_PLACEMENT, configItems.use_placement)
                 .putBoolean(ConfigurationItems.RECORD_AUDIO, configItems.record_audio)
+                .putString(ConfigurationItems.MENU_TYPE, configItems.menu_type)
                 .apply();
     }
 
@@ -73,5 +74,10 @@ public class Configuration {
     public static boolean recordAudio(Context context) {
         return context.getSharedPreferences(ROBOTUTOR_CONFIGURATION, MODE_PRIVATE)
                 .getBoolean(ConfigurationItems.RECORD_AUDIO, false);
+    }
+
+    public static String getMenuType(Context context) {
+        return context.getSharedPreferences(ROBOTUTOR_CONFIGURATION, MODE_PRIVATE)
+                .getString(ConfigurationItems.MENU_TYPE, "CD1");
     }
 }

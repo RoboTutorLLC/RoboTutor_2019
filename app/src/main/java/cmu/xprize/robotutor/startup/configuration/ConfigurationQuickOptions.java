@@ -21,7 +21,8 @@ public class ConfigurationQuickOptions {
             "LANG_NULL",
             false,
             false,
-            false
+            false,
+            "CD1"
     );
 
     // EN version, and they both have the debugger menu.
@@ -35,6 +36,7 @@ public class ConfigurationQuickOptions {
             "LANG_EN",
             false,
             false,
-            false
+            false,
+            "CD1"
     );
 }

@@ -24,6 +24,7 @@ public class ConfigurationItems implements ILoadableObject {
     public static final String SHOW_DEMO_VIDS = "SHOW_DEMO_VIDS";
     public static final String USE_PLACEMENT = "USE_PLACEMENT";
     public static final String RECORD_AUDIO = "RECORD_AUDIO";
+    public static final String MENU_TYPE = "MENU_TYPE";
 
     public String config_version;
     public boolean language_override;
@@ -35,6 +36,7 @@ public class ConfigurationItems implements ILoadableObject {
     public boolean show_demo_vids;
     public boolean use_placement;
     public boolean record_audio;
+    public String menu_type;
 
     public ConfigurationItems() {
         String dataPath = TCONST.DOWNLOAD_PATH + "/config.json";
@@ -53,7 +55,8 @@ public class ConfigurationItems implements ILoadableObject {
                               boolean show_tutorversion, boolean show_debug_launcher,
                               boolean language_switcher, boolean no_asr_apps,
                               String language_feature_id, boolean show_demo_vids,
-                              boolean use_placement, boolean record_audio) {
+                              boolean use_placement, boolean record_audio,
+                              String menu_type) {
 
         this.config_version = config_version;
         this.language_override = language_override;
@@ -65,6 +68,7 @@ public class ConfigurationItems implements ILoadableObject {
         this.show_demo_vids = show_demo_vids;
         this.use_placement = use_placement;
         this.record_audio = record_audio;
+        this.menu_type = menu_type;
     }
 
     public void setDefaults() {
@@ -79,6 +83,7 @@ public class ConfigurationItems implements ILoadableObject {
         show_demo_vids = true;
         use_placement = true;
         record_audio = false;
+        menu_type = "CD1";
     }
 
     @Override

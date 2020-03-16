@@ -117,6 +117,7 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
 
     private static final String LOG_SEQUENCE_ID = "LOG_SEQUENCE_ID";
 
+    // deprecated variable , see issue #427
     public static final boolean OLD_MENU = true;
 
 
