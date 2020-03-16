@@ -875,7 +875,13 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
             if(!_currData.response_set[i].equals(_currData.answer))
                 distractors.append(_currData.response_set[i]+"+");
         }
-        event.setDistractors(distractors.toString().substring(0, distractors.toString().length() - 1));
+
+        String distractors_str = distractors.toString();
+        if (distractors_str.length() > 0){
+            event.setDistractors(distractors_str.substring(0, distractors_str.length() - 1));
+        } else{
+            event.setDistractors("");
+        }
 
         event.setUserResponse(bubble.getStimulus());
         event.setCorrectness(bubble.isCorrect() ? TCONST.LOG_CORRECT : TCONST.LOG_INCORRECT);
