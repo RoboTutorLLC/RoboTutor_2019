@@ -29,6 +29,7 @@ import cmu.xprize.comp_session.CActivitySelector;
 import cmu.xprize.robotutor.R;
 import cmu.xprize.robotutor.RoboTutor;
 import cmu.xprize.robotutor.startup.configuration.Configuration;
+import cmu.xprize.robotutor.tutorengine.CDebugLauncher;
 import cmu.xprize.robotutor.tutorengine.CMediaController;
 import cmu.xprize.robotutor.tutorengine.CMediaManager;
 import cmu.xprize.robotutor.tutorengine.CSceneDelegate;
@@ -154,6 +155,19 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
 
             mLangButton.setVisibility(INVISIBLE);
             requestLayout(); // https://stackoverflow.com/questions/13856180/usage-of-forcelayout-requestlayout-and-invalidate
+        }
+
+
+        // if /sdcard/Download/debug.json exists
+        // bypass the activity selector and directly launch the tutor
+        CDebugLauncher debugLauncher = new CDebugLauncher();
+        if (debugLauncher.launchIfDebug()){
+            this.doLaunch(debugLauncher.getIntent(),
+                          debugLauncher.getIntentData(),
+                          debugLauncher.getDataSource(),
+                          debugLauncher.getTutorId(),
+                          debugLauncher.getMatrix());
+
         }
     }
 
@@ -606,7 +620,8 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
     @Override
     public void doLaunch(String intent, String intentData, String dataSource, String tutorId, String matrix) {
 
-        Log.wtf("WARRIOR_MAN", "doLaunch: tutorId = " + tutorId);
+        Log.wtf("WARRIOR_MAN", "doLaunch: intent = " + intent +
+                ",intentData:" + intentData + ",datasrc="+dataSource +",tid:"+tutorId+",mat:" + matrix);
 
         RoboTutor.SELECTOR_MODE = TCONST.FTR_TUTOR_SELECT;
 
