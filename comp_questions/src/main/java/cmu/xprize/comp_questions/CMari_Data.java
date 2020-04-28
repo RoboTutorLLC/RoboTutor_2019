@@ -6,7 +6,9 @@ import cmu.xprize.util.ILoadableObject;
 import cmu.xprize.util.IScope;
 import cmu.xprize.util.JSON_Helper;
 
-public class CMari_Data implements ILoadableObject {
+public class
+
+CMari_Data implements ILoadableObject {
 
     // json loadable
 

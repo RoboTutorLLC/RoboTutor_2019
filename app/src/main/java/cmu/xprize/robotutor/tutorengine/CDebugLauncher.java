@@ -21,6 +21,7 @@ public class CDebugLauncher {
     String dataSource;
     String tutorId;
     String matrix;
+    Integer next_node_times;
 
     public Boolean launchIfDebug() {
         try {
@@ -46,6 +47,7 @@ public class CDebugLauncher {
             this.dataSource = mResult.get("tutor_data");
             this.tutorId = mResult.get("tutor_id");
             this.matrix = mResult.get("skill1");
+            this.next_node_times = Integer.valueOf(mResult.get("next_node_times"));
 
             return true;
         } catch (Exception e) {
@@ -73,5 +75,11 @@ public class CDebugLauncher {
 
     public String getMatrix() {
         return this.matrix;
+    }
+
+    public Integer getNext_node_times() {
+        Integer t = this.next_node_times;
+        this.next_node_times = 0;
+        return t;
     }
 }

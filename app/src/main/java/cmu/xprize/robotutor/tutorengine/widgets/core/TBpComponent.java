@@ -43,6 +43,7 @@ import android.graphics.RectF;
 import cmu.xprize.bp_component.CBubbleStimulus;
 import cmu.xprize.comp_logging.ITutorLogger;
 import cmu.xprize.robotutor.RoboTutor;
+import cmu.xprize.robotutor.tutorengine.CDebugLauncher;
 import cmu.xprize.robotutor.tutorengine.CMediaController;
 import cmu.xprize.robotutor.tutorengine.CMediaManager;
 import cmu.xprize.robotutor.tutorengine.CObjectDelegate;
@@ -90,7 +91,7 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
     static final String TAG = "TBpComponent";
 
     private String mProblemType = "";
-
+    private CDebugLauncher debugLauncher;
 
     public TBpComponent(Context context) {
         super(context);
@@ -562,6 +563,12 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
      */
     @Override
     public void applyBehaviorNode(String nodeName) {
+        // skip first k questions
+        Integer t = debugLauncher.getNext_node_times();
+        for (int i=0; i<= t; i++){
+            this.next();
+        }
+
         IScriptable2 obj = null;
         if (nodeName != null && !nodeName.equals("") && !nodeName.toUpperCase().equals("NULL")) {
 
@@ -1172,6 +1179,9 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
 
         mSceneObject = new CObjectDelegate(this);
         mSceneObject.init(context, attrs);
+
+        debugLauncher = new CDebugLauncher();
+        debugLauncher.launchIfDebug();
     }
 
 

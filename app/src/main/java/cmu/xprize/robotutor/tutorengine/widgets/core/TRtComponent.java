@@ -35,6 +35,7 @@ import java.util.Map;
 import cmu.xprize.comp_logging.ITutorLogger;
 import cmu.xprize.comp_logging.PerformanceLogItem;
 import cmu.xprize.robotutor.RoboTutor;
+import cmu.xprize.robotutor.tutorengine.CDebugLauncher;
 import cmu.xprize.robotutor.tutorengine.CMediaController;
 import cmu.xprize.robotutor.tutorengine.CMediaManager;
 import cmu.xprize.robotutor.tutorengine.CMediaPackage;
@@ -93,7 +94,7 @@ public class TRtComponent extends CRt_Component implements IBehaviorManager, ITu
         super(context, attrs);
     }
 
-
+    private CDebugLauncher debugLauncher;
     @Override
     public void init(Context context, AttributeSet attrs) {
 
@@ -105,6 +106,9 @@ public class TRtComponent extends CRt_Component implements IBehaviorManager, ITu
         // Push the ASR listener reference into the super class in the Java domain
         //
         prepareListener(CMediaController.getTTS());
+
+        debugLauncher = new CDebugLauncher();
+        debugLauncher.launchIfDebug();
     }
 
 
@@ -307,6 +311,12 @@ public class TRtComponent extends CRt_Component implements IBehaviorManager, ITu
      */
     @Override
     public void applyBehaviorNode(String nodeName) {
+        // skip first k pages
+        Integer t = debugLauncher.getNext_node_times();
+        for (int i=0; i<= t; i++){
+            this.nextPage();
+        }
+
         IScriptable2 obj = null;
 
         if (nodeName != null && !nodeName.equals("") && !nodeName.toUpperCase().equals("NULL")) {
