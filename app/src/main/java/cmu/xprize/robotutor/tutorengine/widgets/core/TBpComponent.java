@@ -563,9 +563,9 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
      */
     @Override
     public void applyBehaviorNode(String nodeName) {
-        // skip first k questions
+        // skip first k items
         Integer t = debugLauncher.getNext_node_times();
-        for (int i=0; i<= t; i++){
+        for (int i=0; i< t; i++){
             this.next();
         }
 

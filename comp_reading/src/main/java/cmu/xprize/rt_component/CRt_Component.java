@@ -73,7 +73,7 @@ public class CRt_Component extends ViewAnimator implements IEventListener, IVMan
     private String                  completedSentences     = "";
 
     // state for the current sentence
-    protected int                   currentIndex          = 0;                      // current sentence index in storyName, -1 if unset
+    protected int                   currentIndex          = 1;                      // current sentence index in storyName, -1 if unset
     private int                     currIntervention      = TCONST.NOINTERVENTION;  //
     private int                     completeSentenceIndex = 0;
     protected String[]              sentenceWords;                                  // current sentence words to hear
