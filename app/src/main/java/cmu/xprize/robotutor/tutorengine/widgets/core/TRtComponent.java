@@ -311,12 +311,6 @@ public class TRtComponent extends CRt_Component implements IBehaviorManager, ITu
      */
     @Override
     public void applyBehaviorNode(String nodeName) {
-        // skip first k pages
-//        Integer t = debugLauncher.getNext_node_times();
-//        Log.wtf("ycx", t.toString());
-//        for (int i=0; i< t; i++){
-//            this.nextPage();
-//        }
 
         IScriptable2 obj = null;
 

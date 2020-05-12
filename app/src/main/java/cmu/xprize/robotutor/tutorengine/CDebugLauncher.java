@@ -82,4 +82,85 @@ public class CDebugLauncher {
         this.next_node_times = 0;
         return t;
     }
+
+        /*
+    modify the datasource
+     */
+    public String hijackJsonData(String jsonData){
+        // not in debug mod
+        if(!this.launchIfDebug())
+            return jsonData;
+
+        Log.wtf("DebugLauncher", "next_node_times: " + next_node_times.toString());
+        Log.wtf("DebugLauncher", "old jsonData: " + jsonData);
+
+        String[] list_name_to_truncate = {"data", "dataSource"};
+        for(String list_name: list_name_to_truncate){
+            Log.wtf("DebugLauncher", "now truncating: " + list_name);
+
+            // find fist "gen_responseSet": [ ...
+            Integer start = jsonData.indexOf(list_name);
+            if(start == -1){ // not found
+                continue;
+            }
+            Log.wtf("DebugLauncher", "found at: "+ start.toString());
+            start = jsonData.indexOf('[', start) + 1;
+
+            // find corresponding ]
+            Integer depth = 1, cur = start;
+            while (depth >= 1){
+                if (jsonData.charAt(cur) == ']'){
+                    depth -= 1;
+                } else if (jsonData.charAt(cur) == '['){
+                    depth += 1;
+                }
+                cur += 1;
+            }
+            cur -= 1; // go back before [
+
+            // get start middle and end part of json
+            String newJsonData_middle = jsonData.substring(start, cur);
+            String newJsonData_start = jsonData.substring(0, start);
+            String newJsonData_end = jsonData.substring(cur);
+
+            // truncate middle part
+            cur = 0;
+            Integer skip_times_ = this.next_node_times;
+            while(skip_times_ > 0){
+                depth = 0;
+
+                while (true){
+//                    Log.wtf("DebugLauncher", newJsonData_middle.substring(cur));
+                    if (newJsonData_middle.charAt(cur) == ',' && depth == 0){
+                        break;
+                    }
+
+                    if (newJsonData_middle.charAt(cur) == '{' ||
+                            newJsonData_middle.charAt(cur) == '['){
+                        depth += 1;
+                    }
+
+                    if (newJsonData_middle.charAt(cur) == '}' ||
+                            newJsonData_middle.charAt(cur) == ']'){
+                        depth -= 1;
+                    }
+                    cur += 1;
+                }
+
+                skip_times_ -= 1;
+                cur += 1; // skip this comma
+            }
+            newJsonData_middle = newJsonData_middle.substring(cur);
+
+            // apply modification to jsonData
+            Log.wtf("DebugLauncher", "newJsonData_start: " + newJsonData_start);
+            Log.wtf("DebugLauncher", "newJsonData_middle: " + newJsonData_middle);
+            Log.wtf("DebugLauncher", "newJsonData_end: " + newJsonData_end);
+            jsonData = newJsonData_start + newJsonData_middle + newJsonData_end;
+        }
+
+        Log.wtf("DebugLauncher", "new jsonData: " + jsonData);
+        return jsonData;
+    }
+
 }

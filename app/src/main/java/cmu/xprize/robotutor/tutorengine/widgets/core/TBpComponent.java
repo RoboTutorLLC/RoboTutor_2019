@@ -563,11 +563,6 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
      */
     @Override
     public void applyBehaviorNode(String nodeName) {
-        // skip first k items
-        Integer t = debugLauncher.getNext_node_times();
-        for (int i=0; i< t; i++){
-            this.next();
-        }
 
         IScriptable2 obj = null;
         if (nodeName != null && !nodeName.equals("") && !nodeName.toUpperCase().equals("NULL")) {
