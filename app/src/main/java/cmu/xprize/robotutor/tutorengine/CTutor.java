@@ -117,7 +117,7 @@ public class CTutor implements ILoadableObject2, IEventSource {
     public scene_initializer[]              scenedata;
     public defdata_tutor                    dataSource = null;
     public String                           language;
-    public String                           navigatorType;
+    public String                           navigatorType = TCONST.SIMPLENAV; // 2020-06-02 JM crashed loadTutorGraph when uninitialized
     public HashMap<String,CMediaPackage>    soundMap;
 
     public String matrix;
@@ -232,8 +232,8 @@ public class CTutor implements ILoadableObject2, IEventSource {
      */
     private void loadTutorGraph() {
 
-        switch(navigatorType) {
-            case TCONST.SIMPLENAV:
+        switch(navigatorType) { // 2020-06-02 was null because uninitialized, causing > 18,000 crashes
+            case TCONST.SIMPLENAV:  // 2020-06-02 JM make this the default value because the other value isn't used
                 mTutorGraph = new CTutorGraph(this, mTutorName, mTutorContainer, mTutorScope);
                 break;
 
