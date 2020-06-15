@@ -117,7 +117,7 @@ public class CTutor implements ILoadableObject2, IEventSource {
     public scene_initializer[]              scenedata;
     public defdata_tutor                    dataSource = null;
     public String                           language;
-    public String                           navigatorType;
+    public String                           navigatorType = TCONST.SIMPLENAV;
     public HashMap<String,CMediaPackage>    soundMap;
 
     public String matrix;
