@@ -3,7 +3,8 @@
 # **RoboTutor**
 
 
-Welcome to RoboTutor: this version was uploaded to XPrize 11/20/2018. For subsequent changes, see [https://github.com/RoboTutorLLC/RoboTutor](https://github.com/RoboTutorLLC/RoboTutor).
+Welcome to RoboTutor:  XPRIZE's repo has the version uploaded on 11/20/2018, but RoboTutor has been updated here since then.
+For changes since 11/20/2018, see [https://github.com/RoboTutorLLC/RoboTutor](https://github.com/RoboTutorLLC/RoboTutor).
 
 
 --- 
