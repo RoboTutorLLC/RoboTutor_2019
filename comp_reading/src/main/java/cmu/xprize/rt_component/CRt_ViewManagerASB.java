@@ -782,7 +782,7 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
             postDelayedTracker();
         } else {
 
-            // NOTE: The narration mode uses the ASR logic to simplify operation.  In doing this
+            // NOTE: The narration mode uses the AS R logic to simplify operation.  In doing this
             /// it uses the wordsToSpeak array to progressively highlight the on screen text based
             /// on the timing found in the segmentation data.
             //

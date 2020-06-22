@@ -61,7 +61,7 @@ android {
     // define apk naming behavior
     // define apk naming behavior
     applicationVariants.all { variant ->
-        variant.outputs.each { output ->
+        /* variant.outputs.each { output ->
             def project = "robotutor"
             def SEP = "."
             def buildType = variant.variantData.variantConfiguration.buildType.name
@@ -69,6 +69,9 @@ android {
 
             def newApkName = project + SEP + buildType + SEP + version + ".apk"
             output.outputFile = new File(output.outputFile.parent, newApkName)
+        } */
+        variant.outputs.all {
+            outputFileName = "robotutor.${variant.variantData.variantConfiguration.buildType.name}.${variant.versionName}.apk"
         }
     }
 
