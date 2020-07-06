@@ -1640,4 +1640,10 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
 
         JSON_Helper.parseSelf(jsonData, this, CClassMap.classMap, scope);
     }
+
+    // TODO: make this method
+    public void saveToFile() {
+        // Where to save the data?
+        // How to get the utterance id?
+    }
 }

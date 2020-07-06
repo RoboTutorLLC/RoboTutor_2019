@@ -70,6 +70,8 @@ android {
             def newApkName = project + SEP + buildType + SEP + version + ".apk"
             output.outputFile = new File(output.outputFile.parent, newApkName)
         } */
+        // This allows the build to work on Windows.
+        // TODO: delete this for final commit
         variant.outputs.all {
             outputFileName = "robotutor.${variant.variantData.variantConfiguration.buildType.name}.${variant.versionName}.apk"
         }
