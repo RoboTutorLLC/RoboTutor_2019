@@ -230,6 +230,10 @@ public class CTutorEngine implements ILoadableObject2 {
 
         Log.d(TCONST.DEBUG_GRAY_SCREEN_TAG, "**: Creating Tutor in startSessionManager: " + defTutor);
 
+        if(Context.POWER_SERVICE == null){
+            return;
+        }
+
         // don't create a new tutor when the screen is off, because on relaunch it will set-in-motion the "KILLTUTOR"
         // https://stackoverflow.com/questions/2474367/how-can-i-tell-if-the-screen-is-on-in-android
         PowerManager powerManager = (PowerManager) Activity.getSystemService(Context.POWER_SERVICE);
