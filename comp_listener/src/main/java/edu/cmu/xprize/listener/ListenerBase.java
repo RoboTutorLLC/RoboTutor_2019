@@ -563,8 +563,6 @@ public class ListenerBase {
 
     /***** Logging */
 
-
-
     /**
      * get the  path to the hypothesis log file for given utterance label
      */

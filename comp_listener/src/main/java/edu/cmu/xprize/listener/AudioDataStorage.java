@@ -1,5 +1,12 @@
 package edu.cmu.xprize.listener;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+import java.nio.ShortBuffer;
+import java.nio.channels.FileChannel;
 import java.util.Arrays;
 
 public class AudioDataStorage {
@@ -9,8 +16,9 @@ public class AudioDataStorage {
      * finIndex is used to add to audioData without overwriting existing data
      * Volatile because it is accessed by the RecognizerThread but also by the _______ thread
      */
-    public static volatile short[] audioData = new short[160 * 25 * 100]; // creates a buffer that can store 25 seconds worth of audio
+    public static volatile short[] audioData = new short[160 * 60 * 100]; // creates a buffer that can store 60 seconds worth of audio
     public static volatile int finIndex = 0;
+
 
     // I initialize the array and add to it
 
@@ -32,7 +40,20 @@ public class AudioDataStorage {
     }
 
     public static void saveAudioData(String filepath) {
+        try {
+            FileOutputStream os = new FileOutputStream(filepath + ".pcm");
+            ByteBuffer dataBuffer = ByteBuffer.allocate(audioData.length * 2);
+            ShortBuffer dataBufferShort = dataBuffer.asShortBuffer();
+            dataBuffer.order(ByteOrder.LITTLE_ENDIAN); // I *think* little endian is what .wav uses, not sure about .mp3
+            dataBufferShort.put(audioData);
+            FileChannel out = os.getChannel();
+            out.close();
+            os.close();
 
+            // TODO: now it needs to be converted to either .wav or .mp3. I think the header can take care of that
+        } catch (IOException e) {
+            e.printStackTrace(); // ?
+        }
     }
 
 }

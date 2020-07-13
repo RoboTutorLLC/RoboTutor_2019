@@ -274,11 +274,24 @@
           "type": "NODE",
           "COMMENT": "node that triggers audio saving for NARRATE mode",
           "maptype": "moduleMap",
-          "mapname": "",
+          "mapname": "SAVEAUDIO",
           "preenter": [],
           "preexit": [],
           "edges": [
             {"constraint": "", "edge": "NEXT_SENTENCE"}
+          ]
+        },
+
+
+        "NARRATE_WRONG": {
+          "type": "NODE",
+          "COMMENT": "For the 'mean' mode of NARRATE that deletes audio as soon as it hears something wrong.",
+          "maptype": "moduleMap",
+          "mapname": "CLEARAUDIO",
+          "preenter": [],
+          "preexit": [],
+          "edges": [
+            {"constraint": "","edge": ""} //TODO: Go to previous sentence.. how?
           ]
         }
       },
@@ -291,7 +304,16 @@
           "reuse": true,
           "COMMENT": "module that saves audio for NARRATE mode",
           "tracks" : [
-            {"type": "COMMAND", "id": "StoryReading", "method": "saveAudio", "parms": "none", "features": "" }
+            {"type": "COMMAND", "id": "SstoryReading", "method": "saveAudio", "parms": "none", "features": "" }
+          ]
+        },
+
+        "CLEARAUDIO": {
+          "type": "MODULE",
+          "reuse": true,
+          "COMMENT": "module that deletes current audio data",
+          "tracks": [
+            {"type": "COMMAND","id": "SstoryReading","method": "clearAudio","parms": "none","features": ""}
           ]
         },
 
@@ -439,8 +461,7 @@
             {"type": "COMMAND", "id": "SstoryReading", "method": "setHighLight", "parms": "red:String"},
             {"type": "COMMAND", "id": "SstoryReading", "method": "continueListening"  , "features": ""}
           ]
-        },
-
+        }
 
       },
 

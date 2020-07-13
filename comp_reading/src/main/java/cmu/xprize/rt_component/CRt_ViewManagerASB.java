@@ -45,6 +45,7 @@ import cmu.xprize.util.ILoadableObject;
 import cmu.xprize.util.IScope;
 import cmu.xprize.util.JSON_Helper;
 import cmu.xprize.util.TCONST;
+import edu.cmu.xprize.listener.AudioDataStorage;
 import edu.cmu.xprize.listener.ListenerBase;
 
 import static cmu.xprize.util.TCONST.FTR_USER_READ;
@@ -1643,7 +1644,26 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
 
     // TODO: make this method
     public void saveToFile() {
-        // Where to save the data?
-        // How to get the utterance id?
+        // Step 1. get sentence text
+        StringBuilder fileNameBuilder = new StringBuilder();
+        for (String word : wordsToDisplay) { // This uses the wordsToDisplay String[] because it contains punctuation
+            fileNameBuilder.append(word).append(" ");
+        }
+        fileNameBuilder.setLength(fileNameBuilder.length() - 1);
+        fileNameBuilder.append(".mp3");
+
+        String fileName = fileNameBuilder.toString();
+
+        // Step 2. Get the story name
+        String fullPath = new StringBuilder(assetLocation)
+                .append("/")
+                .append(fileNameBuilder)
+                .toString();
+
+        AudioDataStorage.saveAudioData(fullPath);
+    }
+
+    public void clearAudioData() {
+        AudioDataStorage.clearAudioData();
     }
 }
