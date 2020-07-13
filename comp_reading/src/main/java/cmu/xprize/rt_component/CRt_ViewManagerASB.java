@@ -1666,4 +1666,9 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
     public void clearAudioData() {
         AudioDataStorage.clearAudioData();
     }
+
+    private void startLine() {
+        // Goes back to the beginning of the line
+        seekToStoryPosition(mCurrPage, mCurrPara, mCurrLine, TCONST.ZERO);
+    }
 }

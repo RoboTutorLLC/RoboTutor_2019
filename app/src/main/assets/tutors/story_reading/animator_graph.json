@@ -231,6 +231,7 @@
           "preenter": [],
           "preexit": [],
           "edges": [
+            {"constraint": "NARRATE_MODE", "edge": "NARRATE_RIGHT"},
             {"constraint": "", "edge": "LISTEN"}
           ]
         },
@@ -278,7 +279,7 @@
           "preenter": [],
           "preexit": [],
           "edges": [
-            {"constraint": "", "edge": "NEXT_SENTENCE"}
+            {"constraint": "", "edge": "LISTEN"}
           ]
         },
 
@@ -291,7 +292,19 @@
           "preenter": [],
           "preexit": [],
           "edges": [
-            {"constraint": "","edge": ""} //TODO: Go to previous sentence.. how?
+            {"constraint": "","edge": "RESTART_LINE_NODE"} //TODO: Go to previous sentence.. how?
+          ]
+        },
+
+        "RESTART_LINE_NODE": {
+          "type": "NODE",
+          "COMMENT": "Goes back to the beginning of the line",
+          "maptype": "moduleMap",
+          "mapname": "START_LINE",
+          "preenter": [],
+          "preexit": [],
+          "edges": [
+            {"constraint": "", "edge": "LISTEN"}
           ]
         }
       },
@@ -461,6 +474,15 @@
             {"type": "COMMAND", "id": "SstoryReading", "method": "setHighLight", "parms": "red:String"},
             {"type": "COMMAND", "id": "SstoryReading", "method": "continueListening"  , "features": ""}
           ]
+        },
+
+        "START_LINE": {
+          "type": "MODULE",
+          "reuse": true,
+          "COMMENT": "goes back to the beginning of the sentence",
+          "tracks": [
+            {"type": "COMMAND", "id": "SstoryReading", "method": "startLine", "pamrms": "none"}
+          ]
         }
 
       },
@@ -610,6 +632,13 @@
         "FTR_WRONG": {
           "type": "CONDITION",
           "test": "FTR_WRONG"
+        },
+
+        "NARRATE_MODE": {
+          "type": "CONDITION",
+          "If": "{{SstoryReading.narrateState}}=='TRUE'",
+          "Then": "true",
+          "Else": "false"
         }
       }
     }
