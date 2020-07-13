@@ -292,7 +292,7 @@
           "preenter": [],
           "preexit": [],
           "edges": [
-            {"constraint": "","edge": "RESTART_LINE_NODE"} //TODO: Go to previous sentence.. how?
+            {"constraint": "","edge": "RESTART_LINE_NODE"}
           ]
         },
 

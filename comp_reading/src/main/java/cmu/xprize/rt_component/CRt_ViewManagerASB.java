@@ -1642,7 +1642,7 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
         JSON_Helper.parseSelf(jsonData, this, CClassMap.classMap, scope);
     }
 
-    // TODO: make this method
+    @Override
     public void saveToFile() {
         // Step 1. get sentence text
         StringBuilder fileNameBuilder = new StringBuilder();
@@ -1663,11 +1663,13 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
         AudioDataStorage.saveAudioData(fullPath);
     }
 
+    @Override
     public void clearAudioData() {
         AudioDataStorage.clearAudioData();
     }
 
-    private void startLine() {
+    @Override
+    public void startLine() {
         // Goes back to the beginning of the line
         seekToStoryPosition(mCurrPage, mCurrPara, mCurrLine, TCONST.ZERO);
     }

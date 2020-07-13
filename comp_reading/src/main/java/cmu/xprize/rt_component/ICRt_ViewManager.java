@@ -75,4 +75,8 @@ public interface ICRt_ViewManager extends ILoadableObject {
     public void setPageFlipButton(String command);
 
     public void execCommand(String _command, Object _target);
+
+    void saveToFile();
+    void clearAudioData();
+    void startLine();
 }

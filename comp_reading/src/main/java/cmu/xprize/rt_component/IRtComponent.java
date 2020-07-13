@@ -54,4 +54,8 @@ public interface IRtComponent {
 
     public void continueListening();
 
+    void saveToFile();
+    void clearAudioData();
+    void startLine();
+
 }

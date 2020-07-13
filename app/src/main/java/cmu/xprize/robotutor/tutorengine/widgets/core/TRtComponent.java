@@ -1196,4 +1196,19 @@ public class TRtComponent extends CRt_Component implements IBehaviorManager, ITu
 
         RoboTutor.perfLogManager.postPerformanceLog(event);
     }
+
+    @Override
+    public void saveToFile() {
+        mViewManager.saveToFile();
+    }
+
+    @Override
+    public void clearAudioData() {
+        mViewManager.clearAudioData();
+    }
+
+    @Override
+    public void startLine() {
+        mViewManager.startLine();
+    }
 }
