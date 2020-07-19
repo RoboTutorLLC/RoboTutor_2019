@@ -850,7 +850,7 @@ public class SpeechRecognizer {
             output = new FileOutputStream(wavFile);
             // first write appropriate wave file header
             ByteArrayOutputStream hdrBytes = new ByteArrayOutputStream();
-            new WaveHeader(WaveHeader.FORMAT_PCM, (short) 1, 16000, (short) 16, (int) rawFile.length()).write(hdrBytes);
+            new WaveHeader(WaveHeader.FORMAT_PCM, (short) 1,    16000, (short) 16, (int) rawFile.length()).write(hdrBytes);
             output.write(hdrBytes.toByteArray());
             // then copy raw bytes to output file
             byte[] buffer = new byte[4096];

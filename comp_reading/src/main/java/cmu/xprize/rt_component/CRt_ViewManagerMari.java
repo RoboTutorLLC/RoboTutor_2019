@@ -203,6 +203,21 @@ public class CRt_ViewManagerMari implements ICRt_ViewManager, ILoadableObject {
         }
     }
 
+    @Override
+    public void saveToFile() {
+
+    }
+
+    @Override
+    public void clearAudioData() {
+
+    }
+
+    @Override
+    public void startLine() {
+
+    }
+
 
     @Override
     public void onUpdate(ListenerBase.HeardWord[] heardWords, boolean finalResult) {

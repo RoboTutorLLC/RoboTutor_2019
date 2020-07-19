@@ -225,6 +225,7 @@ public class TCONST {
     public static final String FTR_USER_REVEAL     = "FTR_USER_REVEAL";
     public static final String FTR_USER_PARROT     = "FTR_USER_PARROT";
     public static final String FTR_USER_READING    = "FTR_USER_READING";
+    public static final String FTR_NARRATE_MODE    = "NARRATE_MODE";
     // UHQ
     public static final String FTR_GEN             = "FTR_GEN";
     public static final String FTR_PIC             = "FTR_PIC";
@@ -785,6 +786,8 @@ public class TCONST {
 
     public static final String RTC_VAR_ECHOSTATE   = ".echoState";
     public static final String RTC_VAR_PARROTSTATE = ".parrotState";
+    public static final String RTC_VAR_NARRATESTATE = ".narrateState";
+
     // Generic question state flag
     public static final String RTC_VAR_QUESTIONSTATE = ".questionState";
     public static final String RTC_VAR_CLOZESTATE = ".clozeState";

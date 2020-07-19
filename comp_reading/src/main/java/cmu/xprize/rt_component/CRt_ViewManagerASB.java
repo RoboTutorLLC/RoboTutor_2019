@@ -217,6 +217,12 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
 
         //TODO: CHECK
         mParent.animatePageFlip(true,mCurrViewIndex);
+
+        // Turns on narrate mode if it is specified in Config.json
+        if (mContext.getSharedPreferences("ROBOTUTOR CONFIGURATION", Context.MODE_PRIVATE)
+            .getBoolean("CONTENT_CREATION_MODE", false)) {
+            mParent.setFeature(TCONST.FTR_NARRATE_MODE, TCONST.ADD_FEATURE);
+        }
     }
 
 
@@ -950,6 +956,7 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
         //
         mParent.publishValue(TCONST.RTC_VAR_ECHOSTATE, TCONST.FALSE);
         mParent.publishValue(TCONST.RTC_VAR_PARROTSTATE, TCONST.FALSE);
+        mParent.publishValue(TCONST.RTC_VAR_NARRATESTATE, TCONST.FALSE);
 
         if (prompt != null) {
             mParent.publishValue(TCONST.RTC_VAR_PROMPT, prompt);
@@ -1646,11 +1653,11 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
     public void saveToFile() {
         // Step 1. get sentence text
         StringBuilder fileNameBuilder = new StringBuilder();
-        for (String word : wordsToDisplay) { // This uses the wordsToDisplay String[] because it contains punctuation
+        for (String word : wordsToSpeak) { // This uses the wordsToDisplay String[] because it contains punctuation
             fileNameBuilder.append(word).append(" ");
         }
         fileNameBuilder.setLength(fileNameBuilder.length() - 1);
-        fileNameBuilder.append(".mp3");
+        fileNameBuilder.append(".pcm");
 
         String fileName = fileNameBuilder.toString();
 

@@ -23,6 +23,7 @@ public class Configuration {
                 .putBoolean(ConfigurationItems.USE_PLACEMENT, configItems.use_placement)
                 .putBoolean(ConfigurationItems.RECORD_AUDIO, configItems.record_audio)
                 .putString(ConfigurationItems.MENU_TYPE, configItems.menu_type)
+                .putBoolean(ConfigurationItems.CONTENT_CREATION_MODE, configItems.content_creation_mode)
                 .apply();
     }
 
@@ -79,5 +80,10 @@ public class Configuration {
     public static String getMenuType(Context context) {
         return context.getSharedPreferences(ROBOTUTOR_CONFIGURATION, MODE_PRIVATE)
                 .getString(ConfigurationItems.MENU_TYPE, "CD1");
+    }
+
+    public static boolean getContentCreationMode(Context context) {
+        return context.getSharedPreferences(ROBOTUTOR_CONFIGURATION, MODE_PRIVATE)
+                .getBoolean(ConfigurationItems.CONTENT_CREATION_MODE, false);
     }
 }
