@@ -51,6 +51,7 @@ import cmu.xprize.comp_writing.WR_CONST;
 import cmu.xprize.ltkplus.CRecognizerPlus;
 import cmu.xprize.ltkplus.GCONST;
 import cmu.xprize.robotutor.RoboTutor;
+import cmu.xprize.robotutor.tutorengine.CDebugLauncher;
 import cmu.xprize.robotutor.tutorengine.CMediaController;
 import cmu.xprize.robotutor.tutorengine.CMediaManager;
 import cmu.xprize.robotutor.tutorengine.CMediaPackage;
@@ -934,7 +935,7 @@ public class TWritingComponent extends CWritingComponent implements IBehaviorMan
                 dataPath += "/" +  TCONST.DATA_PATH + "/" + mMediaManager.getLanguageIANA_2(mTutor) + "/";
 
                 String jsonData = JSON_Helper.cacheData(dataPath + dataFile);
-
+                jsonData = new CDebugLauncher().hijackJsonData(jsonData);
                 // Load the datasource in the component module - i.e. the superclass
                 //
                 loadJSON(new JSONObject(jsonData), mTutor.getScope() );
