@@ -38,9 +38,10 @@ allprojects {
 
         // Semantic versioning description:
         // <Milestone release> <Feature Release> <Patch release> <Asset Compatibility INDEX>
+        // notice: <Asset Compatibility INDEX> must be 1
+        // or the assets will not be unzipped automatically for new users
 
-
-        rtVersionName="3.3.1.2"
+        rtVersionName="3.3.2.1"
 
     }
 }
