@@ -57,5 +57,5 @@ public interface IRtComponent {
     void saveToFile();
     void clearAudioData();
     void startLine();
-
+    void prevSentence();
 }

@@ -55,7 +55,7 @@ public class ListenerBase {
     static protected ListenerAssets  assets;     // created in init phase -
 
     protected String  captureLabel = "";          // label for capture, logging files
-    protected boolean IS_LOGGING   = false;
+    protected boolean IS_LOGGING   = true;
 
     protected File    configFile;                // config file to use, null => default
     protected File    modelsDir;                 // saved model directory

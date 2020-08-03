@@ -735,6 +735,25 @@ public class TRtComponent extends CRt_Component implements IBehaviorManager, ITu
             } else if (dataNameDescriptor.startsWith("{")) {
 
                 loadJSON(new JSONObject(dataNameDescriptor), null);
+            } else if (dataNameDescriptor.startsWith(TCONST.UNPACKAGED_ASSET)) {
+
+                // This is for assets that haven't yet been completed (e.g. stories that need narrations) and exists for content creation
+                String storyFolder = dataNameDescriptor.substring(TCONST.UNPACKAGED_ASSET.length()).toLowerCase();
+
+                String[] levelval   = storyFolder.split("_");
+
+                String levelFolder = levelval[0];
+
+                DATASOURCEPATH  = TCONST.DOWNLOAD_PATH + "/";
+                STORYSOURCEPATH = DATASOURCEPATH + levelFolder + "/" + storyFolder + "/";
+
+                AUDIOSOURCEPATH = TCONST.DOWNLOAD_PATH + "/" + levelFolder + "/" + storyFolder;
+                // Probably going to change this to put all the audio in one place
+
+                configListenerLanguage(mMediaManager.getLanguageFeature(mTutor));
+                mMediaManager.addSoundPackage(mTutor, MEDIA_STORY, new CMediaPackage(LANG_AUTO, AUDIOSOURCEPATH, LOCAL_STORY_AUDIO));
+
+                loadStory(STORYSOURCEPATH, "ASB_Data", TCONST.EXTERN);
 
             } else {
                 throw (new Exception("BadDataSource"));
@@ -1216,4 +1235,7 @@ public class TRtComponent extends CRt_Component implements IBehaviorManager, ITu
     public void startLine() {
         mViewManager.startLine();
     }
+
+    @Override
+    public void prevSentence() {mViewManager.prevSentence();}
 }

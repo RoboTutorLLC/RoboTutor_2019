@@ -205,6 +205,7 @@ public class TCONST {
     public static final String PUNC_STORY = "[punc]";
 
     public static final String LOCAL_FILE          = "[local_file]";
+    public static final String UNPACKAGED_ASSET     = "[unpackaged_asset]";
     public static final String DOWNLOAD_PATH       = "/sdcard/Download";
     public static final String DOWNLOAD_RT_PATH    = "/sdcard/Download/RoboTutor";
     public static final String DOWNLOAD_RT_TUTOR   = "/sdcard/Download/RoboTutor/assets";

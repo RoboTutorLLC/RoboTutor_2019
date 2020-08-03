@@ -23,6 +23,9 @@ public class CDebugLauncher {
     String matrix;
     Integer next_node_times;
 
+    // For content_creation_mode
+    String storyDataPath;
+
     public Boolean launchIfDebug() {
         try {
             InputStream inputStream = new FileInputStream("/sdcard/Download/debug.json");
@@ -49,6 +52,7 @@ public class CDebugLauncher {
             this.matrix = mResult.get("skill1");
             this.next_node_times = Integer.valueOf(mResult.get("next_node_times"));
 
+            this.storyDataPath = mResult.get("story_data_path");
             return true;
         } catch (Exception e) {
             Log.wtf("CDebugLauncher", "/sdcard/Download/debug.json does not exist");
@@ -130,7 +134,7 @@ public class CDebugLauncher {
                 depth = 0;
 
                 while (true){
-//                    Log.wtf("DebugLauncher", newJsonData_middle.substring(cur));
+                    // Log.wtf("DebugLauncher", newJsonData_middle.substring(cur));
                     if (newJsonData_middle.charAt(cur) == ',' && depth == 0){
                         break;
                     }

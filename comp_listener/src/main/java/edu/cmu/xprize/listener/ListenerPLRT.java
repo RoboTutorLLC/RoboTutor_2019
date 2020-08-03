@@ -480,6 +480,7 @@ public class ListenerPLRT extends ListenerBase {
             // log the partial hypothesis
             if(IS_LOGGING)
                 logHyp(timestamp, TextUtils.join(" ", asrWords), segments, heardWords);
+                AudioDataStorage.updateHypothesis(heardWords);
         }
     }
 

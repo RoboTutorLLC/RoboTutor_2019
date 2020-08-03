@@ -1657,17 +1657,11 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
             fileNameBuilder.append(word).append(" ");
         }
         fileNameBuilder.setLength(fileNameBuilder.length() - 1);
-        fileNameBuilder.append(".pcm");
 
         String fileName = fileNameBuilder.toString();
 
-        // Step 2. Get the story name
-        String fullPath = new StringBuilder(assetLocation)
-                .append("/")
-                .append(fileNameBuilder)
-                .toString();
 
-        AudioDataStorage.saveAudioData(fullPath);
+        AudioDataStorage.saveAudioData(fileName, mAsset);
     }
 
     @Override
@@ -1679,5 +1673,19 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
     public void startLine() {
         // Goes back to the beginning of the line
         seekToStoryPosition(mCurrPage, mCurrPara, mCurrLine, TCONST.ZERO);
+    }
+
+    @Override
+    public void prevSentence() {
+        // Not sure if it is zero-index or not. Right now treating the counting like it starts at 1
+        if (mCurrLine > 2) {
+            mCurrLine--;
+            mCurrWord = 1;
+        } else if (mCurrPage > 2) {
+            mCurrPage--;
+            mCurrLine = 1;
+            mCurrWord = 1;
+        }
+        seekToStoryPosition(mCurrPage, mCurrPara, mCurrLine, mCurrWord);
     }
 }
