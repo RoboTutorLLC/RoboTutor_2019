@@ -461,6 +461,7 @@ public class SpeechRecognizer {
                     Log.d("ASR", "AudioRecorder Create Failed: " + e);
                 }
                 isRunningRecognizer = true;
+                AudioDataStorage.setSampleRate(sampleRate);
 
                 // Collect audio samples continuously while not paused and until the
                 // Thread is killed.  This allow UI/UX activity while the listener is still
@@ -577,7 +578,8 @@ public class SpeechRecognizer {
                             decoder.processRaw(buffer, nread, false, false);
                             //Log.d("ASR", "Time in processRaw: " + (System.currentTimeMillis() - ASRTimer));
 
-                            AudioDataStorage.addAudioData(buffer);
+                            AudioDataStorage.addAudioData(nread, buffer);
+                            AudioWriter.addAudio(nread, buffer);
 
                             nSamples += nread;
 

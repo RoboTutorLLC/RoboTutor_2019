@@ -1,6 +1,8 @@
 package cmu.xprize.robotutor.tutorengine;
 
 
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.util.Log;
 
 import com.google.gson.Gson;
@@ -10,8 +12,10 @@ import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 // if /sdcard/Download/debug.json exists
 // bypass the activity selector and directly launch the tutor
@@ -23,8 +27,6 @@ public class CDebugLauncher {
     String matrix;
     Integer next_node_times;
 
-    // For content_creation_mode
-    String storyDataPath;
 
     public Boolean launchIfDebug() {
         try {
@@ -50,13 +52,17 @@ public class CDebugLauncher {
             this.dataSource = mResult.get("tutor_data");
             this.tutorId = mResult.get("tutor_id");
             this.matrix = mResult.get("skill1");
-            this.next_node_times = Integer.valueOf(mResult.get("next_node_times"));
+            //this.next_node_times = Integer.valueOf(mResult.get("next_node_times"));
 
-            this.storyDataPath = mResult.get("story_data_path");
             return true;
         } catch (Exception e) {
             Log.wtf("CDebugLauncher", "/sdcard/Download/debug.json does not exist");
-
+            String stackString = "";
+            for(StackTraceElement s : e.getStackTrace()) {
+                stackString +=  (s + "\n");
+            }
+            Log.wtf("CDebugLauncher", stackString);
+            Log.wtf("CDebugLauncher", e.getClass().getName());
             return false;
         }
     }

@@ -171,6 +171,7 @@
           "mapname": "PLAYWRONG",
           "preexit": [],
           "edges": [
+            {"constraint": "NARRATE_MODE", "edge": "NARRATE_WRONG"},
             {"constraint": "", "edge": "LISTEN"}
           ]
         },
@@ -183,6 +184,7 @@
           "mapname": "SPEAK_EVENT_MODULE",
           "preexit": [],
           "edges": [
+            {"constraint": "NARRATE_MODE", "edge": "NARRATE_WRONG"},
             {"constraint": "", "edge": "LISTEN"}
           ]
         },
@@ -244,6 +246,7 @@
           "preenter": [],
           "preexit": [],
           "edges": [
+            {"constraint": "NARRATE_MODE", "edge": "NARRATE_RIGHT"},
             {"constraint": "", "edge": "LISTEN"}
           ]
         },
@@ -256,6 +259,7 @@
           "preenter": [],
           "preexit": [],
           "edges": [
+            {"constraint": "NARRATE_MODE", "edge": "NARRATE_RIGHT"},
             {"constraint": "", "edge": "LISTEN"}
           ]
         },
@@ -317,7 +321,7 @@
           "reuse": true,
           "COMMENT": "module that saves audio for NARRATE mode",
           "tracks" : [
-            {"type": "COMMAND", "id": "SstoryReading", "method": "saveAudio", "parms": "none", "features": "" }
+            {"type": "COMMAND", "id": "SstoryReading", "method": "saveToFile", "parms": "none", "features": "" }
           ]
         },
 
@@ -326,7 +330,7 @@
           "reuse": true,
           "COMMENT": "module that deletes current audio data",
           "tracks": [
-            {"type": "COMMAND","id": "SstoryReading","method": "clearAudio","parms": "none","features": ""}
+            {"type": "COMMAND","id": "SstoryReading","method": "clearAudioData","parms": "none","features": ""}
           ]
         },
 

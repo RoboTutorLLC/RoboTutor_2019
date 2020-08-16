@@ -46,12 +46,12 @@ import cmu.xprize.util.IScope;
 import cmu.xprize.util.JSON_Helper;
 import cmu.xprize.util.TCONST;
 import edu.cmu.xprize.listener.AudioDataStorage;
+import edu.cmu.xprize.listener.AudioWriter;
 import edu.cmu.xprize.listener.ListenerBase;
 
 import static cmu.xprize.util.TCONST.FTR_USER_READ;
 import static cmu.xprize.util.TCONST.FTR_USER_READING;
 import static cmu.xprize.util.TCONST.QGRAPH_MSG;
-
 
 /**
  * This view manager provides student UX for the African Story Book format used
@@ -218,13 +218,17 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
         //TODO: CHECK
         mParent.animatePageFlip(true,mCurrViewIndex);
 
-        // Turns on narrate mode if it is specified in Config.json
-        if (mContext.getSharedPreferences("ROBOTUTOR CONFIGURATION", Context.MODE_PRIVATE)
-            .getBoolean("CONTENT_CREATION_MODE", false)) {
-            mParent.setFeature(TCONST.FTR_NARRATE_MODE, TCONST.ADD_FEATURE);
-        }
+        feedSentence();
+
     }
 
+    // Narrate mode gets activated here
+    public void enableNarrateMode(boolean isNarrateMode) {
+        if (isNarrateMode) {
+            mParent.setFeature(TCONST.FTR_NARRATE_MODE, TCONST.ADD_FEATURE);
+            Log.d("CRT_ViewManagerASB", "Narrate Mode has been activated through setNarrateMode()");
+        }
+    }
 
     /**
      *  NOTE: we reset mCurrWord - last parm in seekToStoryPosition
@@ -253,6 +257,8 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
             storyBooting = false;
             speakOrListen();
         }
+
+        Log.d("InitStory", "Story has initialized");
     }
 
 
@@ -1066,6 +1072,8 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
         // Actually do the page animation
         //
         mParent.animatePageFlip(true, mCurrViewIndex);
+
+        feedSentence();
     }
     @Override
     public void prevPage() {
@@ -1121,6 +1129,8 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
         if (mCurrPara < mParaCount-1) {
             incPara(TCONST.INCR);
         }
+
+        feedSentence();
     }
 
     @Override
@@ -1165,6 +1175,8 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
         if (mCurrLine < mLineCount-1) {
             incLine(TCONST.INCR);
         }
+
+        feedSentence();
     }
     @Override
     public void prevLine() {
@@ -1651,6 +1663,7 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
 
     @Override
     public void saveToFile() {
+        Log.d("CRt_ saveToFile", "Preparing to save audio data");
         // Step 1. get sentence text
         StringBuilder fileNameBuilder = new StringBuilder();
         for (String word : wordsToSpeak) { // This uses the wordsToDisplay String[] because it contains punctuation
@@ -1660,13 +1673,15 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
 
         String fileName = fileNameBuilder.toString();
 
-
+        Log.d("CRt_ saveToFile", "Telling AudioDataStorage to being writing file");
         AudioDataStorage.saveAudioData(fileName, mAsset);
+
     }
 
     @Override
     public void clearAudioData() {
         AudioDataStorage.clearAudioData();
+        AudioWriter.destroyContent();
     }
 
     @Override
@@ -1688,4 +1703,20 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
         }
         seekToStoryPosition(mCurrPage, mCurrPara, mCurrLine, mCurrWord);
     }
+
+    public void feedSentence() {
+        // Step 1. get sentence text
+        StringBuilder fileNameBuilder = new StringBuilder();
+        for (String word : wordsToSpeak) { // This uses the wordsToDisplay String[] because it contains punctuation
+            fileNameBuilder.append(word).append(" ");
+        }
+        fileNameBuilder.setLength(fileNameBuilder.length() - 1);
+
+        String fileName = fileNameBuilder.toString();
+
+        Log.d("CRt_ saveToFile", "Telling AudioDataStorage to being writing file");
+        AudioWriter.initializePath(fileName, mAsset);
+    }
+
+
 }

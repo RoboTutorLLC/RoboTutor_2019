@@ -81,4 +81,6 @@ public interface ICRt_ViewManager extends ILoadableObject {
     public void startLine();
 
     public void prevSentence();
+
+    public void enableNarrateMode(boolean isNarrateMode);
 }

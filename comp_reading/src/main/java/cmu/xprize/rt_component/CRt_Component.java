@@ -596,6 +596,9 @@ public class CRt_Component extends ViewAnimator implements IEventListener, IVMan
 
     }
 
+    public void enableNarrateMode(boolean isNarrateMode) {
+        mViewManager.enableNarrateMode(isNarrateMode);
+    }
 
     /**
      * TODO: this currently only supports extern assets - need to allow for internal assets

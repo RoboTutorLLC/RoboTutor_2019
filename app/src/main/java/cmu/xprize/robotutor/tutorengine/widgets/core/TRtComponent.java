@@ -35,6 +35,7 @@ import java.util.Map;
 import cmu.xprize.comp_logging.ITutorLogger;
 import cmu.xprize.comp_logging.PerformanceLogItem;
 import cmu.xprize.robotutor.RoboTutor;
+import cmu.xprize.robotutor.startup.configuration.Configuration;
 import cmu.xprize.robotutor.tutorengine.CDebugLauncher;
 import cmu.xprize.robotutor.tutorengine.CMediaController;
 import cmu.xprize.robotutor.tutorengine.CMediaManager;
@@ -470,6 +471,7 @@ public class TRtComponent extends CRt_Component implements IBehaviorManager, ITu
         extractFeatureContents(builder, _FeatureMap);
 
         RoboTutor.logManager.postTutorState(TUTOR_STATE_MSG, "target#reading_tutor," + logData + builder.toString());
+        Log.d("TRt_Component", "Tutor is Listening");
     }
 
     // ITutorLogger - End
@@ -755,9 +757,12 @@ public class TRtComponent extends CRt_Component implements IBehaviorManager, ITu
 
                 loadStory(STORYSOURCEPATH, "ASB_Data", TCONST.EXTERN);
 
+
             } else {
                 throw (new Exception("BadDataSource"));
             }
+
+            enableNarrateMode(Configuration.getContentCreationMode(getContext()));
         }
         catch (Exception e) {
             CErrorManager.logEvent(TAG, "Invalid Data Source for : " + mTutor.getTutorName(), e, true);

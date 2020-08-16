@@ -54,8 +54,8 @@ public interface IRtComponent {
 
     public void continueListening();
 
-    void saveToFile();
-    void clearAudioData();
-    void startLine();
-    void prevSentence();
+    public void saveToFile();
+    public void clearAudioData();
+    public void startLine();
+    public void prevSentence();
 }

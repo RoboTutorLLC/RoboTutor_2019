@@ -25,12 +25,12 @@ android {
 }
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
-    testCompile 'junit:junit:4.12'
-    compile 'com.android.support:appcompat-v7:25.2.0'
-    compile 'com.android.support:percent:25.2.0'
-    compile project(':comp_listener')
-    compile project(':util')
-    compile project(':comp_ask')
-    compile project(':comp_logging')
+    api fileTree(include: ['*.jar'], dir: 'libs')
+    testImplementation 'junit:junit:4.12'
+    api 'com.android.support:appcompat-v7:25.2.0'
+    api 'com.android.support:percent:25.2.0'
+    api project(':comp_listener')
+    api project(':util')
+    api project(':comp_ask')
+    api project(':comp_logging')
 }

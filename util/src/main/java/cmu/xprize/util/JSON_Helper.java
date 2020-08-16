@@ -279,7 +279,7 @@ public class JSON_Helper {
 
                         // You can have a global hash RH type where you defince the Right hand type once
                         // This permits native types - i.e. arrays etc on the RH side.
-                        // Note that type info gets lost in the compile so it is not available for introspection
+                        // Note that type info gets lost in the api so it is not available for introspection
                         // Check for global type
 
                         Class<?> elemClass   = null;

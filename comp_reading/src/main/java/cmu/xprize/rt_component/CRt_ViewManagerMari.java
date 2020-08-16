@@ -609,6 +609,14 @@ public class CRt_ViewManagerMari implements ICRt_ViewManager, ILoadableObject {
         System.out.println(sb.toString());
         sentences = new ArrayList<String>(Arrays.asList(sb.toString().split("\\.")));
     }
+
+    public void prevSentence() {
+
+    }
+
+    public void enableNarrateMode(boolean isNarrateMode) {
+
+    }
 }
 
 

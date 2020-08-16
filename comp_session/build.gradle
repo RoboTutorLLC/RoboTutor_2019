@@ -20,13 +20,13 @@ android {
 }
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
+    api fileTree(include: ['*.jar'], dir: 'libs')
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    compile 'com.android.support:appcompat-v7:25.2.0'
-    testCompile 'junit:junit:4.12'
-    compile project(path: ':comp_ask')
-    compile project(':comp_debug')
-    compile project(':comp_logging')
+    api 'com.android.support:appcompat-v7:25.2.0'
+    testImplementation 'junit:junit:4.12'
+    api project(path: ':comp_ask')
+    api project(':comp_debug')
+    api project(':comp_logging')
 }
