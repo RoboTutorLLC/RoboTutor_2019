@@ -617,6 +617,10 @@ public class CRt_ViewManagerMari implements ICRt_ViewManager, ILoadableObject {
     public void enableNarrateMode(boolean isNarrateMode) {
 
     }
+
+    public void skipSentence() {
+
+    }
 }
 
 

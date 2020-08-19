@@ -3,8 +3,11 @@ package edu.cmu.xprize.listener;
 import android.media.AudioRecord;
 import android.util.Log;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -13,6 +16,7 @@ import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.channels.FileChannel;
+import java.nio.file.Files;
 
 public class AudioWriter {
 
@@ -28,11 +32,9 @@ public class AudioWriter {
 
     public static int dataLen;
 
-    // AudioWriter is updated with a new filepath
-    public static void initializePath(String fileName, String assetLocation) {
-        dataLen = 0;
+    static byte[] savedFileData;
 
-
+    public static void closeStreams() {
         try {
             outputStream.close();
         } catch (Exception ignored) {}
@@ -44,17 +46,36 @@ public class AudioWriter {
         try {
             dataOutputStream.close();
         } catch (Exception ignored) {}
+    }
 
+    // AudioWriter is updated with a new filepath
+    public static void initializePath(String fileName, String assetLocation) {
+        dataLen = 0;
+        // Close up  old file
+        closeStreams();
 
+        //Reopen to add header to the beginning of the file
         try {
             addHeader(new RandomAccessFile(completeFilePath, "rws"));
         } catch (Exception e) {
             Log.d("AudioWriterHeaderFail", Log.getStackTraceString(e));
         }
 
-        audioFileName = fileName;
+        // Prepare new file
+        audioFileName = fileName.toLowerCase().replace(" ", "_");
         audioAssetLocation = assetLocation;
-        completeFilePath = assetLocation + fileName + ".wav";
+        completeFilePath = assetLocation + audioFileName + ".wav";
+
+        // Just in case the new file is already existing, save its contents
+        try {
+            File inFile = new File(completeFilePath);
+            FileInputStream input = new FileInputStream(inFile);
+            savedFileData = new byte[(int) inFile.length()];
+            BufferedInputStream bis =new BufferedInputStream(input);
+            bis.read(savedFileData,0,savedFileData.length);
+            bis.close();
+            input.close();
+        } catch (IOException ignored) {}
 
         try {
             outputStream = new FileOutputStream(completeFilePath);
@@ -153,4 +174,18 @@ public class AudioWriter {
         raf.close();
     }
 
+    // When the sentence is not being recorded, put the original file contents back
+    public static void abortOperation() {
+        try {
+            closeStreams();
+
+            // rewrite old contents of the file
+            FileOutputStream output = new FileOutputStream(completeFilePath);
+            output.write(savedFileData);
+        } catch (IOException ignored) {
+
+        } catch (NullPointerException ignored) {// this is thrown if file doesn't exist
+        }
+
+    }
 }

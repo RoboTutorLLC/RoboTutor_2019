@@ -27,8 +27,10 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import org.json.JSONObject;
@@ -163,6 +165,10 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
     static final String TAG = "CRt_ViewManagerASB";
 
 
+    public Button backButton;
+    public Button forwardButton;
+
+    public String buttonState;
     /**
      *
      * @param parent
@@ -410,6 +416,8 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
 
             mPageFlip = (ImageButton) mOddPage.findViewById(R.id.SpageFlip);
             mSay      = (ImageButton) mOddPage.findViewById(R.id.Sspeak);
+
+
         } else {
 
             mCurrViewIndex = mEvenIndex;
@@ -419,6 +427,34 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
             mPageFlip = (ImageButton) mEvenPage.findViewById(R.id.SpageFlip);
             mSay      = (ImageButton) mEvenPage.findViewById(R.id.Sspeak);
         }
+
+        if (mCurrPage % 2 == 0) {
+            //ViewGroup frameLayout = mEvenPage.findViewById(R.id.SfullViewQuestion);
+            //ViewGroup narrateModeControls = frameLayout.findViewById(R.id.NarrateControls);
+            backButton = mOddPage.findViewById(R.id.backButton);
+            forwardButton = mOddPage.findViewById(R.id.forwardButton);
+        } else {
+            //ViewGroup frameLayout = mOddPage.findViewById(R.id.SfullViewQuestion);
+            //ViewGroup narrateModeControls = frameLayout.findViewById(R.id.NarrateControls);
+            backButton = mEvenPage.findViewById(R.id.backButton);
+            forwardButton = mEvenPage.findViewById(R.id.forwardButton);
+        }
+
+        // CAUSING A LOTTA PROBLEMS IDK WHY!!!!
+        // findViewById is returning null for backButton and forwardButton and causing a fiasco over here
+        /* backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                prevSentence();
+            }
+        });
+
+        forwardButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                skipSentence();
+            }
+        });*/
 
         // Ensure the buttons reflect the current states
         //
@@ -1042,6 +1078,7 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
         // Publish the cumulative state out to the scripting scope in the tutor
         //
         mParent.publishValue(TCONST.RTC_VAR_STATE, cummulativeState);
+        buttonState = cummulativeState;
     }
 
 
@@ -1690,8 +1727,11 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
         seekToStoryPosition(mCurrPage, mCurrPara, mCurrLine, TCONST.ZERO);
     }
 
+    // This definitely does not work
     @Override
     public void prevSentence() {
+        Log.d("NavButton", "Back Button has been pressed");
+        AudioWriter.abortOperation();
         // Not sure if it is zero-index or not. Right now treating the counting like it starts at 1
         if (mCurrLine > 2) {
             mCurrLine--;
@@ -1718,5 +1758,19 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
         AudioWriter.initializePath(fileName, mAsset);
     }
 
+    @Override
+    public void skipSentence() {
+        Log.d("NavButton", "Forward Button has been pressed");
+        AudioWriter.abortOperation();
+        mCurrWord = mWordCount; // go to the end of the sentence
+        publishStateValues();
+        if(buttonState.equals(TCONST.RTC_PAGECOMPLETE)) {
+            nextPage();
+        } else if(buttonState.equals(TCONST.RTC_PARAGRAPHCOMPLETE)) {
+            nextPara();
+        } else if(buttonState.equals(TCONST.RTC_LINECOMPLETE)) {
+            nextLine();
+        }
+    }
 
 }

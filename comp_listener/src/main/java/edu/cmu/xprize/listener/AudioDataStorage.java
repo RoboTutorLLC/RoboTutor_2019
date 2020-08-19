@@ -36,8 +36,12 @@ public class AudioDataStorage {
     static FileOutputStream outputStream;
     static FileChannel outChannel;
 
-    public static void initStoryData(JSONObject JSONObj) {
-        storyData = JSONObj;
+    public static void initStoryData(String jsonData) {
+        try {
+            storyData = new JSONObject(jsonData);
+        } catch (Exception e) {
+            Log.wtf("AudioDataStorage", "Could not load storydata");
+        }
     }
 
     // I initialize the array and add to it
@@ -68,118 +72,9 @@ public class AudioDataStorage {
 
         sampleRate = 16000;
 
-        String completeFilePath = assetLocation + fileName + "fail.wav";
+        String completeFilePath = assetLocation + fileName + ".wav";
 
         Log.d("ADSSave", completeFilePath);
-        // Write the audio to file
-        try {
-            // Remove trailing silence
-            short[] trimmedAudio = null;
-            for(int x = MAX_LEN - 1; x > 0; x--) {
-                if (audioData[x] != 0) {
-                    trimmedAudio = new short[x + 1];
-                    System.arraycopy(audioData, 0, trimmedAudio, 0, x);
-                    break;
-                }
-            }
-
-
-            FileOutputStream os = new FileOutputStream(completeFilePath);
-            int trimmedLen = trimmedAudio.length;
-            int dataLen = (trimmedLen * 2) + 36;
-            ByteBuffer dataBuffer = ByteBuffer.allocate(trimmedLen * 2 /* the data */ + 36 /* The header */);
-
-            dataBuffer.order(ByteOrder.BIG_ENDIAN); // Audio is recorded in Big Endian
-
-            // Sample rate is determined by the recognizer (through some external file but I don't know what)
-            // CHANNEL_IN_MONO (1 channel input)
-
-            int channelNumber = 1;
-            long bitRate = sampleRate * channelNumber * 16; // sampleRate times number of Channels times the number of bits per sample (16)
-            /*byte[] header = new byte[]{'R','I','F','F',
-                    (byte) (dataLen & 0xff), (byte) (byte) ((dataLen >> 8) & 0xff), (byte) ((dataLen >> 16) & 0xff),(byte) ((dataLen >> 24) & 0xff),
-                    'W','A','V','E','f','m','t',' ',
-                    (byte) 16, 0, 0, 1, 0, (byte) channelNumber, 0,(byte) (sampleRate & 0xff), (byte) ((sampleRate >> 8) & 0xff), (byte) ((sampleRate >> 16) & 0xff), (byte) ((sampleRate >> 24) & 0xff),
-                    (byte) ((bitRate / 8) & 0xff), (byte) (((bitRate / 8) >> 8) & 0xff), (byte) (((bitRate / 8) >> 16) & 0xff), (byte) (((bitRate / 8) >> 24) & 0xff), (byte) ((channelNumber * 16) / 8),
-                    0, 16, 0, 'd', 'a', 't', 'a', (byte) (dataLen * 2 & 0xff), (byte) (((dataLen * 2) >> 8) &  0xff), (byte) (((dataLen * 2) >> 16) &  0xff), (byte) (((dataLen * 2) >> 24) &  0xff)
-             };
-
-             */
-            byte[] header = new byte[44];
-
-            header[0] = 'R';
-            header[1] = 'I';
-            header[2] = 'F';
-            header[3] = 'F';
-            header[4] = (byte) (dataLen & 0xff);
-            header[5] = (byte) ((dataLen >> 8) & 0xff);
-            header[6] = (byte) ((dataLen >> 16) & 0xff);
-            header[7] = (byte) ((dataLen >> 24) & 0xff);
-            header[8] = 'W';
-            header[9] = 'A';
-            header[10] = 'V';
-            header[11] = 'E';
-            header[12] = 'f';
-            header[13] = 'm';
-            header[14] = 't';
-            header[15] = ' ';
-            header[16] = (byte) 16;
-            header[17] = 0;
-            header[18] = 0;
-            header[19] = 0;
-            header[20] = 1;
-            header[21] = 0;
-            header[22] = (byte) 1;
-            header[23] = 0;
-            header[24] = (byte) (sampleRate & 0xff);
-            header[25] = (byte) ((sampleRate >> 8) & 0xff);
-            header[26] = (byte) ((sampleRate >> 16) & 0xff);
-            header[27] = (byte) ((sampleRate >> 24) & 0xff);
-            header[28] = (byte) ((bitRate / 8) & 0xff);
-            header[29] = (byte) (((bitRate / 8) >> 8) & 0xff);
-            header[30] = (byte) (((bitRate / 8) >> 16) & 0xff);
-            header[31] = (byte) (((bitRate / 8) >> 24) & 0xff);
-            header[32] = (byte) ((channelNumber * 16) / 8);
-            header[33] = 0;
-            header[34] = 16;
-            header[35] = 0;
-            header[36] = 'd';
-            header[37] = 'a';
-            header[38] = 't';
-            header[39] = 'a';
-            header[40] = (byte) ((trimmedLen * 2)  & 0xff);
-            header[41] = (byte) (((trimmedLen * 2)  >> 8) & 0xff);
-            header[42] = (byte) (((trimmedLen * 2)  >> 16) & 0xff);
-            header[43] = (byte) (((trimmedLen * 2)  >> 24) & 0xff);
-            dataBuffer.put(header, 0, 44);
-
-            Log.d("AudiDataStorageLog", "Just wrote header to file!");
-
-            for(short s : trimmedAudio) {
-                dataBuffer.putShort(s);
-            }
-            Log.d("AudioDataStorageLog", "Put " + trimmedAudio.length + " shorts into file!");
-
-            //ShortBuffer dataBufferShort = dataBuffer.asShortBuffer();
-            //dataBufferShort.put(trimmedAudio); // dataBuffer changes alongside dataBufferShort
-
-            dataBuffer.flip();
-            FileChannel out = os.getChannel();
-            out.write(dataBuffer);
-            os.flush();
-            os.close();
-
-            RandomAccessFile rafOut = new RandomAccessFile(completeFilePath, "rws");
-            FileChannel rafChannel = rafOut.getChannel();
-            int total = rafChannel.write(dataBuffer);
-            Log.d("AudioDataStorageLog", "Wrote out " + total + "bytes!");
-
-            rafChannel.close();
-            rafOut.close();
-        } catch (IOException | NullPointerException e) {
-            Log.wtf("AudioDataStorage", "Failed to save recording to file!");
-            Log.d("AudioRecordingFail", Log.getStackTraceString(e));
-        }
 
         // write segmentation to file
         try {
@@ -224,14 +119,19 @@ public class AudioDataStorage {
                 segm.put(segObj);
                 finalEndTime = heardWord.endTime;
             }
-            sentenceData.put("from", ""); // TODO: figure out what 'from' is supposed to represent
+            sentenceData.put("from", segmentation.get(0).startTime); // TODO: figure out what 'from' is supposed to represent
             sentenceData.put("audio", completeFilePath);
             sentenceData.put("until", finalEndTime);
             sentenceData.put("utterance", fileName);
 
+            FileOutputStream outJson = new FileOutputStream(assetLocation + "storydata.json");
+            outJson.write(storyData.toString().getBytes());
+            outJson.close();
         } catch(JSONException e) {
             Log.wtf("ADSStoryData", "Failed to update storyData!");
             Log.d("StoryDataFail", Log.getStackTraceString(e));
+        } catch(IOException e) {
+            Log.d("ADSStoryDataFail", "Was not able to open file");
         }
 
     }

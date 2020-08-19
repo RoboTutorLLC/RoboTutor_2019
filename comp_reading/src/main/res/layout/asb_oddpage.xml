@@ -7,6 +7,21 @@
     android:id="@+id/story_reading"
     android:background="#FFF">
 
+    <!-- <Button
+        android:id="@+id/forwardButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="250px"
+        android:layout_marginTop="950px"
+        android:text="Forward" />
+
+    <Button
+        android:id="@+id/backButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="950px"
+        android:text="Back" /> -->
+
     <ImageView
         android:id="@+id/SpageImage"
         android:scaleType="fitCenter"
@@ -67,8 +82,39 @@
         android:layout_height="match_parent"
         android:layout_marginLeft="30dp"
         android:layout_marginRight="30dp"
-        android:layout_centerInParent="true" />
+        android:layout_centerInParent="true">
 
+        <LinearLayout
+            android:id="@+id/NarrateControls"
+            android:layout_width="184dp"
+            android:layout_height="63dp"
+            android:orientation="horizontal"
+            android:layout_gravity="bottom"
+            android:layout_marginLeft="1275px">
+
+            <Button
+                android:id="@+id/backButton"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="bottom"
+                android:background="@null"
+                android:text="Back"
+                android:visibility="visible"
+                app:layout_heightPercent="100%"
+                app:layout_marginLeftPercent="41%" />
+
+            <Button
+                android:id="@+id/forwardButton"
+                android:layout_width="98dp"
+                android:layout_height="match_parent"
+                android:background="@null"
+                android:text="Forward"
+                android:visibility="visible"
+                app:layout_heightPercent="100%"
+                app:layout_marginLeftPercent="51%"
+                app:layout_marginTopPercent="90%" />
+        </LinearLayout>
+    </FrameLayout>
 
 
 </android.support.percent.PercentRelativeLayout>

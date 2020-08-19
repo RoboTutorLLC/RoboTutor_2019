@@ -27,6 +27,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.Button;
 import android.widget.ViewAnimator;
 
 import org.json.JSONObject;
@@ -45,6 +46,7 @@ import cmu.xprize.util.IScope;
 import cmu.xprize.util.JSON_Helper;
 import cmu.xprize.util.TTSsynthesizer;
 import cmu.xprize.util.TCONST;
+import edu.cmu.xprize.listener.AudioDataStorage;
 import edu.cmu.xprize.listener.IAsrEventListener;
 import edu.cmu.xprize.listener.ListenerBase;
 import edu.cmu.xprize.listener.ListenerPLRT;
@@ -103,8 +105,6 @@ public class CRt_Component extends ViewAnimator implements IEventListener, IVMan
     // json loadable
     //
     public CData_Index[]      dataSource;
-
-
 
     // This is used to map "type" (class names) in the index to real classes
     //
@@ -574,6 +574,7 @@ public class CRt_Component extends ViewAnimator implements IEventListener, IVMan
 
             // ZZZ it loads the story data JUST FINE
             String jsonData = JSON_Helper.cacheDataByName(EXTERNPATH + TCONST.STORYDATA);
+            AudioDataStorage.initStoryData(jsonData);
             Log.d(TCONST.DEBUG_STORY_TAG, "logging jsonData:");
 
             mViewManager.loadJSON(new JSONObject(jsonData), null);

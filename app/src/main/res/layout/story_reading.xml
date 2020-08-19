@@ -2,6 +2,7 @@
 <cmu.xprize.robotutor.tutorengine.widgets.core.TScenePercentLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/digit_copy">
@@ -18,11 +19,51 @@
         android:textColor="#FFF"
         android:text="This is the Banner Area."/>
 
+
     <cmu.xprize.robotutor.tutorengine.widgets.core.TRtComponent
         android:id="@+id/SstoryReading"
         android:layout_below="@+id/Sbanner"
         app:layout_heightPercent="90%"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        >
+
+        <!-- <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_gravity="bottom|center_horizontal">
+
+            <Button
+                android:id="@+id/PrevSentenceButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="false"
+                android:layout_centerVertical="false"
+                android:background="@null"
+                android:scaleType="centerInside"
+                android:src="@drawable/back_button"
+                android:text="back"
+                android:visibility="visible"
+                app:layout_heightPercent="5%"
+                app:layout_marginLeftPercent="41%"
+                app:layout_marginTopPercent="90%" />
+
+            <Button
+                android:id="@+id/NextSentenceButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="false"
+                android:layout_centerVertical="false"
+                android:background="@null"
+                android:scaleType="centerInside"
+                android:src="@drawable/back_button"
+                android:text="forward"
+                android:visibility="visible"
+                app:layout_heightPercent="5%"
+                app:layout_marginLeftPercent="51%"
+                app:layout_marginTopPercent="90%" />
+        </LinearLayout> -->
+    </cmu.xprize.robotutor.tutorengine.widgets.core.TRtComponent>
 
 </cmu.xprize.robotutor.tutorengine.widgets.core.TScenePercentLayout>

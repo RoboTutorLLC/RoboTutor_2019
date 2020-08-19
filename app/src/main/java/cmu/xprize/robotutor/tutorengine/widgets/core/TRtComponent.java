@@ -23,6 +23,7 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 
 import org.json.JSONObject;
 
@@ -34,6 +35,7 @@ import java.util.Map;
 
 import cmu.xprize.comp_logging.ITutorLogger;
 import cmu.xprize.comp_logging.PerformanceLogItem;
+import cmu.xprize.robotutor.R;
 import cmu.xprize.robotutor.RoboTutor;
 import cmu.xprize.robotutor.startup.configuration.Configuration;
 import cmu.xprize.robotutor.tutorengine.CDebugLauncher;
@@ -1243,4 +1245,7 @@ public class TRtComponent extends CRt_Component implements IBehaviorManager, ITu
 
     @Override
     public void prevSentence() {mViewManager.prevSentence();}
+
+    @Override
+    public void skipSentence() {mViewManager.skipSentence(); }
 }
